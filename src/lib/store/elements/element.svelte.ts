@@ -6,10 +6,25 @@ export type CanvasObject = Partial<IShape> & { type: string };
 export const elementStore = new class {
   elements = $state<CanvasElement[]>([]);
 
-  addElementFromObject(element: CanvasObject) {
+  addFromObject(element: CanvasObject) {
     if (element.type === "shape") {
       const shape = Shape.fromObject(element);
-      this.elements.push(shape);
+      this.addElement(shape);
+    }
+  }
+
+  addFromObjectArray(elements: CanvasObject[]) {
+    elements.forEach((element) => {
+      this.addFromObject(element);
+    })
+  }
+
+  addFromJSON(json: string) {
+    const obj = JSON.parse(json);
+    if (Array.isArray(obj)) {
+      this.addFromObjectArray(obj);
+    } else {
+      this.addFromObject(obj);
     }
   }
 

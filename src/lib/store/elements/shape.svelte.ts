@@ -19,7 +19,7 @@ export const defaultShape: IShape = {
   opacity: 1,
   stroke: "#000000",
   fill: "#ffffff",
-  strokeWidth: 1,
+  strokeWidth: 0,
   radius: 0,
   strokeType: "solid"
 };
@@ -34,7 +34,7 @@ export class Shape implements IShape {
   opacity = $state(1);
   stroke = $state("#000000");
   fill = $state("#ffffff");
-  strokeWidth = $state(1);
+  strokeWidth = $state(0);
   radius = $state(0);
   strokeType = $state("solid");
 

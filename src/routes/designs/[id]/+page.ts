@@ -5,7 +5,7 @@ export async function load({ params, url }) {
       url: {
         sidepanel,
       },
-      data: await loadData(params.id)
+      design: await loadData(params.id)
     };
 }
 
@@ -37,3 +37,6 @@ const loadData = async (id: string) => {
   }
 
 }
+
+export const csr = true;
+export const ssr = false;

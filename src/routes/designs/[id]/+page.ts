@@ -38,5 +38,5 @@ const loadData = async (id: string) => {
 
 }
 
-export const csr = true;
+// export const csr = true;
 export const ssr = false;

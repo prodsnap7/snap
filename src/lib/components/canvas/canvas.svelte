@@ -5,7 +5,7 @@
 
 
 <div
-  class="relative rounded-xs"
+  class="relative rounded-xs border shadow-xs"
   style="
     width: {canvasStore.width}px;
     height: {canvasStore.height}px;

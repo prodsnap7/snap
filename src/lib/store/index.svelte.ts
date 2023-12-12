@@ -19,8 +19,4 @@ export const store = new class {
     this.canvas.setFromJSON(obj.canvas);
     this.elements.addFromJSON(obj.elements);
   }
-
-  addSelectedElements(elements: CanvasElement[]) {
-    this.selectedElements.addElements(elements);
-  }
 }

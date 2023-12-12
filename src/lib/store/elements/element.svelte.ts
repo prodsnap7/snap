@@ -52,6 +52,20 @@ export const selectedElementsStore = new class {
 		});
 	}
 
+	removeElement(element: CanvasElement) {
+		this.elements = this.elements.filter((e) => e !== element);
+	}
+
+	removeElements(elements: CanvasElement[]) {
+		elements.forEach((element) => {
+			this.removeElement(element);
+		});
+	}
+
+	setElements(elements: CanvasElement[]) {
+		this.elements = elements;
+	}
+
 	get x() {
 		return Math.min(...this.elements.map((element) => element.x), Infinity);
 	}
@@ -68,27 +82,37 @@ export const selectedElementsStore = new class {
 		return Math.max(...this.elements.map((element) => element.y + element.height), -Infinity) - this.y;
 	}
 
+	get rotation() {
+		return 0
+	}
+
   set x(value: number) {
     this.elements.forEach((element) => {
-      element.x = value;
+      element.x += value;
     });
   }
 
   set y(value: number) {
     this.elements.forEach((element) => {
-      element.y = value;
+      element.y += value;
     });
   }
 
   set width(value: number) {
     this.elements.forEach((element) => {
-      element.width = value;
+      element.width += value;
     });
   }
 
   set height(value: number) {
     this.elements.forEach((element) => {
-      element.height = value;
+      element.height += value;
     });
   }
+
+	set rotation(value: number) {
+		// this.elements.forEach((element) => {
+		// 	element.rotation = value;
+		// });
+	}
 }

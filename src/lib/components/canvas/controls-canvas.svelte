@@ -2,10 +2,16 @@
 	import { store, type CanvasElement } from "$lib/store";
 	import SelectControls from "../select-controls.svelte";
 
-  const { elements, canvas } = store;
+  const { elements, canvas, selectedElements } = store;
 
-  function onmousedown(element: CanvasElement) {
-    store.addSelectedElements([element]);
+  function onmousedown(event: MouseEvent, element: CanvasElement) {
+    console.log("onmousedown", event, element);
+    // if shift is pressed then add to selected elements
+    if (event.shiftKey) {
+      selectedElements.addElements([element]);
+    } else {
+      selectedElements.setElements([element]);
+    }
   }
 </script>
 <div class="absolute inset-0 flex items-center justify-center">
@@ -16,7 +22,7 @@
   ">
     {#each elements.elements as element}
       <div
-        onmousedown={() => onmousedown(element)}
+        onmousedown={(e) => onmousedown(e,element)}
         role="button"
         tabindex="0"
         class="absolute border-2 border-blue-400 cursor-pointer"

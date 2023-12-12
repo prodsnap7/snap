@@ -26,7 +26,16 @@ const loadData = async (id: string) => {
         height: 100,
         rotation: 0,
         fill: "red",
-      }
+      },
+      {
+        type: "shape",
+        x: 200,
+        y: 200,
+        width: 100,
+        height: 100,
+        rotation: 0,
+        fill: "blue",
+      },
     ]),
     canvas: JSON.stringify({
       width: 750,

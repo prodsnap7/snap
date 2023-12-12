@@ -1,43 +1,25 @@
 <script lang="ts">
   import { store } from "$lib/store";
-
-  let dragging = false;
-
-  function onmousedown(event: MouseEvent) {
-    dragging = true;
-  }
-
-  $effect(() => {
-    function onmouseup(event: MouseEvent) {
-      dragging = false;
-    }
-
-    function onmousemove(event: MouseEvent) {
-      if (dragging) {
-        store.selectedElements.x += event.movementX;
-        store.selectedElements.y += event.movementY;
-      }
-    }
-
-    window.addEventListener("mouseup", onmouseup);
-    window.addEventListener("mousemove", onmousemove);
-
-    return () => {
-      window.removeEventListener("mouseup", onmouseup);
-      window.removeEventListener("mousemove", onmousemove);
-    };
-  })
+	import MoveHandler from "./move-handler.svelte";
 </script>
 
-
-<div
-  onmousedown={onmousedown}
-  tabindex="0"
-  role="button"
-  class="absolute border-2 border-indigo-600"
-  style="
-    width: {store.selectedElements.width}px;
-    height: {store.selectedElements.height}px;
-    left: {store.selectedElements.x}px;
-    top: {store.selectedElements.y}px;"
-/>
+{#if store.selectedElements.elements.length > 0}
+  <MoveHandler
+    x={store.selectedElements.x}
+    y={store.selectedElements.y}
+    width={store.selectedElements.width}
+    height={store.selectedElements.height}
+    rotation={store.selectedElements.rotation}
+    onMove={({ x, y }) => {
+      store.selectedElements.x = x;
+      store.selectedElements.y = y;
+    }}
+    onResize={({ width, height }) => {
+      store.selectedElements.width = width;
+      store.selectedElements.height = height;
+    }}
+    onRotate={(rotation) => {
+      store.selectedElements.rotation = rotation;
+    }}
+  />
+{/if}

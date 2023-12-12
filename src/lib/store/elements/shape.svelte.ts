@@ -58,4 +58,21 @@ export class Shape implements IShape {
       ...obj
     });
   }
+
+  clone(): Shape {
+    return new Shape({
+      type: this.type,
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height,
+      rotation: this.rotation,
+      opacity: this.opacity,
+      stroke: this.stroke,
+      fill: this.fill,
+      strokeWidth: this.strokeWidth,
+      radius: this.radius,
+      strokeType: this.strokeType
+    });
+  }
 }

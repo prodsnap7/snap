@@ -3,7 +3,7 @@ import { Shape, type IShape } from './shape.svelte';
 export type CanvasElement = Shape;
 export type CanvasObject = Partial<IShape> & { type: string };
 
-export const elementStore = new (class {
+export const elementStore = new class {
 	elements = $state<CanvasElement[]>([]);
 
 	addFromObject(element: CanvasObject) {
@@ -37,7 +37,12 @@ export const elementStore = new (class {
 			this.addElement(element);
 		});
 	}
-})();
+
+	cloneElement(element: CanvasElement) {
+		const clone = element.clone();
+		this.addElement(clone);
+	}
+};
 
 export const selectedElementsStore = new class {
 	elements = $state<CanvasElement[]>([]);

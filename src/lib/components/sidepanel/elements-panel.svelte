@@ -12,7 +12,7 @@
 </script>
 
 <div class="mb-4">
-  <h2 class="text-xl font-bold">Shapes</h2>
+  <h2 class="font-bold">Shapes</h2>
 </div>
 <div class="flex flex-wrap items-center gap-3">
   {#each shapes as shape}

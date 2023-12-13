@@ -30,6 +30,14 @@
         state = "resizing-tl";
       } else if (event.target.classList.contains("rotate")) {
         state = "rotating";
+      } else if (event.target.classList.contains("resize-tm")) {
+        state = "resizing-tm";
+      } else if (event.target.classList.contains("resize-bm")) {
+        state = "resizing-bm";
+      } else if (event.target.classList.contains("resize-lm")) {
+        state = "resizing-lm";
+      } else if (event.target.classList.contains("resize-rm")) {
+        state = "resizing-rm";
       }
     }
   }
@@ -127,19 +135,23 @@
   on:mousedown={onmousedown}
   tabindex="0"
   role="button"
-  class="absolute border-2 border-slate-900 move"
+  class="absolute border-2 border-slate-900 cursor-move move"
   style="left: 0px; top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
   >
   <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute top-left corner-control resize-tl" />
   <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute top-right corner-control resize-tr" />
   <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute bottom-left corner-control resize-bl" />
   <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute bottom-right corner-control resize-br" />
+  <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute top-middle middle-control resize-tm" />
+  <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute bottom-middle middle-control resize-bm" />
+  <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute left-middle middle-control resize-lm" />
+  <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute right-middle middle-control resize-rm" />
 </div>
 
 
 <style lang="postcss">
   .corner-control {
-    @apply h-4 w-4 bg-white border border-slate-400 rounded-full;
+    @apply h-4 w-4 bg-white border border-slate-400 rounded-full cursor-grab;
 
   }
   .top-left {
@@ -156,6 +168,26 @@
 
   .bottom-right {
     @apply bottom-0 right-0 translate-x-1/2 translate-y-1/2;
+  }
+
+  .middle-control {
+    @apply  bg-white border border-slate-400 rounded cursor-grab;
+  }
+
+  .top-middle {
+    @apply w-6 h-2 top-0 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .bottom-middle {
+    @apply w-6 h-2 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2;
+  }
+
+  .left-middle {
+    @apply w-2 h-6 top-1/2 left-0 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .right-middle {
+    @apply w-2 h-6 top-1/2 right-0 translate-x-1/2 -translate-y-1/2;
   }
    
 </style>

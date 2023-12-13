@@ -30,7 +30,7 @@
     </div>
 
     <!-- Main content section -->
-    <section class="flex flex-col w-full">
+    <section class="flex flex-col w-full bg-gray-100">
       <div class="h-14 w-full"></div>
 
       <div class="flex-1 flex items-center justify-center relative">

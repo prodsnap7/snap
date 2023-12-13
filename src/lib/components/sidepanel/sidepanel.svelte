@@ -23,7 +23,7 @@
     sidepanelState = val;
   } 
 
-  let sidepanelState = getQueryParamValue('sidepanel');
+  let sidepanelState = $page.url.searchParams.get("sidepanel") || "elements";
 
 </script>
 
@@ -44,7 +44,7 @@
   </nav>
 
   <div class="p-4">
-    {#if $page.data.url.sidepanel === "elements"}
+    {#if sidepanelState === "elements"}
       <ElementsPanel />
     {/if}
   </div>

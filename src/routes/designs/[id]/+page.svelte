@@ -1,11 +1,18 @@
 <script>
+  import { page } from "$app/stores";
 	import Canvas from "$lib/components/canvas/canvas.svelte";
   import ControlsCanvas from "$lib/components/canvas/controls-canvas.svelte";
   import { Sidepanel } from "$lib/components/sidepanel";
 	import { store } from "$lib/store";
+	import { onMount } from "svelte";
 
-  export let data;
-  store.init(data.design)
+  onMount(async () => {
+    const res = await fetch(`/api/designs/${$page.params.id}`)
+    const data = await res.json();
+
+    store.init(data)
+  })
+
 </script>
 
 <div class="w-screen h-screen flex flex-col">

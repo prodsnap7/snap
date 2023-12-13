@@ -14,9 +14,11 @@
       store.selectedElements.x = x;
       store.selectedElements.y = y;
     }}
-    onResize={({ width, height }) => {
+    onResize={({ width, height, x, y }) => {
       store.selectedElements.width = width;
       store.selectedElements.height = height;
+      store.selectedElements.x = x;
+      store.selectedElements.y = y;
     }}
     onRotate={(rotation) => {
       store.selectedElements.rotation = rotation;

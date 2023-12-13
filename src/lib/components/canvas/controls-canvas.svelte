@@ -25,7 +25,7 @@
         onmousedown={(e) => onmousedown(e,element)}
         role="button"
         tabindex="0"
-        class="absolute cursor-pointer"
+        class="absolute cursor-pointer origin-center"
         style="
           width: {element.width}px;
           height: {element.height}px;

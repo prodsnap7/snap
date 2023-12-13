@@ -60,18 +60,42 @@
         // onRotate(rotation + event.movementX);
       } else if (state === "resizing-br") {
           const delta = movementX;
-          onResize({ x: 0, y: 0, width: delta, height: delta });
+          // onResize({ x: 0, y: 0, width: delta, height: delta });
+          // proportionally resize
+          if (movementX > movementY) {
+            onResize({ x: 0, y: 0, width: delta, height: delta / ratio });
+          } else {
+            onResize({ x: 0, y: 0, width: delta * ratio, height: delta });
+          }
       } else if (state === "resizing-tl") {
           const delta = movementX;
-          onResize({ x: delta, y: delta, width: -delta, height: -delta });
+          // onResize({ x: delta, y: delta, width: -delta, height: -delta });
+          // proportionally resize
+          if (movementX > movementY) {
+            onResize({ x: delta, y: delta / ratio, width: -delta, height: -delta / ratio });
+          } else {
+            onResize({ x: delta * ratio, y: delta, width: -delta * ratio, height: -delta });
+          }
       } else if (state === "resizing-bl") {
           const deltaX = movementX;
           const deltaY = movementY;
-          onResize({ x: deltaX, y: 0, width: -deltaX, height: deltaY });
+          // onResize({ x: deltaX, y: 0, width: -deltaX, height: deltaY });
+          // proportionally resize
+          if (movementX > movementY) {
+            onResize({ x: deltaX, y: 0, width: -deltaX, height: -deltaX / ratio });
+          } else {
+            onResize({ x: deltaX * ratio, y: 0, width: -deltaX * ratio, height: -deltaX });
+          }
       } else if (state === "resizing-tr") {
           const deltaX = movementX;
           const deltaY = movementY;
-          onResize({ x: 0, y: deltaY, width: deltaX, height: -deltaY });
+          // onResize({ x: 0, y: deltaY, width: deltaX, height: -deltaY });
+          // proportionally resize
+          if (movementX > movementY) {
+            onResize({ x: 0, y: deltaY, width: deltaX, height: deltaX / ratio });
+          } else {
+            onResize({ x: 0, y: deltaY * ratio, width: deltaX * ratio, height: deltaX });
+          }
       } else if (state === "resizing-tm") {
           const delta = movementY;
           onResize({ x: 0, y: delta, width: 0, height: -delta });

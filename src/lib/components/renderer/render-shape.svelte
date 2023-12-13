@@ -9,6 +9,7 @@
 </script>
 
 <div
+  class="origin-center"
   style="
     width: {shape.width * scale}px;
     height: {shape.height * scale}px;

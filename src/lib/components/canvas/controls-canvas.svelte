@@ -29,9 +29,9 @@
         style="
           width: {element.width}px;
           height: {element.height}px;
-          transform: rotate({element.rotation}deg);
-          left: {element.x}px;
-          top: {element.y}px;
+          transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
+          left: 0px;
+          top: 0px;
         "
       />
     {/each}

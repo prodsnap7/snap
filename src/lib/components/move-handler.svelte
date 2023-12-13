@@ -135,7 +135,7 @@
   on:mousedown={onmousedown}
   tabindex="0"
   role="button"
-  class="absolute border-2 border-slate-900 cursor-move move"
+  class="absolute border border-slate-800 cursor-move move"
   style="left: 0px; top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
   >
   <div role="button" tabindex="0" on:mousedown={onmousedown} class="absolute top-left corner-control resize-tl" />

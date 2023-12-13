@@ -15,7 +15,7 @@
   }
 </script>
 <div class="absolute inset-0 flex items-center justify-center">
-  <div class="absolute"
+  <div class="absolute border border-transparent"
     style="
     width: {canvas.width}px;
     height: {canvas.height}px;

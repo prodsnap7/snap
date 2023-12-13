@@ -7,7 +7,7 @@
   let scale = 0.6
 
   function addShape(shape: Shape) {
-    store.elements.cloneElement(shape)
+    store.elements.addElement(shape.clone())
   }
 </script>
 

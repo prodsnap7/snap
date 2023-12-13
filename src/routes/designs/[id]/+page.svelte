@@ -1,17 +1,19 @@
-<script>
-  import { page } from "$app/stores";
+<script lang="ts">
 	import Canvas from "$lib/components/canvas/canvas.svelte";
   import ControlsCanvas from "$lib/components/canvas/controls-canvas.svelte";
   import { Sidepanel } from "$lib/components/sidepanel";
 	import { store } from "$lib/store";
-	import { onMount } from "svelte";
+	// import { onMount } from "svelte";
+	import type { PageData } from "./$types";
+  // onMount(async () => {
+  //   const res = await fetch(`/api/designs/${$page.params.id}`)
+  //   const data = await res.json();
 
-  onMount(async () => {
-    const res = await fetch(`/api/designs/${$page.params.id}`)
-    const data = await res.json();
+  //   store.init(data)
+  // })
 
-    store.init(data)
-  })
+  export let data: PageData;
+  store.init(data.design)
 
 </script>
 
@@ -30,7 +32,7 @@
     </div>
 
     <!-- Main content section -->
-    <section class="flex flex-col w-full bg-gray-100">
+    <section class="flex flex-col w-full bg-primary/5">
       <div class="h-14 w-full"></div>
 
       <div class="flex-1 flex items-center justify-center relative">

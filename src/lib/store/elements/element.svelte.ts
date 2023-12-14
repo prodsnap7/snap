@@ -1,6 +1,7 @@
+import type { Curve } from './curve.svelte';
 import { Shape, type IShape } from './shape.svelte';
 
-export type CanvasElement = Shape;
+export type CanvasElement = Shape | Curve;
 export type CanvasObject = Partial<IShape> & { type: string };
 
 export const elementStore = new class {
@@ -93,13 +94,21 @@ export const selectedElementsStore = new class {
 
   set x(value: number) {
     this.elements.forEach((element) => {
-      element.x += value;
+			if (element.type === 'curve') {
+				element.x = value;
+			} else {
+      	element.x += value;
+			}
     });
   }
 
   set y(value: number) {
     this.elements.forEach((element) => {
-      element.y += value;
+			if (element.type === 'curve') {
+				element.y = value;
+			} else {
+      	element.y += value;
+			}
     });
   }
 

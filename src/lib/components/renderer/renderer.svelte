@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CanvasElement } from "$lib/store/elements/element.svelte";
+	import RenderCurve from "./render-curve.svelte";
 	import RenderShape from "./render-shape.svelte";
 
   type Props = {
@@ -11,10 +12,16 @@
   scale = scale ?? 1;
 </script>
 
+{#if element.type === "shape"}
 <div 
   class="absolute top-0 left-0"
   style="transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg)">
-{#if element.type === "shape"}
 <RenderShape {scale} shape={element} />
-{/if}
 </div>
+{:else if element.type === "curve"}
+<div 
+  class="absolute origin-center top-0 left-0"
+  >
+<RenderCurve {scale} curve={element} />
+</div>
+{/if}

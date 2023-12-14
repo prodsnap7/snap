@@ -1,24 +1,52 @@
 <script lang="ts">
-	import { store } from "$lib/store";
-	import type { Shape } from "$lib/store/elements/shape.svelte";
-	import { Renderer } from "../renderer";
-  import { shapes } from "./shapes";
+	import { store, type CanvasElement } from '$lib/store';
+	import { Renderer } from '../renderer';
+	import { shapes } from './data/shapes';
+	import { curves } from './data/curves';
 
-  let scale = 0.6
+	let scale = 0.6;
 
-  function addShape(shape: Shape) {
-    store.elements.addElement(shape.clone())
-  }
+	function addElement(el: CanvasElement) {
+		console.log('add element', el);
+		store.elements.addElement(el.clone());
+	}
 </script>
 
 <div class="mb-4">
-  <h2 class="font-bold">Shapes</h2>
+	<h2 class="font-bold">Shapes</h2>
 </div>
 <div class="flex flex-wrap items-center gap-3">
-  {#each shapes as shape}
-    <div on:click={() => addShape(shape)} tabindex="0" role="button" on:keydown={() => addShape(shape)} style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
-    class="relative flex-initial">
-      <Renderer element={shape} {scale} />
-    </div>
-  {/each}
+	{#each shapes as shape}
+		<div
+			on:click={() => addElement(shape)}
+			tabindex="0"
+			role="button"
+			on:keydown={() => addElement(shape)}
+			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
+			class="relative flex-initial"
+		>
+			<Renderer element={shape} {scale} />
+		</div>
+	{/each}
+</div>
+
+<div class="mb-4">
+	<h2 class="font-bold">Curves</h2>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+	{#each curves as curve}
+		<div
+			id="curve-renderer-elements-panel"
+			on:click={() => addElement(curve)}
+			tabindex="0"
+			role="button"
+			on:keydown={() => addElement(curve)}
+			style="width: {curve.width * scale}px; height: {curve.height * scale}px;"
+			class="relative flex-initial"
+		>
+			<div class="absolute origin-center top-0 left-0">
+				<Renderer element={curve} {scale} />
+			</div>
+		</div>
+	{/each}
 </div>

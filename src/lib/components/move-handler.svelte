@@ -151,11 +151,11 @@
 	{#each finalClasses as c}
 		{@render controller(c)}
 	{/each}
-
-	{#if children}
-		{@render children()}
-	{/if}
 </div>
+
+{#if children}
+	{@render children()}
+{/if}
 
 <style lang="postcss">
 	.corner-control {

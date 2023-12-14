@@ -1,37 +1,40 @@
 <script lang="ts">
 	import { store } from '$lib/store';
 	import MoveHandler from './move-handler.svelte';
+	import PointControls from './point-controls.svelte';
+
+	const { selectedElements } = store;
 </script>
 
-{#if store.selectedElements.elements.length > 1}
+{#if selectedElements.elements.length > 1}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
-		rotation={store.selectedElements.rotation}
+		x={selectedElements.x}
+		y={selectedElements.y}
+		width={selectedElements.width}
+		height={selectedElements.height}
+		rotation={selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.width = width;
+			selectedElements.height = height;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
+			selectedElements.rotation = rotation;
 		}}
 	/>
-{:else if store.selectedElements.elements.length === 1 && store.selectedElements.elements[0].type === 'curve'}
+{:else if selectedElements.elements.length === 1 && selectedElements.elements[0].type === 'curve'}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
-		rotation={store.selectedElements.rotation}
+		x={selectedElements.x}
+		y={selectedElements.y}
+		width={selectedElements.width}
+		height={selectedElements.height}
+		rotation={selectedElements.rotation}
 		exclude={[
 			'resizing-tm',
 			'resizing-bm',
@@ -43,38 +46,42 @@
 			'resizing-tl'
 		]}
 		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.width = width;
+			selectedElements.height = height;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
+			selectedElements.rotation = rotation;
 		}}
-	/>
-{:else if store.selectedElements.elements.length === 1}
+	>
+		{#each selectedElements.elements[0].points as point}
+			<PointControls {point} />
+		{/each}
+	</MoveHandler>
+{:else if selectedElements.elements.length === 1}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
-		rotation={store.selectedElements.rotation}
+		x={selectedElements.x}
+		y={selectedElements.y}
+		width={selectedElements.width}
+		height={selectedElements.height}
+		rotation={selectedElements.rotation}
 		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			selectedElements.width = width;
+			selectedElements.height = height;
+			selectedElements.x = x;
+			selectedElements.y = y;
 		}}
 		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
+			selectedElements.rotation = rotation;
 		}}
 	/>
 {/if}

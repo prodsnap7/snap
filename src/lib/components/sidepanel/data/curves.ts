@@ -7,7 +7,7 @@ const CURVES: PartialCurve[] = [
     strokeDasharray: "",
     points: [
       { x: 0, y: 0, type: "point" },
-      { x: 100, y: 100, type: "point" }
+      { x: 100, y: 0, type: "point" }
     ]
   },
   {
@@ -15,9 +15,21 @@ const CURVES: PartialCurve[] = [
     strokeWidth: 1,
     strokeDasharray: "",
     points: [
-      { x: 0, y: 0, type: "point" },
-      { x: 100, y: 100, type: "point" },
-      { x: 200, y: 0, type: "point" }
+      {
+        type: 'point' as const,
+        x: 10,
+        y: 10
+      },
+      {
+        type: 'point' as const,
+        x: 100,
+        y: 50
+      },
+      {
+        type: 'point' as const,
+        x: 300,
+        y: 10
+      }
     ]
   },
   {
@@ -25,10 +37,21 @@ const CURVES: PartialCurve[] = [
     strokeWidth: 1,
     strokeDasharray: "",
     points: [
-      { x: 0, y: 0, type: "point" },
-      { x: 100, y: 100, type: "point" },
-      { x: 200, y: 0, type: "point" },
-      { x: 300, y: 100, type: "point" }
+      {
+        type: 'point' as const,
+        x: 10,
+        y: 100
+      },
+      {
+        type: 'point' as const,
+        x: 100,
+        y: 0
+      },
+      {
+        type: 'point' as const,
+        x: 300,
+        y: 100
+      }
     ]
   },
   {
@@ -36,11 +59,21 @@ const CURVES: PartialCurve[] = [
     strokeWidth: 1,
     strokeDasharray: "",
     points: [
-      { x: 0, y: 0, type: "point" },
-      { x: 100, y: 100, type: "point" },
-      { x: 200, y: 0, type: "point" },
-      { x: 300, y: 100, type: "point" },
-      { x: 400, y: 0, type: "point" }
+      {
+        type: 'point' as const,
+        x: 10,
+        y: 100
+      },
+      {
+        type: 'point' as const,
+        x: 100,
+        y: 0
+      },
+      {
+        type: 'point' as const,
+        x: 300,
+        y: 100
+      }
     ]
   },
   {
@@ -48,12 +81,26 @@ const CURVES: PartialCurve[] = [
     strokeWidth: 1,
     strokeDasharray: "",
     points: [
-      { x: 0, y: 0, type: "point" },
-      { x: 100, y: 100, type: "point" },
-      { x: 200, y: 0, type: "point" },
-      { x: 300, y: 100, type: "point" },
-      { x: 400, y: 0, type: "point" },
-      { x: 500, y: 100, type: "point" }
+      {
+        type: 'point' as const,
+        x: 10,
+        y: 50
+      },
+      {
+        type: 'point' as const,
+        x: 100,
+        y: 100
+      },
+      {
+        type: 'point' as const,
+        x: 200,
+        y: 0
+      },
+      {
+        type: 'point' as const,
+        x: 300,
+        y: 50
+      }
     ]
   },
 ]

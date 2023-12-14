@@ -35,6 +35,7 @@ export interface ICurve extends IBaseObject {
   path: string;
   stroke: string;
   strokeWidth: number;
+  isQuadratic: boolean;
   strokeDasharray: string;
 }
 
@@ -48,12 +49,13 @@ export type PartialCurve = {
 export class Curve implements ICurve, CurveProps {
   type = "curve" as const;
   stroke = $state("#000000");
+  isQuadratic = $state(false);
   strokeWidth = $state(1);
   strokeDasharray = $state("");
   points = $state<Point[]>([]);
   rotation = $state(0);
   opacity = $state(1);
-  path = $derived(getPathFromPoints(this.points))
+  path = $derived(getPathFromPoints(this.points, PathType.QUADRATIC))
 
   constructor(obj: PartialCurve) {
     this.stroke = obj.stroke;
@@ -104,32 +106,72 @@ export class Curve implements ICurve, CurveProps {
   }
 }
 
+/**
+ * Enum for path types.
+ */
+const PathType = {
+  LINEAR: 'linear',
+  QUADRATIC: 'quadratic',
+  CUBIC: 'cubic'
+};
 
-export const getPathFromPoints = (points: IPoint[], isQuadratic = false): string => {
+/**
+ * Generates a path data string from a list of points.
+ * The path can be linear, quadratic, or cubic Bezier.
+ *
+ * @param {IPoint[]} points - Array of points to create the path.
+ * @param {string} pathType - Type of the path (linear, quadratic, cubic).
+ * @return {string} - The SVG path data string.
+ */
+export const getPathFromPoints = (points: IPoint[], pathType = PathType.LINEAR) => {
   if (points.length < 2) {
-    throw new Error('At least two points are required to create a path.');
+    throw new Error('getPathFromPoints requires at least two points to create a path.');
   }
 
   let pathData = `M${points[0].x} ${points[0].y}`;
 
-  if (isQuadratic && points.length > 2) {
-    for (let i = 1; i < points.length - 1; i++) {
-      // const p0 = points[i - 1];
-      const p1 = points[i];
-      const p2 = points[i + 1];
-
-      const midX = (p1.x + p2.x) / 2;
-      const midY = (p1.y + p2.y) / 2;
-
-      pathData += ` Q${p1.x} ${p1.y} ${midX} ${midY}`;
-    }
-    const lastPoint = points[points.length - 1];
-    pathData += ` L${lastPoint.x} ${lastPoint.y}`;
-  } else {
-    for (let i = 1; i < points.length; i++) {
-      pathData += ` L${points[i].x} ${points[i].y}`;
-    }
+  switch (pathType) {
+    case PathType.QUADRATIC:
+      pathData += generateQuadraticPath(points);
+      break;
+    case PathType.CUBIC:
+      pathData += generateCubicPath(points);
+      break;
+    case PathType.LINEAR:
+    default:
+      pathData += generateLinearPath(points);
   }
 
   return pathData;
 };
+
+// ... (generateLinearPath, generateQuadraticPath, generateCubicPath functions remain the same)
+
+// Generate linear path data
+function generateLinearPath(points: IPoint[]) {
+  return points.slice(1).map(point => ` L${point.x} ${point.y}`).join('');
+}
+
+// Generate quadratic path data
+function generateQuadraticPath(points: IPoint[]) {
+  let pathData = '';
+  for (let i = 1; i < points.length - 1; i++) {
+    const midX = (points[i].x + points[i + 1].x) / 2;
+    const midY = (points[i].y + points[i + 1].y) / 2;
+    pathData += ` Q${points[i].x} ${points[i].y} ${midX} ${midY}`;
+  }
+  pathData += ` L${points[points.length - 1].x} ${points[points.length - 1].y}`;
+  return pathData;
+}
+
+// Generate cubic path data
+function generateCubicPath(points: IPoint[]) {
+  let pathData = '';
+  for (let i = 1; i < points.length - 2; i += 3) {
+    if (i + 2 < points.length) {
+      const p1 = points[i], p2 = points[i + 1], p3 = points[i + 2];
+      pathData += ` C${p1.x} ${p1.y}, ${p2.x} ${p2.y}, ${p3.x} ${p3.y}`;
+    }
+  }
+  return pathData;
+}

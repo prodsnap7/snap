@@ -72,6 +72,10 @@ export const selectedElementsStore = new class {
 		this.elements = elements;
 	}
 
+	clear() {
+		this.elements = [];
+	}
+
 	get x() {
 		return Math.min(...this.elements.map((element) => element.x), Infinity);
 	}

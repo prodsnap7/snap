@@ -30,7 +30,7 @@
 	{/each}
 </div>
 
-<div class="mb-4">
+<div class="my-4">
 	<h2 class="font-bold">Curves</h2>
 </div>
 <div class="flex flex-wrap items-center gap-3">
@@ -41,11 +41,11 @@
 			tabindex="0"
 			role="button"
 			on:keydown={() => addElement(curve)}
-			style="width: {curve.width * scale}px; height: {curve.height * scale}px;"
+			style="width: {curve.width}px; height: {curve.height}px;"
 			class="relative flex-initial"
 		>
-			<div class="absolute origin-center top-0 left-0">
-				<Renderer element={curve} {scale} />
+			<div class="absolute origin-center inset-0">
+				<Renderer element={curve} scale={0.3} />
 			</div>
 		</div>
 	{/each}

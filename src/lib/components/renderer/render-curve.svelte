@@ -5,7 +5,9 @@
 		curve: ICurve;
 		scale?: number;
 	};
+
 	const { curve, scale = 1 } = $props<Props>();
+	console.log('Scale: ', scale);
 	const points = curve.points;
 	points.forEach((point) => {
 		point.x = point.x * scale;

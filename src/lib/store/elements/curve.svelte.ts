@@ -106,7 +106,6 @@ export class Curve implements ICurve, CurveProps {
 
 
 export const getPathFromPoints = (points: IPoint[], isQuadratic = false): string => {
-  console.log("getPathFromPoints", points)
   if (points.length < 2) {
     throw new Error('At least two points are required to create a path.');
   }

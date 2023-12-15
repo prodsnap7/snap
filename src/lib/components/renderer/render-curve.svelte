@@ -4,14 +4,14 @@
 	type Props = {
 		curve: ICurve;
 		scale?: number;
+		offset: { x: number; y: number };
 	};
 
-	const { curve, scale = 1 } = $props<Props>();
-	console.log('Scale: ', scale);
+	const { curve, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();
 	const points = curve.points;
 	points.forEach((point) => {
-		point.x = point.x * scale;
-		point.y = point.y * scale;
+		point.x = point.x * scale - offset.x;
+		point.y = point.y * scale - offset.y;
 	});
 </script>
 

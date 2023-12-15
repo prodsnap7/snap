@@ -1,7 +1,6 @@
 import type { CanvasElement } from "./common.svelte";
-import type { IBaseObject } from "./common.svelte";
 
-export interface IGroup extends IBaseObject {
+export interface IGroup {
   type: "group";
   elements: CanvasElement[];
 }
@@ -65,6 +64,13 @@ export class Group implements IGroup {
   set height(value: number) {
     this.elements.forEach((element) => {
       element.height += value;
+    });
+  }
+
+  clone(): Group {
+    return new Group({
+      type: "group",
+      elements: this.elements.map(e => e.clone())
     });
   }
 }

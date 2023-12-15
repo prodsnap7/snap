@@ -1,4 +1,4 @@
-import type { Curve, IShape, PartialCurve, Shape } from "..";
+import type { Curve, Group, IShape, PartialCurve, Shape } from "..";
 
 export interface IBaseObject {
   x: number;
@@ -10,5 +10,5 @@ export interface IBaseObject {
 }
 
 
-export type CanvasElement = Shape | Curve;
+export type CanvasElement = Shape | Curve | Group;
 export type CanvasObject = Partial<IShape> | PartialCurve

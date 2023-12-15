@@ -6,7 +6,7 @@
 
 	const { elements, canvas, selectedElements } = store;
 
-	function selectElement(event: MouseEvent, element: CanvasElement) {
+	function selectElement(event: MouseEvent | KeyboardEvent, element: CanvasElement) {
 		if (event.shiftKey) {
 			selectedElements.addElements([element]);
 		} else {
@@ -53,12 +53,11 @@
 
 	function onmouseup(event: MouseEvent) {
 		if (dragging) {
-			dragging = false;
-			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 			store.selectedElements.setElements(store.highlightedElements.elements);
 			store.highlightedElements.clear();
-		}
-		if (event.target === event.currentTarget || event.target === outerCanvas) {
+			dragging = false;
+			dragRect = { x: 0, y: 0, width: 0, height: 0 };
+		} else if (event.target === event.currentTarget || event.target === outerCanvas) {
 			selectedElements.clear();
 		}
 	}

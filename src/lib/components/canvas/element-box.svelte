@@ -6,7 +6,7 @@
 	type Props = {
 		element: CanvasElement;
 		dragRect: { x: number; y: number; width: number; height: number };
-		onSelect: (event: MouseEvent, element: CanvasElement) => void;
+		onSelect: (event: MouseEvent | KeyboardEvent, element: CanvasElement) => void;
 	};
 
 	const { element, dragRect, onSelect } = $props<Props>();
@@ -23,18 +23,11 @@
 		}
 	});
 
-	function onmouseup(event: MouseEvent) {
-		console.log('onmouseup element-box');
-		event.stopPropagation();
-	}
-
 	function onclick(event: MouseEvent) {
-		event.stopPropagation();
 		onSelect(event, element);
 	}
 	function onkeydown(event: KeyboardEvent) {
-		event.stopPropagation();
-		// onSelect(event, element);
+		onSelect(event, element);
 	}
 </script>
 
@@ -42,7 +35,6 @@
 	id="element-box"
 	{onclick}
 	{onkeydown}
-	{onmouseup}
 	role="button"
 	tabindex="0"
 	class={clsx('absolute cursor-pointer origin-center', {

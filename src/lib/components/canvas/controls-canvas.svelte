@@ -13,7 +13,7 @@
 		}
 	}
 
-	function onmouseup(event: MouseEvent) {
+	function clearSelectedElements(event: MouseEvent | KeyboardEvent) {
 		if (event.target === event.currentTarget) {
 			selectedElements.clear();
 		}
@@ -21,14 +21,14 @@
 </script>
 
 <div
-	on:mouseup={onmouseup}
+	on:mousedown={clearSelectedElements}
 	role="button"
 	id="controls-canvas"
 	tabindex="0"
 	class="absolute inset-0 flex items-center justify-center"
 >
 	<div
-		on:mouseup={onmouseup}
+		on:mousedown={clearSelectedElements}
 		role="button"
 		tabindex="0"
 		class="absolute border border-transparent cursor-default"

@@ -57,9 +57,11 @@
 			store.selectedElements.rotation = rotation;
 		}}
 	>
-		{#each store.selectedElements.elements[0].points as point}
-			<PointControls {point} />
-		{/each}
+		{#if store.selectedElements.elements[0]}
+			{#each store.selectedElements.elements[0].points as point}
+				<PointControls {point} />
+			{/each}
+		{/if}
 	</MoveHandler>
 {:else if store.selectedElements.elements.length === 1}
 	<MoveHandler

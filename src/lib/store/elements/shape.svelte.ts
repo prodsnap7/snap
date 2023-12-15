@@ -1,3 +1,4 @@
+import type { MakeOneRequired } from "$lib/utils";
 import type {  IBaseObject } from "./common.svelte";
 
 export interface IShape extends IBaseObject {
@@ -23,6 +24,8 @@ export const defaultShape: IShape = {
   radius: 0,
   strokeType: "solid"
 };
+
+export type PartialShape = MakeOneRequired<IShape, "type">;
 
 export class Shape implements IShape {
   type = "shape" as const;

@@ -1,8 +1,7 @@
-import type { Curve } from './curve.svelte';
-import { Shape, type IShape } from './shape.svelte';
+import { Shape } from "./shape.svelte";
+import type { CanvasElement, CanvasObject } from "./common.svelte";
+import { Curve } from "./curve.svelte";
 
-export type CanvasElement = Shape | Curve;
-export type CanvasObject = Partial<IShape> & { type: string };
 
 export const elementStore = new class {
 	elements = $state<CanvasElement[]>([]);
@@ -11,7 +10,11 @@ export const elementStore = new class {
 		if (element.type === 'shape') {
 			const shape = Shape.fromObject(element);
 			this.addElement(shape);
+		} else if (element.type === 'curve') {
+			const curve = Curve.fromObject(element);
+			this.addElement(curve);
 		}
+
 	}
 
 	addFromObjectArray(elements: CanvasObject[]) {

@@ -40,6 +40,7 @@ export interface ICurve extends IBaseObject {
 }
 
 export type PartialCurve = {
+  type: "curve";
   points: IPoint[];
   stroke: string;
   strokeWidth: number;
@@ -98,11 +99,16 @@ export class Curve implements ICurve, CurveProps {
 
   clone() {
     return new Curve({
+      type: "curve",
       stroke: this.stroke,
       strokeWidth: this.strokeWidth,
       strokeDasharray: this.strokeDasharray,
       points: this.points.map(p => p.clone())
     });
+  }
+
+  static fromObject(obj: PartialCurve) {
+    return new Curve(obj);
   }
 }
 

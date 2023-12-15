@@ -104,3 +104,6 @@ export function isOverlapping(element1: Moveable, element2: Moveable): boolean {
     // If neither is true, there is an overlap
     return true;
 }
+
+
+export type MakeOneRequired<T, K extends keyof T> = Partial<T> & { [P in K]-?: T[P] };

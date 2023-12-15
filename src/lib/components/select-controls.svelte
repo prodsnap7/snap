@@ -5,6 +5,16 @@
 </script>
 
 {#if store.selectedElements.elements.length > 1}
+	<div
+		style="
+		left: {store.selectedElements.width - store.selectedElements.x}px;
+		top: {store.selectedElements.y}px;
+		transform: rotate({store.selectedElements.rotation}deg);
+		"
+		class="translate-y-1/2 -translate-x-1/2 absolute origin-center"
+	>
+		Hello
+	</div>
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}

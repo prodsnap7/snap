@@ -1,13 +1,13 @@
 <script lang="ts">
-	import Canvas from "$lib/components/canvas/canvas.svelte";
-  import ControlsCanvas from "$lib/components/canvas/controls-canvas.svelte";
-  import { Sidepanel } from "$lib/components/sidepanel";
-	import { store } from "$lib/store";
-	import type { PageData } from "./$types";
+	import Canvas from '$lib/components/canvas/canvas.svelte';
+	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
+	import { Sidepanel } from '$lib/components/sidepanel';
+	import Toolbar from '$lib/components/toolbar/toolbar.svelte';
+	import { store } from '$lib/store';
+	import type { PageData } from './$types';
 
-  export let data: PageData;
-  store.init(data.design)
-
+	export let data: PageData;
+	store.init(data.design);
 </script>
 
 <div class="w-screen h-screen flex flex-col">
@@ -29,7 +29,9 @@
 
 		<!-- Main content section -->
 		<section class="flex flex-col w-full bg-primary/5">
-			<div class="h-14 w-full" />
+			<div class="h-14 w-full bg-white p-4 border-b shadow-xs">
+				<Toolbar />
+			</div>
 
 			<div class="flex-1 flex items-center justify-center relative">
 				<Canvas />
@@ -38,4 +40,3 @@
 		</section>
 	</main>
 </div>
-

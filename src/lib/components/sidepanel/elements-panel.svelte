@@ -45,7 +45,7 @@
 			class="relative flex-initial"
 		>
 			<div class="absolute origin-center inset-0">
-				<Renderer element={curve} scale={0.3} />
+				<Renderer element={curve} scale={0.5} />
 			</div>
 		</div>
 	{/each}

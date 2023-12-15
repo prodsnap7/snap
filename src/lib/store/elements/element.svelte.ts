@@ -134,3 +134,37 @@ export const selectedElementsStore = new class {
 		// });
 	}
 }
+
+export const highlightedElementsStore = new class {
+	elements = $state<CanvasElement[]>([]);
+
+	addElement(element: CanvasElement) {
+		console.log('adding element highlight', element);
+		this.elements.push(element);
+	}
+
+	addElements(elements: CanvasElement[]) {
+		elements.forEach((element) => {
+			this.addElement(element);
+		});
+	}
+
+	removeElement(element: CanvasElement) {
+		console.log('removing element highlight', element);
+		this.elements = this.elements.filter((e) => e !== element);
+	}
+
+	removeElements(elements: CanvasElement[]) {
+		elements.forEach((element) => {
+			this.removeElement(element);
+		});
+	}
+
+	setElements(elements: CanvasElement[]) {
+		this.elements = elements;
+	}
+
+	clear() {
+		this.elements = [];
+	}
+}

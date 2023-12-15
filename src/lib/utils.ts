@@ -60,3 +60,21 @@ export const flyAndScale = (
         easing: cubicOut
     };
 };
+
+
+type Moveable = { x: number, y: number, width: number, height: number };
+
+export function isOverlapping(element1: Moveable, element2: Moveable): boolean {
+    // Check if one element is to the right of the other
+    if (element1.x + element1.width <= element2.x || element2.x + element2.width <= element1.x) {
+        return false;
+    }
+  
+    // Check if one element is above the other
+    if (element1.y + element1.height <= element2.y || element2.y + element2.height <= element1.y) {
+        return false;
+    }
+  
+    // If neither is true, there is an overlap
+    return true;
+  }

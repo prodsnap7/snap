@@ -25,39 +25,42 @@
 		| 'resizing-lm'
 		| 'resizing-rm';
 
-	let frameid: number | null = null;
-	let state = $state<State>('idle');
+	let frameid = $state<number | null>(null);
+	let status = $state<State>('idle');
 	let { x, y, width, height, rotation, exclude = [], onMove, onResize, children } = $props<Props>();
 
 	function onmousedown(event: MouseEvent) {
+		event.stopPropagation();
 		if (event.target instanceof HTMLElement) {
 			if (event.target.classList.contains('move')) {
-				state = 'moving';
+				status = 'moving';
 			} else if (event.target.classList.contains('resizing-br')) {
-				state = 'resizing-br';
+				status = 'resizing-br';
 			} else if (event.target.classList.contains('resizing-bl')) {
-				state = 'resizing-bl';
+				status = 'resizing-bl';
 			} else if (event.target.classList.contains('resizing-tr')) {
-				state = 'resizing-tr';
+				status = 'resizing-tr';
 			} else if (event.target.classList.contains('resizing-tl')) {
-				state = 'resizing-tl';
+				status = 'resizing-tl';
 			} else if (event.target.classList.contains('rotate')) {
-				state = 'rotating';
+				status = 'rotating';
 			} else if (event.target.classList.contains('resizing-tm')) {
-				state = 'resizing-tm';
+				status = 'resizing-tm';
 			} else if (event.target.classList.contains('resizing-bm')) {
-				state = 'resizing-bm';
+				status = 'resizing-bm';
 			} else if (event.target.classList.contains('resizing-lm')) {
-				state = 'resizing-lm';
+				status = 'resizing-lm';
 			} else if (event.target.classList.contains('resizing-rm')) {
-				state = 'resizing-rm';
+				status = 'resizing-rm';
 			}
 		}
 	}
 
 	$effect(() => {
 		function onmouseup(event: MouseEvent) {
-			state = 'idle';
+			console.log('mouseup');
+			status = 'idle';
+			event.stopPropagation();
 		}
 
 		function onmousemove(event: MouseEvent) {
@@ -68,6 +71,7 @@
 				cancelAnimationFrame(frameid);
 			}
 			frameid = requestAnimationFrame(() => moveHandler(ratio, movementX, movementY));
+			// moveHandler(ratio, movementX, movementY);
 		}
 
 		function moveHandler(ratio: number, movementX: number, movementY: number) {
@@ -82,23 +86,23 @@
 				onResize({ x: anchorX, y: anchorY, width, height });
 			};
 
-			if (state === 'moving') {
+			if (status === 'moving') {
 				onMove({ x: movementX, y: movementY, width: 0, height: 0 });
-			} else if (state === 'resizing-br') {
+			} else if (status === 'resizing-br') {
 				resizeProportionally(movementX, movementX, 0, 0);
-			} else if (state === 'resizing-tl') {
+			} else if (status === 'resizing-tl') {
 				resizeProportionally(-movementX, -movementX, movementX, movementX / ratio);
-			} else if (state === 'resizing-bl') {
+			} else if (status === 'resizing-bl') {
 				resizeProportionally(-movementX, movementY, movementX, 0);
-			} else if (state === 'resizing-tr') {
+			} else if (status === 'resizing-tr') {
 				resizeProportionally(movementX, -movementY, 0, movementY);
-			} else if (state === 'resizing-tm') {
+			} else if (status === 'resizing-tm') {
 				onResize({ x: 0, y: movementY, width: 0, height: -movementY });
-			} else if (state === 'resizing-bm') {
+			} else if (status === 'resizing-bm') {
 				onResize({ x: 0, y: 0, width: 0, height: movementY });
-			} else if (state === 'resizing-lm') {
+			} else if (status === 'resizing-lm') {
 				onResize({ x: movementX, y: 0, width: -movementX, height: 0 });
-			} else if (state === 'resizing-rm') {
+			} else if (status === 'resizing-rm') {
 				onResize({ x: 0, y: 0, width: movementX, height: 0 });
 			}
 		}
@@ -135,6 +139,10 @@
 	const classes = include.filter((c) => !exclude.includes(c));
 	// get the classes from the classMap and classes
 	const finalClasses = classes.map((c) => classMap[c]);
+
+	function onMoveHandlerMouseUp(event: MouseEvent) {
+		console.log('onMoveHandlerMouseUp');
+	}
 </script>
 
 {#snippet controller(classes)}
@@ -142,11 +150,13 @@
 {/snippet}
 
 <div
-	on:mousedown={onmousedown}
+	{onmousedown}
+	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
 	class="absolute border border-slate-800 cursor-move move"
-	style="left: 0px; top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
+	style="left: 0px;
+	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
 >
 	{#each finalClasses as c}
 		{@render controller(c)}

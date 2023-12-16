@@ -37,6 +37,13 @@ export class Group implements IGroup {
     return this._height;
   }
 
+  updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+    this.elements.forEach((element) => {
+      element.updateBounds({ x, y, width, height });
+    })
+  }
+  
+
   set x(value: number) {
     this.elements.forEach((element) => {
       if (element.type === 'curve') {

@@ -12,6 +12,7 @@ type StoreObj = {
 export const store = new class {
   elements = $state(elementStore);
   selectedElements = $derived(selectedElementsStore);
+  unselectedElements = $derived((this.elements.elements.filter((element) => !this.selectedElements.elements.includes(element))));
   highlightedElements = $state(highlightedElementsStore);
   canvas = canvasStore;
   name = $state("New Design");
@@ -45,4 +46,114 @@ export const store = new class {
     this.elements.addElement(group);
     this.selectedElements.setElements([group]);
   }
+}
+
+function getGrid() {
+  return store.unselectedElements.map(el => ({
+    left: el.x,
+    right: el.x + el.width,
+    top: el.y,
+    bottom: el.y + el.height
+  }))
+}
+
+export function getGridLines() {
+  const grid = getGrid();
+  const selectedElements = $derived(store.selectedElements.elements);
+  const canvas = $derived(store.canvas);
+
+  const lines = selectedElements.reduce((acc, el) => {
+    const { x, y, width, height } = el;
+    const elMiddleX = x + width / 2;
+    const elMiddleY = y + height / 2;
+    const tolerance = 1e-6;
+
+    grid.forEach((g) => {
+        if (g.left === x) {
+            acc.push({
+                x1: g.left,
+                y1: (g.top + g.bottom) / 2,
+                x2: x,
+                y2: y + height / 2,
+            });
+        }
+
+        if (g.top === y) {
+            acc.push({
+                x1: (g.left + g.right) / 2,
+                y1: g.top,
+                x2: x + width / 2,
+                y2: y,
+            });
+        }
+
+        if (g.right === x + width) {
+            acc.push({
+                x1: g.right,
+                y1: (g.top + g.bottom) / 2,
+                x2: x + width,
+                y2: y + height / 2,
+            });
+        }
+
+        if (g.bottom === y + height) {
+            acc.push({
+                x1: (g.left + g.right) / 2,
+                y1: g.bottom,
+                x2: x + width / 2,
+                y2: y + height,
+            });
+        }
+
+        // Calculate middle points for the grid element
+        const gridMiddleX = g.left + (g.right - g.left) / 2;
+        const gridMiddleY = g.top + (g.bottom - g.top) / 2;
+
+        // Check alignment and create lines
+        if (Math.abs(gridMiddleX - elMiddleX) <= tolerance) {
+            acc.push({
+                x1: gridMiddleX,
+                y1: Math.min(g.top, y), // Start from the top of the higher element
+                x2: elMiddleX,
+                y2: Math.max(g.bottom, y + height), // End at the bottom of the lower element
+            });
+        }
+
+        if (Math.abs(gridMiddleY - elMiddleY) <= tolerance) {
+            acc.push({
+                x1: Math.min(g.left, x), // Start from the left of the leftmost element
+                y1: gridMiddleY,
+                x2: Math.max(g.right, x + width), // End at the right of the rightmost element
+                y2: elMiddleY,
+            });
+        }
+    });
+
+    const middlePointOfElement = {
+        x: x + width / 2,
+        y: y + height / 2,
+    };
+
+    if (middlePointOfElement.x === canvas.width / 2) {
+        acc.push({
+            x1: canvas.width / 2,
+            y1: 0,
+            x2: middlePointOfElement.x,
+            y2: middlePointOfElement.y,
+        });
+    }
+
+    if (middlePointOfElement.y === canvas.height / 2) {
+        acc.push({
+            x1: 0,
+            y1: canvas.height / 2,
+            x2: middlePointOfElement.x,
+            y2: middlePointOfElement.y,
+        });
+    }
+
+    return acc;
+}, [] as { x1: number; y1: number; x2: number; y2: number }[]);
+
+return lines;
 }

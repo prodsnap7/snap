@@ -97,6 +97,13 @@ export class Curve implements ICurve, CurveProps {
     //
   }
 
+  updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+    this.points.forEach(p => {
+      p.x += x;
+      p.y += y;
+    })
+  }
+
   clone() {
     return new Curve({
       type: "curve",

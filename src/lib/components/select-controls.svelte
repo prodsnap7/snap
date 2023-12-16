@@ -3,6 +3,7 @@
 	import { Trash } from 'phosphor-svelte';
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
+	import { snapToGrid } from '$lib/utils/snap-utils';
 
 	const selected = $derived(store.selectedElements.elements);
 
@@ -32,6 +33,18 @@
 		return points;
 	}
 	const points = $derived(getPoints());
+
+	function onMove({ x, y }: { x: number; y: number }) {
+		const currentEl = {
+			x,
+			y,
+			width: store.selectedElements.width,
+			height: store.selectedElements.height
+		};
+		const snap = snapToGrid(currentEl, store.unselectedElements, 5);
+
+		store.selectedElements.updateBounds({ x: snap.x, y: snap.y, width: 0, height: 0 });
+	}
 </script>
 
 {#if selected.length > 1}
@@ -70,14 +83,10 @@
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			store.selectedElements.updateBounds({ x, y, width: 0, height: 0 });
 		}}
 		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
+			store.selectedElements.updateBounds({ x, y, width, height });
 		}}
 		onRotate={(rotation) => {
 			store.selectedElements.rotation = rotation;
@@ -176,10 +185,7 @@
 		width={store.selectedElements.width}
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
-		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.width = width;
 			store.selectedElements.height = height;

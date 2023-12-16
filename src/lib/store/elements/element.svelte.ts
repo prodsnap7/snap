@@ -58,8 +58,11 @@ export const elementStore = new class {
 	}
 };
 
+const unSelectedElements = $derived(elementStore.elements.filter((element) => !selectedElementsStore.elements.includes(element)));
+
 export const selectedElementsStore = new class {
 	elements = $state<CanvasElement[]>([]);
+	private _bounds = $derived(this._getBounds(this.elements)); 
 
 	addElement(element: CanvasElement) {
 		this.elements.push(element);
@@ -87,6 +90,25 @@ export const selectedElementsStore = new class {
 
 	clear() {
 		this.elements = [];
+	}
+
+	private _getBounds(elements: CanvasElement[]) {
+		let x = Math.min(...elements.map((element) => element.x), Infinity);
+		let y = Math.min(...elements.map((element) => element.y), Infinity);
+		let width = Math.max(...elements.map((element) => element.x + element.width), -Infinity) - x;
+		let height = Math.max(...elements.map((element) => element.y + element.height), -Infinity) - y;
+
+		return { x, y, width, height };
+	}
+
+	get bounds() {
+		return this._bounds;
+	}
+
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number}) {
+		this.elements.forEach((element) => {
+			element.updateBounds({ x, y, width, height });
+		})
 	}
 
 	get x() {

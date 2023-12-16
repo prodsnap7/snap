@@ -7,6 +7,7 @@ export interface IBaseObject {
   height: number;
   rotation: number;
   opacity: number;
+  snapped?: boolean;
 }
 
 

@@ -1,6 +1,7 @@
 import { canvasStore } from "./canvas.svelte";
 import { Group } from "./elements/group.svelte";
 import { elementStore, highlightedElementsStore, selectedElementsStore } from "./elements/element.svelte"
+import type { CanvasElement } from ".";
 
 type StoreObj = {
   name: string;
@@ -28,7 +29,16 @@ export const store = new class {
   }
 
   groupSelected() {
-    const selected = this.selectedElements.elements.map((element) => element.clone());
+    // get the selected elements, but if one of the selected elements is a group, then call element.ungroup() 
+    // const selected = this.selectedElements.elements.map((element) => element.clone());
+    const selected: CanvasElement[] = [];
+    this.selectedElements.elements.forEach((element) => {
+      if (element.type === 'group') {
+        selected.push(...element.ungroup());
+      } else {
+        selected.push(element.clone());
+      }
+    });
     this.deleteSelected();
     const group = new Group({ elements: selected, type: "group" });
 

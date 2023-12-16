@@ -4,6 +4,8 @@
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
 
+	const selected = $derived(store.selectedElements.elements);
+
 	function deleteSelected() {
 		store.deleteSelected();
 	}
@@ -21,7 +23,7 @@
 	}
 </script>
 
-{#if store.selectedElements.elements.length > 1}
+{#if selected.length > 1}
 	<div
 		style="
 			left: {store.selectedElements.x}px;
@@ -70,7 +72,7 @@
 			store.selectedElements.rotation = rotation;
 		}}
 	></MoveHandler>
-{:else if store.selectedElements.elements.length === 1 && store.selectedElements.elements[0].type === 'curve'}
+{:else if selected.length === 1 && selected[0].type === 'curve'}
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}
@@ -101,13 +103,13 @@
 			store.selectedElements.rotation = rotation;
 		}}
 	>
-		{#if store.selectedElements.elements[0]}
-			{#each store.selectedElements.elements[0].points as point}
+		{#if selected[0]}
+			{#each selected[0].points as point}
 				<PointControls {point} />
 			{/each}
 		{/if}
 	</MoveHandler>
-{:else if store.selectedElements.elements.length === 1 && store.selectedElements.elements[0].type === 'group'}
+{:else if selected.length === 1 && selected[0].type === 'group'}
 	<div
 		style="
 	left: {store.selectedElements.x}px;
@@ -128,10 +130,7 @@
 			<div
 				class="p-1.5 px-2 shadow-sm rounded flex items-center gap-2 bg-white border border-gray-400"
 			>
-				<button
-					onclick={() => unGroupSelected(store.selectedElements.elements[0] as Group)}
-					class="text-xs select-none"
-				>
+				<button onclick={() => unGroupSelected(selected[0] as Group)} class="text-xs select-none">
 					Ungroup
 				</button>
 				<button onclick={deleteSelected}>
@@ -161,7 +160,7 @@
 			store.selectedElements.rotation = rotation;
 		}}
 	></MoveHandler>
-{:else if store.selectedElements.elements.length === 1}
+{:else if selected.length === 1}
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}

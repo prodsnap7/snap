@@ -21,6 +21,17 @@
 		store.elements.addElements(ungrouped);
 		store.selectedElements.addElements(ungrouped);
 	}
+
+	function getPoints() {
+		const points = [];
+		for (const element of selected) {
+			if (element.type === 'curve') {
+				points.push(...element.points);
+			}
+		}
+		return points;
+	}
+	const points = $derived(getPoints());
 </script>
 
 {#if selected.length > 1}
@@ -103,11 +114,9 @@
 			store.selectedElements.rotation = rotation;
 		}}
 	>
-		{#if selected[0]}
-			{#each selected[0].points as point}
-				<PointControls {point} />
-			{/each}
-		{/if}
+		{#each points as point}
+			<PointControls {point} />
+		{/each}
 	</MoveHandler>
 {:else if selected.length === 1 && selected[0].type === 'group'}
 	<div

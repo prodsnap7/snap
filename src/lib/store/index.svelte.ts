@@ -11,7 +11,7 @@ type StoreObj = {
 
 export const store = new class {
   elements = $state(elementStore);
-  selectedElements = $state(selectedElementsStore);
+  selectedElements = $derived(selectedElementsStore);
   highlightedElements = $state(highlightedElementsStore);
   canvas = canvasStore;
   name = $state("New Design");

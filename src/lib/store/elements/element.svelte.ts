@@ -42,6 +42,16 @@ export const elementStore = new class {
 		});
 	}
 
+	removeElement(element: CanvasElement) {
+		this.elements = this.elements.filter((e) => e !== element);
+	}
+
+	removeElements(elements: CanvasElement[]) {
+		elements.forEach((element) => {
+			this.removeElement(element);
+		});
+	}
+
 	cloneElement(element: CanvasElement) {
 		const clone = element.clone();
 		this.addElement(clone);
@@ -101,7 +111,7 @@ export const selectedElementsStore = new class {
 
   set x(value: number) {
     this.elements.forEach((element) => {
-			if (element.type === 'curve') {
+			if (element.type === 'curve' || element.type === 'group') {
 				element.x = value;
 			} else {
       	element.x += value;
@@ -111,7 +121,7 @@ export const selectedElementsStore = new class {
 
   set y(value: number) {
     this.elements.forEach((element) => {
-			if (element.type === 'curve') {
+			if (element.type === 'curve' || element.type === 'group') {
 				element.y = value;
 			} else {
       	element.y += value;
@@ -121,13 +131,21 @@ export const selectedElementsStore = new class {
 
   set width(value: number) {
     this.elements.forEach((element) => {
-      element.width += value;
+			if (element.type === 'curve' || element.type === 'group') {
+				element.width = value;
+			} else {
+      	element.width += value;
+			}
     });
   }
 
   set height(value: number) {
     this.elements.forEach((element) => {
-      element.height += value;
+			if (element.type === 'curve' || element.type === 'group') {
+				element.height = value;
+			} else {
+				element.height += value;
+			}
     });
   }
 

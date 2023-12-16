@@ -1,19 +1,53 @@
 <script lang="ts">
-	import { store } from '$lib/store';
+	import { Group, store } from '$lib/store';
+	import { Trash } from 'phosphor-svelte';
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
+
+	function deleteSelected() {
+		store.deleteSelected();
+	}
+
+	function groupSelected() {
+		store.groupSelected();
+	}
+
+	function unGroupSelected(element: Group) {
+		const ungrouped = element.ungroup();
+		store.elements.removeElement(element);
+		store.selectedElements.clear();
+		store.elements.addElements(ungrouped);
+		store.selectedElements.addElements(ungrouped);
+	}
 </script>
 
 {#if store.selectedElements.elements.length > 1}
 	<div
 		style="
-		left: {store.selectedElements.width - store.selectedElements.x}px;
-		top: {store.selectedElements.y}px;
-		transform: rotate({store.selectedElements.rotation}deg);
+			left: {store.selectedElements.x}px;
+			top: {store.selectedElements.y}px;
+			width: {store.selectedElements.width}px;
+			height: {store.selectedElements.height}px;
 		"
-		class="translate-y-1/2 -translate-x-1/2 absolute origin-center"
+		class="absolute"
 	>
-		Hello
+		<div
+			style="
+			left: 50%;
+			top: -40px;
+			transform: translateX(-50%) rotate({store.selectedElements.rotation}deg);
+			"
+			class="absolute origin-center"
+		>
+			<div
+				class="p-1.5 px-2 shadow-sm rounded flex items-center gap-2 bg-white border border-gray-400"
+			>
+				<button onclick={groupSelected} class="text-xs select-none"> Group </button>
+				<button onclick={deleteSelected}>
+					<Trash />
+				</button>
+			</div>
+		</div>
 	</div>
 	<MoveHandler
 		x={store.selectedElements.x}
@@ -35,7 +69,7 @@
 		onRotate={(rotation) => {
 			store.selectedElements.rotation = rotation;
 		}}
-	/>
+	></MoveHandler>
 {:else if store.selectedElements.elements.length === 1 && store.selectedElements.elements[0].type === 'curve'}
 	<MoveHandler
 		x={store.selectedElements.x}
@@ -73,6 +107,60 @@
 			{/each}
 		{/if}
 	</MoveHandler>
+{:else if store.selectedElements.elements.length === 1 && store.selectedElements.elements[0].type === 'group'}
+	<div
+		style="
+	left: {store.selectedElements.x}px;
+	top: {store.selectedElements.y}px;
+	width: {store.selectedElements.width}px;
+	height: {store.selectedElements.height}px;
+"
+		class="absolute"
+	>
+		<div
+			style="
+	left: 50%;
+	top: -40px;
+	transform: translateX(-50%) rotate({store.selectedElements.rotation}deg);
+	"
+			class="absolute origin-center"
+		>
+			<div
+				class="p-1.5 px-2 shadow-sm rounded flex items-center gap-2 bg-white border border-gray-400"
+			>
+				<button
+					onclick={() => unGroupSelected(store.selectedElements.elements[0] as Group)}
+					class="text-xs select-none"
+				>
+					Ungroup
+				</button>
+				<button onclick={deleteSelected}>
+					<Trash />
+				</button>
+			</div>
+		</div>
+	</div>
+	<MoveHandler
+		x={store.selectedElements.x}
+		y={store.selectedElements.y}
+		width={store.selectedElements.width}
+		height={store.selectedElements.height}
+		rotation={store.selectedElements.rotation}
+		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		onMove={({ x, y }) => {
+			store.selectedElements.x = x;
+			store.selectedElements.y = y;
+		}}
+		onResize={({ width, height, x, y }) => {
+			store.selectedElements.width = width;
+			store.selectedElements.height = height;
+			store.selectedElements.x = x;
+			store.selectedElements.y = y;
+		}}
+		onRotate={(rotation) => {
+			store.selectedElements.rotation = rotation;
+		}}
+	></MoveHandler>
 {:else if store.selectedElements.elements.length === 1}
 	<MoveHandler
 		x={store.selectedElements.x}

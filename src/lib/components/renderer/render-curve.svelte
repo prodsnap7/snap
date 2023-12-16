@@ -4,7 +4,7 @@
 	type Props = {
 		curve: ICurve;
 		scale?: number;
-		offset: { x: number; y: number };
+		offset?: { x: number; y: number };
 	};
 
 	const { curve, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();

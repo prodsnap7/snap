@@ -21,10 +21,12 @@ export class Group implements IGroup {
 
   get x() {
     return this._x;
+    // return Math.min(...this.elements.map((element) => element.x), Infinity);
   }
 
   get y() {
     return this._y;
+    // return Math.min(...this.elements.map((element) => element.y), Infinity);
   }
 
   get width() {
@@ -71,6 +73,14 @@ export class Group implements IGroup {
     return new Group({
       type: "group",
       elements: this.elements.map(e => e.clone())
+    });
+  }
+
+  ungroup(): CanvasElement[] {
+    return this.elements.map((element) => {
+      // element.x += this.x;
+      // element.y += this.y;
+      return element.clone();
     });
   }
 }

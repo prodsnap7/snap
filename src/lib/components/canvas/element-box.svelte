@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { store, type CanvasElement } from '$lib/store';
-	import { isOverlapping } from '$lib/utils';
+	import { isOverlapping } from '$lib/utils/select-utils';
 	import clsx from 'clsx';
 
 	type Props = {

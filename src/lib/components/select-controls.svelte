@@ -56,6 +56,39 @@
 			height: 0
 		});
 	}
+
+	function onResize({
+		x,
+		y,
+		width,
+		height
+	}: {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	}) {
+		const currentEl = {
+			x: store.selectedElements.x + x,
+			y: store.selectedElements.y + y,
+			width: store.selectedElements.width + width,
+			height: store.selectedElements.height + height
+		};
+
+		const otherEls = [
+			...store.unselectedElements,
+			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
+		];
+
+		const snap = snapToGrid(currentEl, otherEls, 5);
+
+		store.selectedElements.updateBounds({
+			x: snap.x - store.selectedElements.x,
+			y: snap.y - store.selectedElements.y,
+			width: snap.width - store.selectedElements.width,
+			height: snap.height - store.selectedElements.height
+		});
+	}
 </script>
 
 {#if selected.length > 1}
@@ -93,9 +126,7 @@
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
-		onMove={({ x, y }) => {
-			store.selectedElements.updateBounds({ x, y, width: 0, height: 0 });
-		}}
+		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.updateBounds({ x, y, width, height });
 		}}
@@ -120,10 +151,7 @@
 			'resizing-tr',
 			'resizing-tl'
 		]}
-		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.width = width;
 			store.selectedElements.height = height;
@@ -175,10 +203,7 @@
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
-		onMove={({ x, y }) => {
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.width = width;
 			store.selectedElements.height = height;

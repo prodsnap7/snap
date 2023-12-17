@@ -36,15 +36,20 @@
 
 	function onMove({ x, y }: { x: number; y: number }) {
 		const currentEl = {
-			x,
-			y,
+			x: store.selectedElements.x + x,
+			y: store.selectedElements.y + y,
 			width: store.selectedElements.width,
 			height: store.selectedElements.height
 		};
 
 		const snap = snapToGrid(currentEl, store.unselectedElements, 5);
 
-		store.selectedElements.updateBounds({ x: snap.x, y: snap.y, width: 0, height: 0 });
+		store.selectedElements.updateBounds({
+			x: snap.x - store.selectedElements.x,
+			y: snap.y - store.selectedElements.y,
+			width: 0,
+			height: 0
+		});
 	}
 
 	// $effect(() => {

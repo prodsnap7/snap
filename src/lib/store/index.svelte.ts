@@ -17,6 +17,7 @@ export const store = new class {
   canvas = canvasStore;
   name = $state("New Design");
   fonts = $state<Record<string, string[]>>({});
+  gridLines = $derived(getGridLines());
 
   init(obj: StoreObj) {
     this.name = obj.name;
@@ -49,12 +50,14 @@ export const store = new class {
 }
 
 function getGrid() {
-  return store.unselectedElements.map(el => ({
+  const grid = $derived(store.unselectedElements.map((el) => ({
     left: el.x,
-    right: el.x + el.width,
     top: el.y,
-    bottom: el.y + el.height
-  }))
+    right: el.x + el.width,
+    bottom: el.y + el.height,
+  })));
+
+      return grid;
 }
 
 export function getGridLines() {
@@ -155,5 +158,5 @@ export function getGridLines() {
     return acc;
 }, [] as { x1: number; y1: number; x2: number; y2: number }[]);
 
-return lines;
+  return lines;
 }

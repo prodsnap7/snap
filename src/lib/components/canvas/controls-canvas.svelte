@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { store, type CanvasElement } from '$lib/store';
+	import GridLines from '../grid-lines/grid-lines.svelte';
 	import SelectControls from '../select-controls.svelte';
 	import DragOverlay from './drag-overlay.svelte';
 	import ElementBox from './element-box.svelte';
@@ -95,6 +96,7 @@
     height: {canvas.height}px;
   "
 	>
+		<GridLines />
 		{#each elements.elements as element}
 			<ElementBox
 				{element}

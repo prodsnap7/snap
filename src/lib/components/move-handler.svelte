@@ -58,7 +58,6 @@
 
 	$effect(() => {
 		function onmouseup(event: MouseEvent) {
-			console.log('mouseup');
 			status = 'idle';
 			event.stopPropagation();
 		}
@@ -140,9 +139,7 @@
 	// get the classes from the classMap and classes
 	const finalClasses = classes.map((c) => classMap[c]);
 
-	function onMoveHandlerMouseUp(event: MouseEvent) {
-		console.log('onMoveHandlerMouseUp');
-	}
+	function onMoveHandlerMouseUp(event: MouseEvent) {}
 </script>
 
 {#snippet controller(classes)}

@@ -3,9 +3,7 @@
 	import Line from './line.svelte';
 
 	const { width, height } = store.canvas;
-	const lines = getGridLines();
-
-	$inspect(lines);
+	const lines = $derived(store.gridLines);
 </script>
 
 <svg {width} {height} class="absolute inset-0">

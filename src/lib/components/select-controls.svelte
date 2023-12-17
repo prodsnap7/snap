@@ -41,10 +41,24 @@
 			width: store.selectedElements.width,
 			height: store.selectedElements.height
 		};
+
 		const snap = snapToGrid(currentEl, store.unselectedElements, 5);
 
 		store.selectedElements.updateBounds({ x: snap.x, y: snap.y, width: 0, height: 0 });
 	}
+
+	// $effect(() => {
+	// 	const currentEl = {
+	// 		x: store.selectedElements.x,
+	// 		y: store.selectedElements.y,
+	// 		width: store.selectedElements.width,
+	// 		height: store.selectedElements.height
+	// 	};
+
+	// 	const snap = snapToGrid(currentEl, store.unselectedElements, 5);
+
+	// 	store.selectedElements.updateBounds({ x: snap.x, y: snap.y, width: 0, height: 0 });
+	// });
 </script>
 
 {#if selected.length > 1}

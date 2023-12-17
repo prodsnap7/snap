@@ -2,6 +2,7 @@ import { Curve, type PartialCurve } from "$lib/store/elements/curve.svelte";
 
 const CURVES: PartialCurve[] = [
   {
+    type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
     strokeDasharray: "",
@@ -11,6 +12,7 @@ const CURVES: PartialCurve[] = [
     ]
   },
   {
+    type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
     strokeDasharray: "",
@@ -33,6 +35,7 @@ const CURVES: PartialCurve[] = [
     ]
   },
   {
+    type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
     strokeDasharray: "",
@@ -55,6 +58,7 @@ const CURVES: PartialCurve[] = [
     ]
   },
   {
+    type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
     strokeDasharray: "",
@@ -77,6 +81,7 @@ const CURVES: PartialCurve[] = [
     ]
   },
   {
+    type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
     strokeDasharray: "",

@@ -11,7 +11,7 @@ export function isCloseEnough(a: number, b: number, threshold: number): boolean 
 	return Math.abs(a - b) <= threshold;
 }
 
-export function snapToGridOld(
+export function snapToGrid(
 	currentEl: Snappable,
 	otherEls: Snappable[],
 	snapThreshold: number

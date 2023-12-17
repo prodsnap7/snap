@@ -222,12 +222,7 @@
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
 		{onMove}
-		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onResize}
 		onRotate={(rotation) => {
 			store.selectedElements.rotation = rotation;
 		}}

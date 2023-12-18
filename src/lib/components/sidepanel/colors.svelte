@@ -66,9 +66,7 @@
 		mutationFn: async ({ val }: { val: string }) => {
 			const color = Color(val.replace(/\s+/g, '')).rgb().string();
 			console.log('val', val);
-			const res = await fetch(
-				`https://www.thecolorapi.com/scheme?rgb=${color}&mode=analogic&count=12`
-			);
+			const res = await fetch(`https://www.thecolorapi.com/scheme?rgb=${color}&count=12`);
 			const data = await res.json();
 			searchResults = data.colors.map((color: any) => color.hex.value);
 		}
@@ -105,7 +103,7 @@
 
 <div class="grid grid-cols-6 gap-2">
 	<div
-		class="w-9 h-9 rounded flex items-center justify-center bg-gradient-to-t from-cyan-500 via-sky-500 to-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
+		class="w-10 h-10 rounded flex items-center justify-center bg-gradient-to-t from-cyan-500 via-sky-500 to-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
 		id="color-picker"
 	>
 		<PlusCircle color="#efefef" size={24} />
@@ -113,7 +111,7 @@
 	{#each elementStore.colors as color}
 		<button
 			onclick={() => onColorClick(color)}
-			class="w-9 h-9 rounded border border-gray-300 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
+			class="w-10 h-10 rounded border border-gray-300 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
 			style="background-color: {color}"
 		>
 			<Check size={24} color={color === sidepanelStore.val ? '#efefef' : 'transparent'} />
@@ -129,7 +127,7 @@
 		{#each searchResults as color}
 			<button
 				onclick={() => onColorClick(color)}
-				class="w-9 h-9 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
+				class="w-10 h-10 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
 				style="background-color: {color}"
 			>
 			</button>
@@ -145,7 +143,7 @@
 	{#each COLORS as color}
 		<button
 			onclick={() => onColorClick(color)}
-			class="w-9 h-9 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
+			class="w-10 h-10 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
 			style="background-color: {color}"
 		>
 		</button>

@@ -39,6 +39,7 @@ export type PartialCurve = {
   type: "curve";
   points: IPoint[];
   stroke: string;
+  pathType?: "linear" | "quadratic" | "cubic";
   strokeWidth: number;
   strokeDasharray: string;
 }
@@ -52,11 +53,13 @@ export class Curve implements ICurve, IBaseMethods {
   points = $state<Point[]>([]);
   rotation = $state(0);
   opacity = $state(1);
-  path = $derived(getPathFromPoints(this.points, PathType.QUADRATIC))
+  pathType = $state("linear");
+  path = $derived(getPathFromPoints(this.points, this.pathType))
 
   constructor(obj: PartialCurve) {
     this.stroke = obj.stroke;
     this.strokeWidth = obj.strokeWidth;
+    this.pathType = obj.pathType || "linear";
     this.strokeDasharray = obj.strokeDasharray;
     this.points = obj.points.map(p => new Point(p));
   }
@@ -110,7 +113,8 @@ export class Curve implements ICurve, IBaseMethods {
       stroke: this.stroke,
       strokeWidth: this.strokeWidth,
       strokeDasharray: this.strokeDasharray,
-      points: this.points.map(p => p.clone())
+      points: this.points.map(p => p.clone()),
+      pathType: this.pathType as "linear" | "quadratic" | "cubic"
     });
   }
 

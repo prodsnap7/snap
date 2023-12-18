@@ -8,7 +8,7 @@ const CURVES: PartialCurve[] = [
     strokeDasharray: "",
     points: [
       { x: 0, y: 0, type: "point" },
-      { x: 200, y: 0, type: "point" }
+      { x: 150, y: 0, type: "point" }
     ]
   },
   {
@@ -29,7 +29,7 @@ const CURVES: PartialCurve[] = [
       },
       {
         type: 'point' as const,
-        x: 200,
+        x: 150,
         y: 10
       }
     ]
@@ -38,6 +38,7 @@ const CURVES: PartialCurve[] = [
     type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
+    pathType: "quadratic",
     strokeDasharray: "",
     points: [
       {
@@ -52,7 +53,7 @@ const CURVES: PartialCurve[] = [
       },
       {
         type: 'point' as const,
-        x: 200,
+        x: 150,
         y: 100
       }
     ]
@@ -75,7 +76,7 @@ const CURVES: PartialCurve[] = [
       },
       {
         type: 'point' as const,
-        x: 200,
+        x: 150,
         y: 100
       }
     ]
@@ -84,6 +85,7 @@ const CURVES: PartialCurve[] = [
     type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
+    pathType: "quadratic",
     strokeDasharray: "",
     points: [
       {
@@ -98,12 +100,12 @@ const CURVES: PartialCurve[] = [
       },
       {
         type: 'point' as const,
-        x: 200,
+        x: 150,
         y: 0
       },
       {
         type: 'point' as const,
-        x: 200,
+        x: 150,
         y: 50
       }
     ]

@@ -1,15 +1,15 @@
 export const sidepanelStore = new class {
-  private _prev = $state("");
+  private _prev = $state("elements");
   private _state = $state("elements");
   val = $state("");
-  cb= $state<(x: any) => void>(() => {});
+  cb = $state<(x: any) => void>(() => {});
 
   get state() {
     return this._state;
   }
 
   set state(val) {
-    if (this._state === val) {
+    if (val.length && this._state === val) {
       return;
     }
     this._prev = this._state;

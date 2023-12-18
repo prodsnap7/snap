@@ -15,7 +15,8 @@
 <div class="mb-4">
 	<h2 class="font-bold">Shapes</h2>
 </div>
-<div class="flex flex-wrap items-center gap-3">
+
+<div class="flex flex-nowrap overflow-x-auto overflow-hidden items-center gap-3">
 	{#each shapes as shape}
 		<div
 			on:click={() => addElement(shape)}
@@ -23,7 +24,7 @@
 			role="button"
 			on:keydown={() => addElement(shape)}
 			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
-			class="relative flex-initial"
+			class="relative flex-initial shrink-0"
 		>
 			<Renderer element={shape} {scale} />
 		</div>
@@ -33,7 +34,7 @@
 <div class="my-4">
 	<h2 class="font-bold">Curves</h2>
 </div>
-<div class="flex flex-wrap items-center gap-3">
+<div class="flex flex-nowrap overflow-hidden overflow-x-auto items-center gap-3">
 	{#each curves as curve}
 		<div
 			id="curve-renderer-elements-panel"
@@ -42,10 +43,10 @@
 			role="button"
 			on:keydown={() => addElement(curve)}
 			style="width: {curve.width}px; height: {curve.height}px;"
-			class="relative flex-initial"
+			class="relative flex-initial shrink-0"
 		>
 			<div class="absolute origin-center inset-0">
-				<Renderer element={curve} scale={0.5} />
+				<Renderer element={curve} />
 			</div>
 		</div>
 	{/each}

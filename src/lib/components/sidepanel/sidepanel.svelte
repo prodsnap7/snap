@@ -72,7 +72,7 @@
 		</button>
 	</nav>
 
-	<div class="p-4">
+	<div class="p-4 w-[320px]">
 		{#if sidepanelStore.state === 'elements'}
 			<div in:fade>
 				<ElementsPanel />

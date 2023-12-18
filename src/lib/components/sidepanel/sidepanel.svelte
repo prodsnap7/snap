@@ -3,13 +3,19 @@
 	import { fade } from 'svelte/transition';
 	import clsx from 'clsx';
 	import ElementsPanel from './elements-panel.svelte';
+	import Colors from './colors.svelte';
+	import { sidepanelStore } from './state.svelte';
 
 	function onclick(val: string) {
 		$page.url.searchParams.set('sidepanel', val);
-		sidepanelState = val;
+		sidepanelStore.state = val;
 	}
 
-	let sidepanelState = $page.url.searchParams.get('sidepanel') || 'elements';
+	$inspect(sidepanelStore);
+
+	// $effect(() => {
+	// 	sidepanelStore.state = $page.url.searchParams.get('sidepanel') || 'elements';
+	// });
 </script>
 
 <div class="flex w-full h-full">
@@ -18,7 +24,11 @@
 			on:click={() => onclick('elements')}
 			class="rounded p-1 flex flex-col items-center gap-1 hover:bg-secondary/95"
 		>
-			<span class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelState === 'elements' })}>
+			<span
+				class={clsx('px-2 py-1.5 rounded', {
+					'bg-primary/20': sidepanelStore.state === 'elements'
+				})}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -45,7 +55,9 @@
 			on:click={() => onclick('upload')}
 			class="rounded p-1 flex flex-col items-center gap-1 hover:bg-secondary/95"
 		>
-			<span class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelState === 'upload' })}>
+			<span
+				class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelStore.state === 'upload' })}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -67,12 +79,14 @@
 	</nav>
 
 	<div class="p-4">
-		{#if sidepanelState === 'elements'}
-			<div transition:fade>
+		{#if sidepanelStore.state === 'elements'}
+			<div in:fade>
 				<ElementsPanel />
 			</div>
-		{:else if sidepanelState === 'colors'}
-			<div transition:fade>colors</div>
+		{:else if sidepanelStore.state === 'colors'}
+			<div in:fade>
+				<Colors />
+			</div>
 		{/if}
 	</div>
 </div>

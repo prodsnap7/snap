@@ -5,9 +5,10 @@
 	import DragOverlay from './drag-overlay.svelte';
 	import ElementBox from './element-box.svelte';
 
-	const { elements, canvas, selectedElements } = store;
+	const { elements, canvas, selectedElements, activeElement } = store;
 
 	function selectElement(event: MouseEvent | KeyboardEvent, element: CanvasElement) {
+		activeElement.setElement(element);
 		if (event.shiftKey) {
 			selectedElements.addElements([element]);
 		} else {

@@ -1,11 +1,11 @@
-import type { CanvasElement } from "./common.svelte";
+import type { CanvasElement, IBaseMethods } from "./common.svelte";
 
 export interface IGroup {
   type: "group";
   elements: CanvasElement[];
 }
 
-export class Group implements IGroup {
+export class Group implements IGroup, IBaseMethods {
   type = "group" as const;
   elements = $state<CanvasElement[]>([]);
   _x = $derived(Math.min(...this.elements.map(e => e.x)));
@@ -35,6 +35,10 @@ export class Group implements IGroup {
 
   get height() {
     return this._height;
+  }
+
+  get colors(): string[] {
+    return this.elements.map((element) => element.colors).flat();
   }
 
   updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {

@@ -1,21 +1,60 @@
-<div class="flex items-center gap-2 justify-between" id="toolbar">
-	<div class="flex-1" />
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { Shape, store } from '$lib/store';
+	import clsx from 'clsx';
+	import { sidepanelStore } from '../sidepanel/state.svelte';
 
-	<button class="text-red-900">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="24"
-			height="24"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="lucide lucide-trash-2"
-			><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path
-				d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
-			/><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg
-		>
-	</button>
+	const activeElement = $derived(store.activeElement.element);
+
+	let chosen = $state<'fill' | 'stroke' | ''>('');
+
+	function onFillClick() {
+		console.log('onFillClick');
+		chosen = 'fill';
+		$page.url.searchParams.set('sidepanel', 'colors');
+		sidepanelStore.state = 'colors';
+		sidepanelStore.val = (activeElement as Shape).fill as string;
+		sidepanelStore.cb = (val: string) => {
+			(store.activeElement.element as Shape).fill = val;
+		};
+	}
+
+	$effect(() => {
+		if (chosen === 'fill') {
+			sidepanelStore.val = (activeElement as Shape).fill as string;
+		} else if (chosen === 'stroke') {
+			sidepanelStore.val = (activeElement as Shape).stroke as string;
+		}
+	});
+
+	function onStrokeClick() {
+		console.log('onStrokeClick');
+		chosen = 'stroke';
+		$page.url.searchParams.set('sidepanel', 'colors');
+		sidepanelStore.state = 'colors';
+		sidepanelStore.val = (activeElement as Shape).stroke as string;
+		sidepanelStore.cb = (val: string) => {
+			(store.activeElement.element as Shape).stroke = val;
+		};
+	}
+</script>
+
+<div class="flex items-center gap-2 justify-between" id="toolbar">
+	{#if activeElement && activeElement.type === 'shape'}
+		<button
+			onclick={onFillClick}
+			class={clsx('w-6 h-6 rounded', {
+				'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'fill'
+			})}
+			style="background-color: {activeElement.fill}"
+		></button>
+		<button
+			onclick={onStrokeClick}
+			class={clsx('w-6 h-6 rounded', {
+				'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'stroke'
+			})}
+			style="background-color: {activeElement.stroke}"
+		></button>
+	{/if}
+	<div class="flex-1" />
 </div>

@@ -109,9 +109,7 @@
 			"
 			class="absolute origin-center"
 		>
-			<div
-				class="p-1.5 px-2 shadow-sm rounded flex items-center gap-2 bg-white border border-gray-400"
-			>
+			<div class="p-1.5 px-2 shadow-sm rounded flex items-center bg-white border border-gray-400">
 				<button onclick={groupSelected} class="text-xs select-none"> Group </button>
 				<button onclick={deleteSelected}>
 					<Trash />

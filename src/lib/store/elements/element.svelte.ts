@@ -56,9 +56,13 @@ export const elementStore = new class {
 		const clone = element.clone();
 		this.addElement(clone);
 	}
-};
 
-const unSelectedElements = $derived(elementStore.elements.filter((element) => !selectedElementsStore.elements.includes(element)));
+	get colors(): string[] {
+		const colorsWithDuplicates = this.elements.map((element) => element.colors).flat();
+		const uniqueColors = [...new Set(colorsWithDuplicates)];
+		return uniqueColors;
+	}
+};
 
 export const selectedElementsStore = new class {
 	elements = $state<CanvasElement[]>([]);
@@ -209,5 +213,17 @@ export const highlightedElementsStore = new class {
 
 	clear() {
 		this.elements = [];
+	}
+}
+
+export const activeElementStore = new class {
+	element = $state<CanvasElement | null>(null);
+
+	setElement(element: CanvasElement) {
+		this.element = element;
+	}
+
+	clear() {
+		this.element = null;
 	}
 }

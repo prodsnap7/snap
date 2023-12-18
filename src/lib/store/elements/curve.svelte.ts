@@ -1,4 +1,4 @@
-import type { IBaseObject } from "./common.svelte";
+import type { IBaseMethods, IBaseObject } from "./common.svelte";
 
 export interface IPoint {
   x: number;
@@ -25,10 +25,6 @@ export class Point implements IPoint {
   }
 }
 
-export interface CurveProps {
-  clone(): Curve;
-}
-
 export interface ICurve extends IBaseObject {
   type: "curve";
   points: Point[];
@@ -47,7 +43,7 @@ export type PartialCurve = {
   strokeDasharray: string;
 }
 
-export class Curve implements ICurve, CurveProps {
+export class Curve implements ICurve, IBaseMethods {
   type = "curve" as const;
   stroke = $state("#000000");
   isQuadratic = $state(false);
@@ -95,6 +91,10 @@ export class Curve implements ICurve, CurveProps {
 
   set height(val: number) {
     //
+  }
+
+  get colors() {
+    return [this.stroke];
   }
 
   updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {

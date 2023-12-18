@@ -7,7 +7,11 @@ export interface IBaseObject {
   height: number;
   rotation: number;
   opacity: number;
-  snapped?: boolean;
+}
+
+export interface IBaseMethods {
+  clone(): CanvasElement;
+  colors: string[];
 }
 
 

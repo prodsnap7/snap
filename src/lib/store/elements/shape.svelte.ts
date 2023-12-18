@@ -1,5 +1,5 @@
 import type { MakeOneRequired } from "$lib/utils";
-import type {  IBaseObject } from "./common.svelte";
+import type {  IBaseMethods, IBaseObject } from "./common.svelte";
 
 export interface IShape extends IBaseObject {
   type: "shape";
@@ -27,7 +27,7 @@ export const defaultShape: IShape = {
 
 export type PartialShape = MakeOneRequired<IShape, "type">;
 
-export class Shape implements IShape {
+export class Shape implements IShape, IBaseMethods {
   type = "shape" as const;
   x = $state(0);
   y = $state(0);
@@ -60,6 +60,10 @@ export class Shape implements IShape {
       ...defaultShape,
       ...obj
     });
+  }
+
+  get colors() {
+    return [this.stroke, this.fill];
   }
 
   clone(): Shape {

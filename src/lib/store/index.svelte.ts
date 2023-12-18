@@ -1,6 +1,7 @@
 import { canvasStore } from './canvas.svelte';
 import { Group } from './elements/group.svelte';
 import {
+	activeElementStore,
 	elementStore,
 	highlightedElementsStore,
 	selectedElementsStore
@@ -15,6 +16,7 @@ type StoreObj = {
 
 export const store = new (class {
 	elements = $state(elementStore);
+	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
 	unselectedElements = $derived(
 		this.elements.elements.filter((element) => !this.selectedElements.elements.includes(element))

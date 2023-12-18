@@ -15,7 +15,7 @@
 
 {#if element.type === 'shape'}
 	<div
-		class="absolute top-0 left-0"
+		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg)"
 	>

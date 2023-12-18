@@ -123,14 +123,12 @@
 		width={store.selectedElements.width}
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
-		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.updateBounds({ x, y, width, height });
 		}}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
+		onRotate={() => {}}
 	></MoveHandler>
 {:else if selected.length === 1 && selected[0].type === 'curve'}
 	<MoveHandler
@@ -156,9 +154,7 @@
 			store.selectedElements.x = x;
 			store.selectedElements.y = y;
 		}}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
+		onRotate={() => {}}
 	>
 		{#each points as point}
 			<PointControls {point} />
@@ -208,9 +204,7 @@
 			store.selectedElements.x = x;
 			store.selectedElements.y = y;
 		}}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
+		onRotate={() => {}}
 	></MoveHandler>
 {:else if selected.length === 1}
 	<MoveHandler

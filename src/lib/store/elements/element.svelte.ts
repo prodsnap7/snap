@@ -69,6 +69,7 @@ function colors(elements: CanvasElement[]): string[] {
 export const selectedElementsStore = new class {
 	elements = $state<CanvasElement[]>([]);
 	private _bounds = $derived(this._getBounds(this.elements)); 
+	private _rotation = $state(0);
 
 	addElement(element: CanvasElement) {
 		this.elements.push(element);
@@ -96,6 +97,7 @@ export const selectedElementsStore = new class {
 
 	clear() {
 		this.elements = [];
+		this._rotation = 0;
 	}
 
 	private _getBounds(elements: CanvasElement[]) {
@@ -134,7 +136,10 @@ export const selectedElementsStore = new class {
 	}
 
 	get rotation() {
-		return 0
+		if (this.elements.length === 1) {
+			return this.elements[0].rotation;
+		}
+		return 0;
 	}
 
   set x(value: number) {
@@ -178,9 +183,10 @@ export const selectedElementsStore = new class {
   }
 
 	set rotation(value: number) {
-		// this.elements.forEach((element) => {
-		// 	element.rotation = value;
-		// });
+		this._rotation = value;
+		this.elements.forEach((element) => {
+			element.rotation = value;
+		});
 	}
 }
 

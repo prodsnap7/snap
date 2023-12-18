@@ -17,6 +17,5 @@
     border-radius: {shape.radius}px;
     border: {shape.strokeWidth}px {shape.strokeType} {shape.stroke};
     opacity: {shape.opacity};
-    transform: rotate({shape.rotation}deg);
   "
 />

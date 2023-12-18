@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ArrowsCounterClockwise } from 'phosphor-svelte';
+
 	type Props = {
 		x: number;
 		y: number;
@@ -27,9 +29,23 @@
 
 	let frameid = $state<number | null>(null);
 	let status = $state<State>('idle');
-	let { x, y, width, height, rotation, exclude = [], onMove, onResize, children } = $props<Props>();
+	let {
+		x,
+		y,
+		width,
+		height,
+		rotation,
+		exclude = [],
+		onMove,
+		onResize,
+		children,
+		onRotate
+	} = $props<Props>();
+
+	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
 	function onmousedown(event: MouseEvent) {
+		console.log('onmousedown', event.target);
 		event.stopPropagation();
 		if (event.target instanceof HTMLElement) {
 			if (event.target.classList.contains('move')) {
@@ -42,8 +58,12 @@
 				status = 'resizing-tr';
 			} else if (event.target.classList.contains('resizing-tl')) {
 				status = 'resizing-tl';
-			} else if (event.target.classList.contains('rotate')) {
+			} else if (event.target.classList.contains('rotate-control')) {
 				status = 'rotating';
+				center = {
+					x: x + width / 2,
+					y: y + height / 2
+				};
 			} else if (event.target.classList.contains('resizing-tm')) {
 				status = 'resizing-tm';
 			} else if (event.target.classList.contains('resizing-bm')) {
@@ -56,7 +76,15 @@
 		}
 	}
 
+	let canvasPosition = $state<{ x: number; y: number }>({ x: 0, y: 0 });
+
 	$effect(() => {
+		const canvas = document.getElementById('canvas');
+		if (canvas) {
+			const { x, y } = canvas.getBoundingClientRect();
+			canvasPosition = { x, y };
+		}
+
 		function onmouseup(event: MouseEvent) {
 			status = 'idle';
 			event.stopPropagation();
@@ -64,16 +92,16 @@
 
 		function onmousemove(event: MouseEvent) {
 			const ratio = width / height;
-			const movementX = event.movementX;
-			const movementY = event.movementY;
 			if (frameid) {
 				cancelAnimationFrame(frameid);
 			}
-			frameid = requestAnimationFrame(() => moveHandler(ratio, movementX, movementY));
+			frameid = requestAnimationFrame(() => moveHandler(ratio, event));
 			// moveHandler(ratio, movementX, movementY);
 		}
 
-		function moveHandler(ratio: number, movementX: number, movementY: number) {
+		function moveHandler(ratio: number, e: MouseEvent) {
+			const movementX = e.movementX;
+			const movementY = e.movementY;
 			const resizeProportionally = (
 				deltaX: number,
 				deltaY: number,
@@ -103,15 +131,24 @@
 				onResize({ x: movementX, y: 0, width: -movementX, height: 0 });
 			} else if (status === 'resizing-rm') {
 				onResize({ x: 0, y: 0, width: movementX, height: 0 });
+			} else if (status === 'rotating') {
+				const R2D = 180 / Math.PI;
+				const posX = e.clientX - canvasPosition.x;
+				const posY = e.clientY - canvasPosition.y;
+				const x = posX - center.x;
+				const y = posY - center.y;
+				const d = R2D * Math.atan2(y, x);
+				const currentRotation = d;
+				onRotate(currentRotation + 90);
 			}
 		}
 
-		window.addEventListener('mouseup', onmouseup);
-		window.addEventListener('mousemove', onmousemove);
+		window.addEventListener('pointerup', onmouseup);
+		window.addEventListener('pointermove', onmousemove);
 
 		return () => {
-			window.removeEventListener('mouseup', onmouseup);
-			window.removeEventListener('mousemove', onmousemove);
+			window.removeEventListener('pointerup', onmouseup);
+			window.removeEventListener('pointermove', onmousemove);
 		};
 	});
 
@@ -155,6 +192,30 @@
 	style="left: 0px;
 	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
 >
+	{#if !exclude.includes('rotating')}
+		<div
+			role="button"
+			tabindex="0"
+			{onmousedown}
+			class="absolute rotate-control flex items-center justify-center text-gray-700"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="18"
+				height="18"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="lucide lucide-refresh-cw pointer-events-none"
+				><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path
+					d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+				/><path d="M8 16H3v5" /></svg
+			>
+		</div>
+	{/if}
 	{#each finalClasses as c}
 		{@render controller(c)}
 	{/each}
@@ -202,5 +263,9 @@
 
 	.right-middle {
 		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2;
+	}
+
+	.rotate-control {
+		@apply -top-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white;
 	}
 </style>

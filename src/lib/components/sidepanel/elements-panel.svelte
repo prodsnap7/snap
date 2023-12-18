@@ -19,12 +19,12 @@
 <div class="flex flex-nowrap overflow-x-auto overflow-hidden items-center gap-3">
 	{#each shapes as shape}
 		<div
-			on:click={() => addElement(shape)}
 			tabindex="0"
 			role="button"
+			on:click={() => addElement(shape)}
 			on:keydown={() => addElement(shape)}
 			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
-			class="relative flex-initial shrink-0"
+			class="relative p-2 flex-initial shrink-0"
 		>
 			<Renderer element={shape} {scale} />
 		</div>

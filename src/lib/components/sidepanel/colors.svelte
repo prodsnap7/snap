@@ -62,7 +62,6 @@
 
 	let searchVal = $state('');
 	let searchResults = $state([]);
-	const usedColors = $derived(store.elements.colors);
 	const colorMutation = createMutation({
 		mutationFn: async ({ val }: { val: string }) => {
 			const color = Color(val.replace(/\s+/g, '')).rgb().string();

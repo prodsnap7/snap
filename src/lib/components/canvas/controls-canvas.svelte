@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { store, type CanvasElement } from '$lib/store';
 	import GridLines from '../grid-lines/grid-lines.svelte';
+	import SelectBar from '../select-bar.svelte';
 	import SelectControls from '../select-controls.svelte';
 	import { sidepanelStore } from '../sidepanel/state.svelte';
 	import DragOverlay from './drag-overlay.svelte';
@@ -101,6 +102,9 @@
   "
 	>
 		<GridLines />
+		{#if store.selectedElements.elements.length > 0}
+			<SelectBar />
+		{/if}
 		{#each elements.elements as element}
 			<ElementBox
 				{element}

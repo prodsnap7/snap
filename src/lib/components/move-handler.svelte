@@ -139,7 +139,7 @@
 				const y = posY - center.y;
 				const d = R2D * Math.atan2(y, x);
 				const currentRotation = d;
-				onRotate(currentRotation + 90);
+				onRotate(currentRotation + 270);
 			}
 		}
 
@@ -197,7 +197,7 @@
 	>
 		{#if status === 'rotating'}
 			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
-				{rotation.toFixed(0)}&deg;
+				{(rotation - 360).toFixed(0)}&deg;
 			</div>
 		{:else if status.startsWith('resizing-br')}
 			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
@@ -283,6 +283,6 @@
 	}
 
 	.rotate-control {
-		@apply -top-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-800 hover:bg-slate-800 hover:text-white;
+		@apply -bottom-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
 	}
 </style>

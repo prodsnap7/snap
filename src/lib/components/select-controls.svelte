@@ -1,27 +1,10 @@
 <script lang="ts">
-	import { Group, store } from '$lib/store';
-	import { Trash } from 'phosphor-svelte';
+	import { store } from '$lib/store';
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
 
 	const selected = $derived(store.selectedElements.elements);
-
-	function deleteSelected() {
-		store.deleteSelected();
-	}
-
-	function groupSelected() {
-		store.groupSelected();
-	}
-
-	function unGroupSelected(element: Group) {
-		const ungrouped = element.ungroup();
-		store.elements.removeElement(element);
-		store.selectedElements.clear();
-		store.elements.addElements(ungrouped);
-		store.selectedElements.addElements(ungrouped);
-	}
 
 	function getPoints() {
 		const points = [];
@@ -92,31 +75,6 @@
 </script>
 
 {#if selected.length > 1}
-	<div
-		style="
-			left: {store.selectedElements.x}px;
-			top: {store.selectedElements.y}px;
-			width: {store.selectedElements.width}px;
-			height: {store.selectedElements.height}px;
-		"
-		class="absolute"
-	>
-		<div
-			style="
-			left: 50%;
-			top: -40px;
-			transform: translateX(-50%) rotate({store.selectedElements.rotation}deg);
-			"
-			class="absolute origin-center"
-		>
-			<div class="p-1.5 px-2 shadow-sm rounded flex items-center bg-white border border-gray-400">
-				<button onclick={groupSelected} class="text-xs select-none"> Group </button>
-				<button onclick={deleteSelected}>
-					<Trash />
-				</button>
-			</div>
-		</div>
-	</div>
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}
@@ -162,35 +120,6 @@
 		{/each}
 	</MoveHandler>
 {:else if selected.length === 1 && selected[0].type === 'group'}
-	<div
-		style="
-	left: {store.selectedElements.x}px;
-	top: {store.selectedElements.y}px;
-	width: {store.selectedElements.width}px;
-	height: {store.selectedElements.height}px;
-"
-		class="absolute"
-	>
-		<div
-			style="
-	left: 50%;
-	top: -40px;
-	transform: translateX(-50%) rotate({store.selectedElements.rotation}deg);
-	"
-			class="absolute origin-center"
-		>
-			<div
-				class="p-1.5 px-2 shadow-sm rounded flex items-center gap-2 bg-white border border-gray-400"
-			>
-				<button onclick={() => unGroupSelected(selected[0] as Group)} class="text-xs select-none">
-					Ungroup
-				</button>
-				<button onclick={deleteSelected}>
-					<Trash />
-				</button>
-			</div>
-		</div>
-	</div>
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}

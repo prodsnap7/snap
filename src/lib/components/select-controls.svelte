@@ -138,6 +138,7 @@
 		height={store.selectedElements.height}
 		rotation={store.selectedElements.rotation}
 		exclude={[
+			'rotating',
 			'resizing-tm',
 			'resizing-bm',
 			'resizing-lm',

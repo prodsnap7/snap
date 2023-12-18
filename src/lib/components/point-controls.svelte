@@ -39,5 +39,5 @@
 	role="button"
 	tabindex="0"
 	style="left: {point.x}px; top: {point.y}px;"
-	class="absolute w-3 h-3 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 shadow cursor-pointer border"
+	class="absolute w-3 h-3 bg-white rounded-full hover:bg-slate-800 -translate-x-1/2 -translate-y-1/2 shadow cursor-pointer border"
 />

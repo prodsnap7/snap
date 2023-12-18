@@ -192,12 +192,29 @@
 	style="left: 0px;
 	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
 >
+	<div
+		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"
+	>
+		{#if status === 'rotating'}
+			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+				{rotation.toFixed(0)}&deg;
+			</div>
+		{:else if status.startsWith('resizing-br')}
+			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+				{width.toFixed(0)} x {height.toFixed(0)}
+			</div>
+		{:else if status === 'moving'}
+			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+				{x.toFixed(0)} x {y.toFixed(0)}
+			</div>
+		{/if}
+	</div>
 	{#if !exclude.includes('rotating')}
 		<div
 			role="button"
 			tabindex="0"
 			{onmousedown}
-			class="absolute rotate-control flex items-center justify-center text-gray-700"
+			class="absolute rotate-control flex items-center justify-center"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +244,7 @@
 
 <style lang="postcss">
 	.corner-control {
-		@apply h-4 w-4 cursor-grab rounded-full border border-slate-400 bg-white;
+		@apply h-4 w-4 cursor-grab rounded-full border border-slate-400 bg-white hover:bg-slate-800;
 	}
 	.top-left {
 		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2;
@@ -246,7 +263,7 @@
 	}
 
 	.middle-control {
-		@apply cursor-grab rounded border border-slate-400 bg-white;
+		@apply cursor-grab rounded border border-slate-400 bg-white hover:bg-slate-800;
 	}
 
 	.top-middle {
@@ -266,6 +283,6 @@
 	}
 
 	.rotate-control {
-		@apply -top-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white;
+		@apply -top-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-800 hover:bg-slate-800 hover:text-white;
 	}
 </style>

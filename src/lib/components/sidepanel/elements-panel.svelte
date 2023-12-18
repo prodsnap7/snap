@@ -31,7 +31,7 @@
 	{/each}
 </div>
 
-<div class="my-4">
+<div class="mt-4">
 	<h2 class="font-bold">Curves</h2>
 </div>
 <div class="flex flex-nowrap overflow-hidden overflow-x-auto items-center gap-3">
@@ -51,3 +51,9 @@
 		</div>
 	{/each}
 </div>
+
+<div class="my-4">
+	<h2 class="font-bold">Text</h2>
+</div>
+
+<button class="p-2 w-full hover:border-slate-600 border rounded-sm">Add Some Text</button>

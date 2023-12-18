@@ -58,14 +58,14 @@
 
 <button
 	onclick={onFillClick}
-	class={clsx('w-6 h-6 rounded', {
+	class={clsx('w-6 h-6 rounded border border-gray-400', {
 		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'fill'
 	})}
 	style="background-color: {element.fill}"
 ></button>
 <button
 	onclick={onStrokeClick}
-	class={clsx('w-6 h-6 rounded flex items-center justify-center', {
+	class={clsx('w-6 h-6 rounded flex items-center justify-center border', {
 		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'stroke'
 	})}
 >

@@ -25,7 +25,7 @@ const CURVES: PartialCurve[] = [
       {
         type: 'point' as const,
         x: 100,
-        y: 50
+        y: 20
       },
       {
         type: 'point' as const,
@@ -67,7 +67,7 @@ const CURVES: PartialCurve[] = [
       {
         type: 'point' as const,
         x: 10,
-        y: 100
+        y: 50
       },
       {
         type: 'point' as const,

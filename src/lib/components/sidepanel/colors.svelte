@@ -1,11 +1,35 @@
 <script lang="ts">
-	import { store } from '$lib/store';
+	import { elementStore, store } from '$lib/store';
 	import { Check, MagnifyingGlass, PlusCircle } from 'phosphor-svelte';
 	import { createMutation } from '@tanstack/svelte-query';
 	import '@simonwep/pickr/dist/themes/nano.min.css';
 	import Color from 'color';
 	import Pickr from '@simonwep/pickr';
 	import { sidepanelStore } from './state.svelte';
+
+	const COLORS = [
+		'#ffffff',
+		'#000000',
+		'#64748b',
+		'#78716c',
+		'#ef4444',
+		'#f97316',
+		'#f59e0b',
+		'#eab308',
+		'#84cc16',
+		'#22c55e',
+		'#10b981',
+		'#14b8a6',
+		'#06b6d4',
+		'#0ea5e9',
+		'#3b82f6',
+		'#6366f1',
+		'#8b5cf6',
+		'#a855f7',
+		'#d946ef',
+		'#ec4899',
+		'#f43f5e'
+	];
 
 	let pickr = null;
 	$effect(() => {
@@ -27,11 +51,18 @@
 				}
 			}
 		});
+
+		pickr.on('save', (color: any) => {
+			if (sidepanelStore.cb) {
+				sidepanelStore.cb(color.toHEXA().toString());
+				sidepanelStore.val = color.toHEXA().toString();
+			}
+		});
 	});
 
 	let searchVal = $state('');
 	let searchResults = $state([]);
-	const usedColors = store.elements.colors;
+	const usedColors = $derived(store.elements.colors);
 	const colorMutation = createMutation({
 		mutationFn: async ({ val }: { val: string }) => {
 			const color = Color(val.replace(/\s+/g, '')).rgb().string();
@@ -80,7 +111,7 @@
 	>
 		<PlusCircle color="#efefef" size={24} />
 	</div>
-	{#each usedColors as color}
+	{#each elementStore.colors as color}
 		<button
 			onclick={() => onColorClick(color)}
 			class="w-9 h-9 rounded border border-gray-300 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
@@ -97,10 +128,27 @@
 	</div>
 	<div class="grid grid-cols-6 gap-2">
 		{#each searchResults as color}
-			<div
+			<button
+				onclick={() => onColorClick(color)}
 				class="w-9 h-9 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
 				style="background-color: {color}"
-			></div>
+			>
+			</button>
 		{/each}
 	</div>
 {/if}
+
+<div class="my-4">
+	<h2 class="font-bold text-sm">Default Colors</h2>
+</div>
+
+<div class="grid grid-cols-6 gap-2">
+	{#each COLORS as color}
+		<button
+			onclick={() => onColorClick(color)}
+			class="w-9 h-9 rounded border border-gray-300 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"
+			style="background-color: {color}"
+		>
+		</button>
+	{/each}
+</div>

@@ -40,6 +40,7 @@ export class Shape implements IShape, IBaseMethods {
   strokeWidth = $state(0);
   radius = $state(0);
   strokeType = $state("solid");
+  colors = $derived([this.stroke, this.fill]);
 
   constructor(obj: IShape) {
     this.x = obj.x;
@@ -62,9 +63,9 @@ export class Shape implements IShape, IBaseMethods {
     });
   }
 
-  get colors() {
-    return [this.stroke, this.fill];
-  }
+  // get colors() {
+  //   return [this.stroke, this.fill];
+  // }
 
   clone(): Shape {
     return new Shape({

@@ -5,6 +5,7 @@ import { Curve } from "./curve.svelte";
 
 export const elementStore = new class {
 	elements = $state<CanvasElement[]>([]);
+	colors = $derived(colors(this.elements));
 
 	addFromObject(element: CanvasObject) {
 		if (element.type === 'shape') {
@@ -57,12 +58,13 @@ export const elementStore = new class {
 		this.addElement(clone);
 	}
 
-	get colors(): string[] {
-		const colorsWithDuplicates = this.elements.map((element) => element.colors).flat();
-		const uniqueColors = [...new Set(colorsWithDuplicates)];
-		return uniqueColors;
-	}
 };
+
+function colors(elements: CanvasElement[]): string[] {
+	const colorsWithDuplicates = elements.map((element) => element.colors).flat();
+	const uniqueColors = [...new Set(colorsWithDuplicates)];
+	return uniqueColors;
+}
 
 export const selectedElementsStore = new class {
 	elements = $state<CanvasElement[]>([]);

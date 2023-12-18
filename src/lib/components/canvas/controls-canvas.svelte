@@ -2,6 +2,7 @@
 	import { store, type CanvasElement } from '$lib/store';
 	import GridLines from '../grid-lines/grid-lines.svelte';
 	import SelectControls from '../select-controls.svelte';
+	import { sidepanelStore } from '../sidepanel/state.svelte';
 	import DragOverlay from './drag-overlay.svelte';
 	import ElementBox from './element-box.svelte';
 
@@ -48,6 +49,8 @@
 		if (event.target === event.currentTarget) {
 			console.log('onmousedown');
 			selectedElements.clear();
+			activeElement.clear();
+			sidepanelStore.prev();
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
 		}

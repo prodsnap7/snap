@@ -10,12 +10,6 @@
 		$page.url.searchParams.set('sidepanel', val);
 		sidepanelStore.state = val;
 	}
-
-	$inspect(sidepanelStore);
-
-	// $effect(() => {
-	// 	sidepanelStore.state = $page.url.searchParams.get('sidepanel') || 'elements';
-	// });
 </script>
 
 <div class="flex w-full h-full">

@@ -1,60 +1,56 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Shape, store } from '$lib/store';
-	import clsx from 'clsx';
-	import { sidepanelStore } from '../sidepanel/state.svelte';
-
-	const activeElement = $derived(store.activeElement.element);
-
-	let chosen = $state<'fill' | 'stroke' | ''>('');
-
-	function onFillClick() {
-		console.log('onFillClick');
-		chosen = 'fill';
-		$page.url.searchParams.set('sidepanel', 'colors');
-		sidepanelStore.state = 'colors';
-		sidepanelStore.val = (activeElement as Shape).fill as string;
-		sidepanelStore.cb = (val: string) => {
-			(store.activeElement.element as Shape).fill = val;
-		};
-	}
-
-	$effect(() => {
-		if (chosen === 'fill') {
-			sidepanelStore.val = (activeElement as Shape).fill as string;
-		} else if (chosen === 'stroke') {
-			sidepanelStore.val = (activeElement as Shape).stroke as string;
-		}
-	});
-
-	function onStrokeClick() {
-		console.log('onStrokeClick');
-		chosen = 'stroke';
-		$page.url.searchParams.set('sidepanel', 'colors');
-		sidepanelStore.state = 'colors';
-		sidepanelStore.val = (activeElement as Shape).stroke as string;
-		sidepanelStore.cb = (val: string) => {
-			(store.activeElement.element as Shape).stroke = val;
-		};
-	}
+	import { activeElementStore } from '$lib/store';
+	import * as Popover from '../ui/popover';
+	import Slider from '../ui/slider/slider.svelte';
+	import Shape from './shape.svelte';
 </script>
 
-<div class="flex items-center gap-2 justify-between" id="toolbar">
-	{#if activeElement && activeElement.type === 'shape'}
-		<button
-			onclick={onFillClick}
-			class={clsx('w-6 h-6 rounded', {
-				'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'fill'
-			})}
-			style="background-color: {activeElement.fill}"
-		></button>
-		<button
-			onclick={onStrokeClick}
-			class={clsx('w-6 h-6 rounded', {
-				'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'stroke'
-			})}
-			style="background-color: {activeElement.stroke}"
-		></button>
-	{/if}
-	<div class="flex-1" />
-</div>
+{#if activeElementStore.element}
+	<div class="flex items-center gap-2 justify-between" id="toolbar">
+		{#if activeElementStore.element && activeElementStore.element.type === 'shape'}
+			<Shape element={activeElementStore.element} />
+		{/if}
+		<div class="flex-1" />
+
+		<Popover.Root portal="null">
+			<Popover.Trigger>
+				<button class="transparent-square h-8 w-8 rounded-lg border" />
+			</Popover.Trigger>
+
+			<Popover.Content class="w-60">
+				<div class="space-y-4 px-2">
+					<div class="flex items-center justify-between">
+						<label for="border width" class="text-xs font-semibold">Transparency</label>
+						<input
+							class="w-12 h-6 border rounded p-2 text-xs"
+							bind:value={activeElementStore.element.opacity}
+						/>
+					</div>
+
+					<Slider
+						min={0}
+						step={0.01}
+						max={1}
+						onValueChange={(val) => {
+						activeElementStore.element!.opacity = val[0];
+					}}
+						value={[activeElementStore.element.opacity]}
+					/>
+				</div>
+			</Popover.Content>
+		</Popover.Root>
+	</div>
+{/if}
+
+<style>
+	.transparent-square {
+		background: linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+			linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+		background-position:
+			0 0,
+			5px 5px;
+		background-size: 10px 10px;
+		position: relative;
+		overflow: hidden;
+	}
+</style>

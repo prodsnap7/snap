@@ -1,4 +1,5 @@
 <script lang="ts">
+	import clsx from 'clsx';
 	import { ArrowsCounterClockwise } from 'phosphor-svelte';
 
 	type Props = {
@@ -180,7 +181,12 @@
 </script>
 
 {#snippet controller(classes)}
-	<div role="button" tabindex="0" on:mousedown={onmousedown} class={'absolute ' + classes}></div>
+	<div
+		role="button"
+		tabindex="0"
+		on:mousedown={onmousedown}
+		class={clsx('absolute ' + classes, { 'opacity-20': status !== 'idle' })}
+	></div>
 {/snippet}
 
 <div
@@ -188,7 +194,9 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class="absolute border border-slate-800 cursor-move move"
+	class={clsx('absolute border border-slate-800 cursor-move move', {
+		'border-2': status !== 'idle'
+	})}
 	style="left: 0px;
 	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
 >
@@ -214,7 +222,9 @@
 			role="button"
 			tabindex="0"
 			{onmousedown}
-			class="absolute rotate-control flex items-center justify-center"
+			class={clsx('absolute rotate-control flex items-center justify-center', {
+				'opacity-20': status !== 'idle'
+			})}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -247,19 +257,19 @@
 		@apply h-4 w-4 cursor-grab rounded-full border border-slate-400 bg-white hover:bg-slate-800;
 	}
 	.top-left {
-		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nwse-resize;
+		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nw-resize;
 	}
 
 	.top-right {
-		@apply right-0 top-0 -translate-y-1/2 translate-x-1/2 cursor-nesw-resize;
+		@apply right-0 top-0 -translate-y-1/2 translate-x-1/2 cursor-ne-resize;
 	}
 
 	.bottom-left {
-		@apply bottom-0 left-0 -translate-x-1/2 translate-y-1/2 cursor-nesw-resize;
+		@apply bottom-0 left-0 -translate-x-1/2 translate-y-1/2 cursor-sw-resize;
 	}
 
 	.bottom-right {
-		@apply bottom-0 right-0 translate-x-1/2 translate-y-1/2 cursor-nwse-resize;
+		@apply bottom-0 right-0 translate-x-1/2 translate-y-1/2 cursor-se-resize;
 	}
 
 	.middle-control {
@@ -267,19 +277,19 @@
 	}
 
 	.top-middle {
-		@apply left-1/2 top-0 h-2 w-6 -translate-x-1/2 -translate-y-1/2 cursor-ns-resize;
+		@apply left-1/2 top-0 h-2 w-6 -translate-x-1/2 -translate-y-1/2 cursor-n-resize;
 	}
 
 	.bottom-middle {
-		@apply bottom-0 left-1/2 h-2 w-6 -translate-x-1/2 translate-y-1/2 cursor-ns-resize;
+		@apply bottom-0 left-1/2 h-2 w-6 -translate-x-1/2 translate-y-1/2 cursor-s-resize;
 	}
 
 	.left-middle {
-		@apply left-0 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize;
+		@apply left-0 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2 cursor-w-resize;
 	}
 
 	.right-middle {
-		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2 cursor-ew-resize;
+		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2 cursor-e-resize;
 	}
 
 	.rotate-control {

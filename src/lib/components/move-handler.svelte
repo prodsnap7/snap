@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { ArrowsCounterClockwise } from 'phosphor-svelte';
+	import { ArrowsCounterClockwise, ArrowsOutCardinal } from 'phosphor-svelte';
 
 	type Props = {
 		x: number;
@@ -76,6 +76,7 @@
 			}
 		}
 	}
+	console.log('width: ', width);
 
 	let canvasPosition = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -246,6 +247,17 @@
 	{#each finalClasses as c}
 		{@render controller(c)}
 	{/each}
+
+	{#if height < 10}
+		<div
+			{onmousedown}
+			role="button"
+			tabindex="0"
+			class="absolute -bottom-10 left-1/2 flex items-center justify-center bg-white text-slate-700 border border-slate-500 move -translate-x-1/2 h-6 w-6 rounded-full"
+		>
+			<ArrowsOutCardinal class="pointer-events-none" size={18} />
+		</div>
+	{/if}
 </div>
 
 {#if children}

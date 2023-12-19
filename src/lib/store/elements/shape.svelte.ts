@@ -1,5 +1,5 @@
 import type { MakeOneRequired } from "$lib/utils";
-import type {  IBaseMethods, IBaseObject } from "./common.svelte";
+import {  BaseObject, type IBaseMethods, type IBaseObject } from "./common.svelte";
 
 export interface IShape extends IBaseObject {
   type: "shape";
@@ -27,14 +27,8 @@ export const defaultShape: IShape = {
 
 export type PartialShape = MakeOneRequired<IShape, "type">;
 
-export class Shape implements IShape, IBaseMethods {
+export class Shape extends BaseObject implements IShape {
   type = "shape" as const;
-  x = $state(0);
-  y = $state(0);
-  width = $state(100);
-  height = $state(100);
-  rotation = $state(0);
-  opacity = $state(1);
   stroke = $state("#000000");
   fill = $state("#ffffff");
   strokeWidth = $state(0);
@@ -43,12 +37,14 @@ export class Shape implements IShape, IBaseMethods {
   colors = $derived([this.stroke, this.fill]);
 
   constructor(obj: IShape) {
-    this.x = obj.x;
-    this.y = obj.y;
-    this.width = obj.width;
-    this.height = obj.height;
-    this.rotation = obj.rotation;
-    this.opacity = obj.opacity;
+    super({
+      x: obj.x,
+      y: obj.y,
+      width: obj.width,
+      height: obj.height,
+      rotation: obj.rotation,
+      opacity: obj.opacity
+    })
     this.stroke = obj.stroke;
     this.fill = obj.fill;
     this.strokeWidth = obj.strokeWidth;
@@ -62,10 +58,6 @@ export class Shape implements IShape, IBaseMethods {
       ...obj
     });
   }
-
-  // get colors() {
-  //   return [this.stroke, this.fill];
-  // }
 
   clone(): Shape {
     return new Shape({

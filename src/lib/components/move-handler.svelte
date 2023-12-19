@@ -247,19 +247,19 @@
 		@apply h-4 w-4 cursor-grab rounded-full border border-slate-400 bg-white hover:bg-slate-800;
 	}
 	.top-left {
-		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2;
+		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nwse-resize;
 	}
 
 	.top-right {
-		@apply right-0 top-0 -translate-y-1/2 translate-x-1/2;
+		@apply right-0 top-0 -translate-y-1/2 translate-x-1/2 cursor-nesw-resize;
 	}
 
 	.bottom-left {
-		@apply bottom-0 left-0 -translate-x-1/2 translate-y-1/2;
+		@apply bottom-0 left-0 -translate-x-1/2 translate-y-1/2 cursor-nesw-resize;
 	}
 
 	.bottom-right {
-		@apply bottom-0 right-0 translate-x-1/2 translate-y-1/2;
+		@apply bottom-0 right-0 translate-x-1/2 translate-y-1/2 cursor-nwse-resize;
 	}
 
 	.middle-control {
@@ -267,19 +267,19 @@
 	}
 
 	.top-middle {
-		@apply left-1/2 top-0 h-2 w-6 -translate-x-1/2 -translate-y-1/2;
+		@apply left-1/2 top-0 h-2 w-6 -translate-x-1/2 -translate-y-1/2 cursor-ns-resize;
 	}
 
 	.bottom-middle {
-		@apply bottom-0 left-1/2 h-2 w-6 -translate-x-1/2 translate-y-1/2;
+		@apply bottom-0 left-1/2 h-2 w-6 -translate-x-1/2 translate-y-1/2 cursor-ns-resize;
 	}
 
 	.left-middle {
-		@apply left-0 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2;
+		@apply left-0 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize;
 	}
 
 	.right-middle {
-		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2;
+		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2 cursor-ew-resize;
 	}
 
 	.rotate-control {

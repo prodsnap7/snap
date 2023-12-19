@@ -29,7 +29,7 @@
 
 		<!-- Main content section -->
 		<section class="flex flex-col w-full bg-primary/5">
-			<div class="h-14 w-full bg-white p-4 border-b shadow-xs">
+			<div class="h-14 w-full p-2 bg-white border-b shadow-xs">
 				<Toolbar />
 			</div>
 

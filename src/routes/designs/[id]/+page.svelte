@@ -13,7 +13,7 @@
 <div class="w-screen h-screen flex flex-col">
 	<header class="sticky top-0 z-50 w-full border-b bg-background/95 shadow-sm backdrop-blur">
 		<div class="container flex h-14 items-center">
-			<div class="mr-4 hidden md:flex">
+			<div class="mr-4 md:flex">
 				<input
 					value={store.name}
 					class="text-xs justify-self-end bg-transparent p-2 rounded outline-none border"

@@ -51,7 +51,6 @@ export class Curve implements ICurve, IBaseMethods {
   strokeWidth = $state(1);
   strokeDasharray = $state("");
   points = $state<Point[]>([]);
-  rotation = $state(0);
   opacity = $state(1);
   pathType = $state("linear");
   path = $derived(getPathFromPoints(this.points, this.pathType))
@@ -62,6 +61,14 @@ export class Curve implements ICurve, IBaseMethods {
     this.pathType = obj.pathType || "linear";
     this.strokeDasharray = obj.strokeDasharray;
     this.points = obj.points.map(p => new Point(p));
+  }
+
+  get rotation() {
+    return 0;
+  }
+
+  set rotation(val: number) {
+    //
   }
 
   get x() {

@@ -107,6 +107,19 @@ export class Curve implements ICurve, IBaseMethods {
     })
   }
 
+  get bounds() {
+    return {
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height
+    }
+  }
+
+  get rect() {
+    return this.bounds;
+  }
+
   clone() {
     return new Curve({
       type: "curve",

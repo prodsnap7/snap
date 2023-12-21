@@ -1,4 +1,4 @@
-import type { CanvasElement, IBaseMethods } from "./common.svelte";
+import type {  CanvasElement,IBaseMethods } from "./common.svelte";
 
 export interface IGroup {
   type: "group";
@@ -46,7 +46,15 @@ export class Group implements IGroup, IBaseMethods {
       element.updateBounds({ x, y, width, height });
     })
   }
-  
+
+  get bounds(): { x: number; y: number; width: number; height: number } {
+    return {
+      x: this.elements.reduce((acc, cur) => Math.min(acc, cur.bounds.x), 0),
+      y: this.elements.reduce((acc, cur) => Math.min(acc, cur.bounds.y), 0),
+      width: this.elements.reduce((acc, cur) => Math.max(acc, cur.bounds.x + cur.bounds.width), 0),
+      height: this.elements.reduce((acc, cur) => Math.max(acc, cur.bounds.y + cur.bounds.height), 0)
+    }
+  }
 
   set x(value: number) {
     this.elements.forEach((element) => {

@@ -52,7 +52,7 @@ export class BaseObject {
   }
 }
 
-function getRotatedBoundingBox(x: number, y: number, width: number, height: number, rotationDegree: number): { minX: number, maxX: number, minY: number, maxY: number } {
+export function getRotatedBoundingBox(x: number, y: number, width: number, height: number, rotationDegree: number): { minX: number, maxX: number, minY: number, maxY: number } {
   const theta = rotationDegree * Math.PI / 180; // Convert to radians
   const centerX = x + width / 2;
   const centerY = y + height / 2;

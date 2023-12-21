@@ -12,18 +12,19 @@
 	const offset = $derived({ x: group.x, y: group.y });
 </script>
 
-{#each group.elements as element}
-	{#if element.type === 'shape'}
-		<div
-			id="group-renderer"
-			style="
+<div
+	id="group-renderer"
+	style="
 			position: absolute;
 			left: {group.x}px;
 			top: {group.y}px;
 			width: {group.width * scale}px;
 			height: {group.height * scale}px;
+			transform: rotate({group.rotation}deg);
 		"
-		>
+>
+	{#each group.elements as element}
+		{#if element.type === 'shape'}
 			<div
 				class="absolute top-0 left-0"
 				style="transform: translate({element.x - offset.x}px, {element.y -
@@ -31,10 +32,10 @@
 			>
 				<RenderShape {scale} shape={element} />
 			</div>
-		</div>
-	{:else if element.type === 'curve'}
-		<div class="absolute origin-center inset-0">
-			<RenderCurve {scale} curve={element} />
-		</div>
-	{/if}
-{/each}
+		{:else if element.type === 'curve'}
+			<div class="absolute origin-center inset-0">
+				<RenderCurve {scale} curve={element} />
+			</div>
+		{/if}
+	{/each}
+</div>

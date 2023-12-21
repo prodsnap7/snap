@@ -19,8 +19,8 @@ export class Group implements IGroup, IBaseMethods {
   _y = $derived(Math.min(...this.elements.map(e => e.y)));
   _width = $derived(Math.max(...this.elements.map(e => e.x + e.width)) - this.x);
   _height = $derived(Math.max(...this.elements.map(e => e.y + e.height)) - this.y);
+  _rotation = $state(0);  
   opacity = $state(1);
-  rotation = $state(0);
   private _bounds: Moveable = $derived(this._getBounds(this.elements));
 
   constructor(obj: IGroup) {
@@ -47,6 +47,18 @@ export class Group implements IGroup, IBaseMethods {
 
   get colors(): string[] {
     return this.elements.map((element) => element.colors).flat();
+  }
+
+  get rotation(): number {
+    if (this.elements.length === 1) {
+      return this.elements[0].rotation;
+    } else {
+      return this._rotation;
+    }
+  }
+
+  set rotation(value: number) {
+    this._rotation = value;
   }
 
   updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
@@ -113,9 +125,10 @@ export class Group implements IGroup, IBaseMethods {
 
   ungroup(): CanvasElement[] {
     return this.elements.map((element) => {
-      // element.x += this.x;
-      // element.y += this.y;
-      return element.clone();
+      const el = element.clone();
+      el.rotation += this.rotation;
+
+      return el;
     });
   }
 }

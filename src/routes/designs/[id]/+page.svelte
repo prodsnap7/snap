@@ -23,7 +23,7 @@
 	</header>
 
 	<main class="flex flex-1">
-		<div class="min-w-[400px] w-[400px] border-r">
+		<div class="sm:hidden min-w-[400px] w-[400px] border-r">
 			<Sidepanel />
 		</div>
 

@@ -3,6 +3,7 @@
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
+	import Button from '../ui/button/button.svelte';
 
 	let scale = 0.6;
 
@@ -16,7 +17,7 @@
 	<h2 class="font-bold">Shapes</h2>
 </div>
 
-<div class="flex flex-nowrap overflow-x-auto overflow-hidden items-center gap-3">
+<div class="flex flex-nowrap no-scrollbar overflow-x-auto overflow-hidden items-center gap-3">
 	{#each shapes as shape}
 		<div
 			tabindex="0"
@@ -34,7 +35,7 @@
 <div class="mt-4">
 	<h2 class="font-bold">Curves</h2>
 </div>
-<div class="flex flex-nowrap overflow-hidden overflow-x-auto items-center gap-3">
+<div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
 	{#each curves as curve}
 		<div
 			id="curve-renderer-elements-panel"
@@ -55,5 +56,4 @@
 <div class="my-4">
 	<h2 class="font-bold">Text</h2>
 </div>
-
-<button class="p-2 w-full hover:border-slate-600 border rounded-sm">Add Some Text</button>
+<Button variant="secondary" class="w-full">Add Some Text</Button>

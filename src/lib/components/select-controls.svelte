@@ -126,7 +126,7 @@
 		width={store.selectedElements.bounds.width}
 		height={store.selectedElements.bounds.height}
 		rotation={store.selectedElements.rotation}
-		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.width = width;

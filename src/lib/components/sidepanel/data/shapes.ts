@@ -10,25 +10,12 @@ const SHAPES: Partial<IShape>[] = [
     rotation: 0,
     opacity: 1,
     stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
+    fill: "#efefef",
+    strokeWidth: 2,
     radius: 0,
     strokeType: "solid"
   },
   // rectangle
-  {
-    x: 0,
-    y: 0,
-    width: 200,
-    height: 100,
-    rotation: 0,
-    opacity: 1,
-    stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
-    radius: 0,
-    strokeType: "solid"
-  },
   // square with rounded corners
   {
     x: 0,
@@ -38,8 +25,8 @@ const SHAPES: Partial<IShape>[] = [
     rotation: 0,
     opacity: 1,
     stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
+    fill: "#efefef",
+    strokeWidth: 2,
     radius: 10,
     strokeType: "solid"
   },
@@ -53,9 +40,22 @@ const SHAPES: Partial<IShape>[] = [
     rotation: 0,
     opacity: 1,
     stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
+    fill: "#efefef",
+    strokeWidth: 2,
     radius: 50,
+    strokeType: "solid"
+  },
+  {
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 100,
+    rotation: 0,
+    opacity: 1,
+    stroke: "#4a4b4d",
+    fill: "#efefef",
+    strokeWidth: 2,
+    radius: 0,
     strokeType: "solid"
   },
 
@@ -68,8 +68,8 @@ const SHAPES: Partial<IShape>[] = [
     rotation: 0,
     opacity: 1,
     stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
+    fill: "#efefef",
+    strokeWidth: 2,
     radius: 50,
     strokeType: "solid"
   },
@@ -83,8 +83,8 @@ const SHAPES: Partial<IShape>[] = [
     rotation: 0,
     opacity: 1,
     stroke: "#4a4b4d",
-    fill: "#ebeffc",
-    strokeWidth: 1,
+    fill: "#efefef",
+    strokeWidth: 2,
     radius: 10,
     strokeType: "solid"
   },

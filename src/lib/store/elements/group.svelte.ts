@@ -1,3 +1,4 @@
+import shortUUID from "short-uuid";
 import type {  CanvasElement,IBaseMethods } from "./common.svelte";
 
 export interface IGroup {
@@ -14,6 +15,7 @@ type Moveable = {
 
 export class Group implements IGroup, IBaseMethods {
   type = "group" as const;
+  id = shortUUID.generate();
   elements = $state<CanvasElement[]>([]);
   _x = $derived(Math.min(...this.elements.map(e => e.x)));
   _y = $derived(Math.min(...this.elements.map(e => e.y)));

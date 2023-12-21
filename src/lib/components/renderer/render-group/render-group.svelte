@@ -13,7 +13,7 @@
 </script>
 
 <div
-	id="group-renderer"
+	id={group.id}
 	style="
 			position: absolute;
 			left: {group.x}px;
@@ -33,7 +33,7 @@
 				<RenderShape {scale} shape={element} />
 			</div>
 		{:else if element.type === 'curve'}
-			<div class="absolute origin-center inset-0">
+			<div id="curve-group-helper" class="absolute" style="left: {-group.x}px; top: {-group.y}px">
 				<RenderCurve {scale} curve={element} />
 			</div>
 		{/if}

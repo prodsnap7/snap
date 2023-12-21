@@ -1,13 +1,15 @@
 <script lang="ts">
-	import type { ICurve } from '$lib/store/elements/curve.svelte';
+	import type { Curve } from '$lib/store/elements/curve.svelte';
 
 	type Props = {
-		curve: ICurve;
+		curve: Curve;
 		scale?: number;
 		offset?: { x: number; y: number };
 	};
 
 	const { curve, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();
+	const width = $derived(curve.bounds.width);
+	const height = $derived(curve.bounds.height);
 	const points = curve.points;
 	points.forEach((point) => {
 		point.x = point.x * scale - offset.x;
@@ -23,8 +25,8 @@
     overflow: visible;
     display: block;
     position: absolute;
-    width: {curve.width}px;
-    height: {curve.height}px;
+    width: {width}px;
+    height: {height}px;
   "
 >
 	<g>

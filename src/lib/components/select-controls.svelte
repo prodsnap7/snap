@@ -30,7 +30,7 @@
 			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
 		];
 
-		const snap = snapToGrid(currentEl, otherEls, 5);
+		const snap = snapToGrid(currentEl, otherEls, 3);
 
 		store.selectedElements.updateBounds({
 			x: snap.x - store.selectedElements.x,

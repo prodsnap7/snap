@@ -76,7 +76,6 @@
 			}
 		}
 	}
-	console.log('width: ', width);
 
 	let canvasPosition = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 

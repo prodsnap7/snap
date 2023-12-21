@@ -23,10 +23,10 @@
 
 <div
 	style="
-      left: {store.selectedElements.x}px;
-      top: {store.selectedElements.y}px;
-      width: {store.selectedElements.width}px;
-      height: {store.selectedElements.height}px;
+      left: {store.selectedElements.bounds.x}px;
+      top: {store.selectedElements.bounds.y}px;
+      width: {store.selectedElements.bounds.width}px;
+      height: {store.selectedElements.bounds.height}px;
     "
 	class="absolute"
 >

@@ -121,10 +121,10 @@
 	</MoveHandler>
 {:else if selected.length === 1 && selected[0].type === 'group'}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
+		x={store.selectedElements.bounds.x}
+		y={store.selectedElements.bounds.y}
+		width={store.selectedElements.bounds.width}
+		height={store.selectedElements.bounds.height}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}

@@ -5,6 +5,13 @@ export interface IGroup {
   elements: CanvasElement[];
 }
 
+type Moveable = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export class Group implements IGroup, IBaseMethods {
   type = "group" as const;
   elements = $state<CanvasElement[]>([]);
@@ -14,6 +21,7 @@ export class Group implements IGroup, IBaseMethods {
   _height = $derived(Math.max(...this.elements.map(e => e.y + e.height)) - this.y);
   opacity = $state(1);
   rotation = $state(0);
+  private _bounds: Moveable = $derived(this._getBounds(this.elements));
 
   constructor(obj: IGroup) {
     this.elements = obj.elements;
@@ -47,14 +55,22 @@ export class Group implements IGroup, IBaseMethods {
     })
   }
 
-  get bounds(): { x: number; y: number; width: number; height: number } {
-    return {
-      x: this.elements.reduce((acc, cur) => Math.min(acc, cur.bounds.x), 0),
-      y: this.elements.reduce((acc, cur) => Math.min(acc, cur.bounds.y), 0),
-      width: this.elements.reduce((acc, cur) => Math.max(acc, cur.bounds.x + cur.bounds.width), 0),
-      height: this.elements.reduce((acc, cur) => Math.max(acc, cur.bounds.y + cur.bounds.height), 0)
-    }
+  get bounds() {
+    return this._bounds;
   }
+
+  private _getBounds(elements: CanvasElement[]) {
+		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
+		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
+		let width =
+			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
+			x;
+		let height =
+			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
+			y;
+
+		return { x, y, width, height };
+	}
 
   set x(value: number) {
     this.elements.forEach((element) => {

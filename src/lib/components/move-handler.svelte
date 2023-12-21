@@ -247,7 +247,7 @@
 		{@render controller(c)}
 	{/each}
 
-	{#if height < 10}
+	{#if height < 20}
 		<div
 			{onmousedown}
 			role="button"

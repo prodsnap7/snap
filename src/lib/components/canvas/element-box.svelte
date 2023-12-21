@@ -30,8 +30,10 @@
 		onSelect(event, element);
 	}
 
-	const width = element.width < 10 ? 10 : element.width;
-	const height = element.height < 10 ? 10 : element.height;
+	const x = $derived(element.bounds.x);
+	const y = $derived(element.bounds.y);
+	const width = $derived(element.bounds.width);
+	const height = $derived(element.bounds.height);
 </script>
 
 <div
@@ -47,9 +49,9 @@
 		}
 	)}
 	style="
-    width: {width}px;
-    height: {height}px;
-    transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
+    width: {width + 20}px;
+    height: {height + 20}px;
+    transform: translate({x - 10}px, {y - 10}px) rotate({element.rotation}deg);
     left: 0px;
     top: 0px;
   "

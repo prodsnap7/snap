@@ -3,7 +3,6 @@ import type { IBaseMethods, IBaseObject } from "./common.svelte";
 export interface IPoint {
   x: number;
   y: number;
-  type: "point";
 }
 
 export class Point implements IPoint {
@@ -11,16 +10,15 @@ export class Point implements IPoint {
   y = $state(0);
   type = "point" as const;
 
-  constructor(obj: IPoint) {
-    this.x = obj.x;
-    this.y = obj.y;
+  constructor(obj: IPoint, scale = 1) {
+    this.x = obj.x * scale;
+    this.y = obj.y * scale;
   }
 
   clone() {
     return new Point({
       x: this.x,
       y: this.y,
-      type: this.type
     });
   }
 }
@@ -54,13 +52,14 @@ export class Curve implements ICurve, IBaseMethods {
   opacity = $state(1);
   pathType = $state("linear");
   path = $derived(getPathFromPoints(this.points, this.pathType))
+  // scale
 
-  constructor(obj: PartialCurve) {
+  constructor(obj: PartialCurve, scale = 1) {
     this.stroke = obj.stroke;
     this.strokeWidth = obj.strokeWidth;
     this.pathType = obj.pathType || "linear";
     this.strokeDasharray = obj.strokeDasharray;
-    this.points = obj.points.map(p => new Point(p));
+    this.points = obj.points.map(p => new Point(p, scale));
   }
 
   get rotation() {
@@ -69,6 +68,10 @@ export class Curve implements ICurve, IBaseMethods {
 
   set rotation(val: number) {
     //
+  }
+
+  getScaledPath(scale: number) {
+    return getPathFromPoints(this.points.map(p => ({ x: p.x * scale, y: p.y * scale })), this.pathType);
   }
 
   get x() {
@@ -127,7 +130,7 @@ export class Curve implements ICurve, IBaseMethods {
     return this.bounds;
   }
 
-  clone() {
+  clone(scale = 1) {
     return new Curve({
       type: "curve",
       stroke: this.stroke,
@@ -135,7 +138,7 @@ export class Curve implements ICurve, IBaseMethods {
       strokeDasharray: this.strokeDasharray,
       points: this.points.map(p => p.clone()),
       pathType: this.pathType as "linear" | "quadratic" | "cubic"
-    });
+    }, scale);
   }
 
   static fromObject(obj: PartialCurve) {

@@ -23,7 +23,7 @@
 	</div>
 {:else if element.type === 'curve'}
 	<div class="absolute origin-center inset-0">
-		<RenderCurve {scale} curve={element} {offset} />
+		<RenderCurve {scale} curve={element} />
 	</div>
 {:else if element.type === 'group'}
 	<RenderGroup {scale} group={element} />

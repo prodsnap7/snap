@@ -29,6 +29,9 @@
 	function onkeydown(event: KeyboardEvent) {
 		onSelect(event, element);
 	}
+
+	const width = element.width < 10 ? 10 : element.width;
+	const height = element.height < 10 ? 10 : element.height;
 </script>
 
 <div
@@ -37,12 +40,15 @@
 	{onkeydown}
 	role="button"
 	tabindex="0"
-	class={clsx('absolute cursor-pointer origin-center', {
-		'border-2 border-slate-700': store.highlightedElements.elements.includes(element)
-	})}
+	class={clsx(
+		'absolute cursor-pointer origin-center border-2 border-transparent hover:border-slate-700',
+		{
+			'border-2 border-slate-700': store.highlightedElements.elements.includes(element)
+		}
+	)}
 	style="
-    width: {element.width}px;
-    height: {element.height}px;
+    width: {width}px;
+    height: {height}px;
     transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
     left: 0px;
     top: 0px;

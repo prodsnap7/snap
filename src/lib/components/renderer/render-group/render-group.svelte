@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Group } from '$lib/store/elements/group.svelte';
-	import RenderCurve from '../render-curve.svelte';
+	import RenderCurve from '../render-curve';
 	import RenderShape from '../render-shape.svelte';
 
 	type Props = {

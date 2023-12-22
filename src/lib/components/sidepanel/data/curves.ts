@@ -15,6 +15,8 @@ const CURVES: PartialCurve[] = [
     type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
+    markerSize: 10,
+    startMarker: "fill-arrow",
     strokeDasharray: "",
     points: [
       {

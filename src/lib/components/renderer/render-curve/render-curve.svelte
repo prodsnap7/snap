@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Curve } from '$lib/store/elements/curve.svelte';
+	import RenderMarker from './render-marker.svelte';
 
 	type Props = {
 		curve: Curve;
@@ -23,6 +24,22 @@
     height: {height}px;
   "
 >
+	<defs>
+		<RenderMarker
+			orient="start"
+			type={curve.startMarker}
+			id={`start-${curve.markerId}`}
+			size={curve.markerSize ?? 30}
+			color={curve.stroke ?? 'black'}
+		/>
+		<RenderMarker
+			orient="end"
+			type={curve.endMarker}
+			id={`end-${curve.markerId}`}
+			size={curve.markerSize ?? 30}
+			color={curve.stroke ?? 'black'}
+		/>
+	</defs>
 	<g>
 		<g style="user-select: none;">
 			<path
@@ -43,6 +60,8 @@
 				stroke-width={curve.strokeWidth}
 				stroke={curve.stroke}
 				stroke-dasharray={curve.strokeDasharray}
+				marker-start={`url(#start-${curve.markerId})`}
+				marker-end={`url(#end-${curve.markerId})`}
 			/>
 		</g>
 	</g>

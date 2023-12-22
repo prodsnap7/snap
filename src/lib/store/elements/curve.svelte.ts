@@ -1,3 +1,4 @@
+import shortUUID from "short-uuid";
 import type { IBaseMethods, IBaseObject } from "./common.svelte";
 
 export interface IPoint {
@@ -40,10 +41,17 @@ export type PartialCurve = {
   pathType?: "linear" | "quadratic" | "cubic";
   strokeWidth: number;
   strokeDasharray: string;
+  markerSize?: number;
+  startMarker?: MarkerType;
+  endMarker?: MarkerType;
 }
+
+export type MarkerType = "none" | "fill-arrow" | "outline-arrrow" | "fill-circle" | "outline-circle";
 
 export class Curve implements ICurve, IBaseMethods {
   type = "curve" as const;
+  id = shortUUID.generate();
+  markerId = shortUUID.generate();
   stroke = $state("#000000");
   isQuadratic = $state(false);
   strokeWidth = $state(1);
@@ -52,7 +60,9 @@ export class Curve implements ICurve, IBaseMethods {
   opacity = $state(1);
   pathType = $state("linear");
   path = $derived(getPathFromPoints(this.points, this.pathType))
-  // scale
+  startMarker = $state<MarkerType>("none");
+  endMarker = $state<MarkerType>("none");
+  markerSize = $state(10);
 
   constructor(obj: PartialCurve, scale = 1) {
     this.stroke = obj.stroke;
@@ -60,6 +70,18 @@ export class Curve implements ICurve, IBaseMethods {
     this.pathType = obj.pathType || "linear";
     this.strokeDasharray = obj.strokeDasharray;
     this.points = obj.points.map(p => new Point(p, scale));
+
+    if (obj.startMarker) {
+      this.startMarker = obj.startMarker;
+    }
+
+    if (obj.endMarker) {
+      this.endMarker = obj.endMarker;
+    }
+
+    if (obj.markerSize) {
+      this.markerSize = obj.markerSize;
+    }
   }
 
   get rotation() {
@@ -135,6 +157,9 @@ export class Curve implements ICurve, IBaseMethods {
       type: "curve",
       stroke: this.stroke,
       strokeWidth: this.strokeWidth,
+      startMarker: this.startMarker,
+      endMarker: this.endMarker,
+      markerSize: this.markerSize,
       strokeDasharray: this.strokeDasharray,
       points: this.points.map(p => p.clone()),
       pathType: this.pathType as "linear" | "quadratic" | "cubic"

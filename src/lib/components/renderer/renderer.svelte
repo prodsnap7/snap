@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CanvasElement } from '$lib/store';
-	import RenderCurve from './render-curve.svelte';
+	import RenderCurve from './render-curve';
 	import RenderGroup from './render-group/render-group.svelte';
 	import RenderShape from './render-shape.svelte';
 

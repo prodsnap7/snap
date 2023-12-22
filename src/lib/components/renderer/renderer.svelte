@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { CanvasElement } from '$lib/store';
+	import { type CanvasElement, Curve, Shape, Group, PathShape } from '$lib/store';
 	import RenderCurve from './render-curve';
 	import RenderGroup from './render-group/render-group.svelte';
+	import RenderPathShape from './render-path-shape.svelte';
 	import RenderShape from './render-shape.svelte';
 
 	type Props = {
@@ -13,7 +14,15 @@
 	let { element, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();
 </script>
 
-{#if element.type === 'shape'}
+{#if element instanceof PathShape}
+	<div
+		class="absolute top-0 left-0 origin-center"
+		style="transform: translate({element.x - offset.x}px, {element.y -
+			offset.y}px) rotate({element.rotation}deg)"
+	>
+		<RenderPathShape {scale} {element} />
+	</div>
+{:else if element instanceof Shape}
 	<div
 		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x - offset.x}px, {element.y -
@@ -21,10 +30,10 @@
 	>
 		<RenderShape {scale} shape={element} />
 	</div>
-{:else if element.type === 'curve'}
+{:else if element instanceof Curve}
 	<div class="absolute origin-center inset-0">
 		<RenderCurve {scale} curve={element} />
 	</div>
-{:else if element.type === 'group'}
+{:else if element instanceof Group}
 	<RenderGroup {scale} group={element} />
 {/if}

@@ -3,6 +3,7 @@
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
+	import { paths } from './data/paths';
 	import Button from '../ui/button/button.svelte';
 
 	let scale = 0.6;
@@ -28,6 +29,19 @@
 			class="relative p-2 flex-initial shrink-0"
 		>
 			<Renderer element={shape} {scale} />
+		</div>
+	{/each}
+
+	{#each paths as path}
+		<div
+			tabindex="0"
+			role="button"
+			on:click={() => addElement(path.clone())}
+			on:keydown={() => addElement(path.clone())}
+			style="width: {path.width}px; height: {path.height}px;"
+			class="relative p-2 flex-initial shrink-0"
+		>
+			<Renderer element={path} {scale} />
 		</div>
 	{/each}
 </div>

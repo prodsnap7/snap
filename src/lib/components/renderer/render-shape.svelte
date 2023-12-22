@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { IShape } from '$lib/store/elements/shape.svelte';
+	import type { Shape } from '$lib/store/elements/shape.svelte';
 
 	type Props = {
-		shape: IShape;
+		shape: Shape;
 		scale?: number;
 	};
 	const { shape, scale = 1 } = $props<Props>();

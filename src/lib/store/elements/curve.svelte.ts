@@ -62,7 +62,7 @@ export class Curve implements ICurve, IBaseMethods {
   path = $derived(getPathFromPoints(this.points, this.pathType))
   startMarker = $state<MarkerType>("none");
   endMarker = $state<MarkerType>("none");
-  markerSize = $state(10);
+  markerSize = $state(30);
 
   constructor(obj: PartialCurve, scale = 1) {
     this.stroke = obj.stroke;

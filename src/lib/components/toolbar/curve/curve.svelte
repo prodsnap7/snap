@@ -2,10 +2,13 @@
 	import { sidepanelStore } from '$lib/components/sidepanel/state.svelte';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
 	import * as Popover from '$lib/components/ui/popover';
-	import type { Curve } from '$lib/store';
+	import type { Curve, MarkerType } from '$lib/store';
 	import clsx from 'clsx';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { CircleDashed } from 'phosphor-svelte';
+	import { BezierCurve, CircleDashed, LineSegment } from 'phosphor-svelte';
+	import { Button } from '$lib/components/ui/button';
+	import StartMarkers from './start-markers.svelte';
+	import EndMarkers from './end-markers.svelte';
 
 	type Props = {
 		element: Curve;
@@ -16,6 +19,8 @@
 		{ dash: '4,4', style: 'dotted' },
 		{ dash: '8,4', style: 'dashed' }
 	];
+
+	const TYPES = ['none', 'outline-arrow', 'outline-circle', 'fill-arrow', 'fill-circle'];
 
 	let { element } = $props<Props>();
 	let chosen = $state('');
@@ -62,17 +67,16 @@
 		<button
 			onclick={onBorderClick}
 			class={clsx('flex rounded-full items-center justify-center', {
-				'ring-4 ring-slate-200': chosen === 'border'
+				'bg-neutral-200': chosen === 'border'
 			})}
 		>
 			<CircleDashed size={28} />
 		</button>
 	</Popover.Trigger>
-	<Popover.Content class="w-80 space-y-4">
-		<div class="flex items-center gap-3">
+	<Popover.Content class="space-y-4">
+		<div class="flex flex-nowrap items-center gap-3">
 			<button
 				onclick={() => {
-					console.log('onStrokeStyleClick', 'none');
 					element.strokeWidth = 0;
 				}}
 				class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
@@ -131,3 +135,91 @@
 		</div>
 	</Popover.Content>
 </Popover.Root>
+
+<Separator class="h-6" orientation="vertical" />
+
+<Popover.Root portal="null">
+	<Popover.Trigger>
+		<Button
+			onclick={() => {
+				chosen = 'marker';
+			}}
+			class={clsx('p-0', {
+				'bg-neutral-200': chosen === 'marker'
+			})}
+			variant="ghost"
+		>
+			<StartMarkers type={element.startMarker} />
+			<EndMarkers type={element.endMarker} />
+		</Button>
+	</Popover.Trigger>
+	<Popover.Content>
+		<label class="text-sm font-semibold" for="markers">Start</label>
+		<div class="space-x-1">
+			{#each TYPES as type}
+				<Button
+					variant="ghost"
+					class="px-2 py-1.5"
+					onclick={() => {
+          element.startMarker = type as MarkerType;
+        }}
+				>
+					<StartMarkers {type} />
+				</Button>
+			{/each}
+		</div>
+
+		<label class="font-semibold text-sm" for="markers">End</label>
+		<div class="space-x-1">
+			{#each TYPES as type}
+				<Button
+					class="px-2 py-1.5"
+					variant="ghost"
+					onclick={() => {
+          element.endMarker = type as MarkerType;
+        }}
+				>
+					<EndMarkers {type} />
+				</Button>
+			{/each}
+		</div>
+
+		<div class="space-y-4 px-2">
+			<div class="flex items-center justify-between">
+				<label for="border width" class="text-xs font-semibold">Size</label>
+				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.markerSize} />
+			</div>
+
+			<Slider
+				onValueChange={(val) => {
+					element.markerSize = val[0];
+				}}
+				value={[element.markerSize]}
+			/>
+		</div>
+	</Popover.Content>
+</Popover.Root>
+
+<Separator class="h-6" orientation="vertical" />
+
+{#if element.pathType === 'quadratic'}
+	<Button
+		onclick={() => {
+			element.pathType = 'linear';
+		}}
+		variant="ghost"
+		class="p-1"
+	>
+		<LineSegment size={20} />
+	</Button>
+{:else if element.pathType === 'linear'}
+	<Button
+		onclick={() => {
+			element.pathType = 'quadratic';
+		}}
+		variant="ghost"
+		class="p-1"
+	>
+		<BezierCurve size={20} />
+	</Button>
+{/if}

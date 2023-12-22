@@ -10,6 +10,8 @@
 	const { curve } = $props<Props>();
 	const width = $derived(curve.bounds.width);
 	const height = $derived(curve.bounds.height);
+
+	$inspect(curve.startMarker);
 </script>
 
 <svg

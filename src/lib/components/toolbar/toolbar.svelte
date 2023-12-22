@@ -2,13 +2,16 @@
 	import { activeElementStore } from '$lib/store';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
+	import CurveToolbar from './curve';
 	import Shape from './shape.svelte';
 </script>
 
 {#if activeElementStore.element}
 	<div class="flex items-center gap-2 justify-between" id="toolbar">
-		{#if activeElementStore.element && activeElementStore.element.type === 'shape'}
+		{#if activeElementStore.element.type === 'shape'}
 			<Shape element={activeElementStore.element} />
+		{:else if activeElementStore.element.type === 'curve'}
+			<CurveToolbar element={activeElementStore.element} />
 		{/if}
 		<div class="flex-1" />
 

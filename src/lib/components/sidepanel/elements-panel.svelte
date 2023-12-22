@@ -9,7 +9,7 @@
 
 	function addElement(el: CanvasElement) {
 		console.log('add element', el);
-		store.elements.addElement(el.clone());
+		store.elements.addElement(el);
 	}
 </script>
 
@@ -22,8 +22,8 @@
 		<div
 			tabindex="0"
 			role="button"
-			on:click={() => addElement(shape)}
-			on:keydown={() => addElement(shape)}
+			on:click={() => addElement(shape.clone())}
+			on:keydown={() => addElement(shape.clone())}
 			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
 			class="relative p-2 flex-initial shrink-0"
 		>
@@ -39,10 +39,10 @@
 	{#each curves as curve}
 		<div
 			id="curve-renderer-elements-panel"
-			on:click={() => addElement(curve)}
+			on:click={() => addElement(curve.clone(2.5))}
 			tabindex="0"
 			role="button"
-			on:keydown={() => addElement(curve)}
+			on:keydown={() => addElement(curve.clone(2.5))}
 			style="width: {curve.width}px; height: {curve.height}px;"
 			class="relative flex-initial shrink-0"
 		>

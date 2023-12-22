@@ -7,28 +7,30 @@ const CURVES: PartialCurve[] = [
     strokeWidth: 1,
     strokeDasharray: "",
     points: [
-      { x: 0, y: 0, type: "point" },
-      { x: 150, y: 0, type: "point" }
+      { x: 0, y: 0,  },
+      { x: 150, y: 0,  }
     ]
   },
   {
     type: "curve",
     stroke: "#262626",
     strokeWidth: 1,
+    markerSize: 20,
+    startMarker: "fill-arrow",
     strokeDasharray: "",
     points: [
       {
-        type: 'point' as const,
+        
         x: 10,
         y: 10
       },
       {
-        type: 'point' as const,
+        
         x: 100,
         y: 20
       },
       {
-        type: 'point' as const,
+        
         x: 150,
         y: 10
       }
@@ -42,17 +44,17 @@ const CURVES: PartialCurve[] = [
     strokeDasharray: "",
     points: [
       {
-        type: 'point' as const,
+        
         x: 10,
         y: 100
       },
       {
-        type: 'point' as const,
+        
         x: 100,
         y: 0
       },
       {
-        type: 'point' as const,
+        
         x: 150,
         y: 100
       }
@@ -65,17 +67,17 @@ const CURVES: PartialCurve[] = [
     strokeDasharray: "",
     points: [
       {
-        type: 'point' as const,
+        
         x: 10,
         y: 50
       },
       {
-        type: 'point' as const,
+        
         x: 100,
         y: 0
       },
       {
-        type: 'point' as const,
+        
         x: 150,
         y: 100
       }
@@ -89,22 +91,22 @@ const CURVES: PartialCurve[] = [
     strokeDasharray: "",
     points: [
       {
-        type: 'point' as const,
+        
         x: 10,
         y: 50
       },
       {
-        type: 'point' as const,
+        
         x: 100,
         y: 100
       },
       {
-        type: 'point' as const,
+        
         x: 150,
         y: 0
       },
       {
-        type: 'point' as const,
+        
         x: 150,
         y: 50
       }
@@ -112,4 +114,4 @@ const CURVES: PartialCurve[] = [
   },
 ]
 
-export const curves = CURVES.map(c => new Curve(c));
+export const curves = CURVES.map(c => new Curve(c, 0.4));

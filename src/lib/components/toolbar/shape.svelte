@@ -22,7 +22,6 @@
 	}
 
 	function onStrokeStyleClick(dash: string) {
-		console.log('onStrokeStyleClick', dash);
 		element.strokeType = dash;
 		if (!element.strokeWidth) {
 			element.strokeWidth = 1;

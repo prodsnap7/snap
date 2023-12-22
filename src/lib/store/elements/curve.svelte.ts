@@ -1,9 +1,9 @@
+import shortUUID from "short-uuid";
 import type { IBaseMethods, IBaseObject } from "./common.svelte";
 
 export interface IPoint {
   x: number;
   y: number;
-  type: "point";
 }
 
 export class Point implements IPoint {
@@ -11,16 +11,15 @@ export class Point implements IPoint {
   y = $state(0);
   type = "point" as const;
 
-  constructor(obj: IPoint) {
-    this.x = obj.x;
-    this.y = obj.y;
+  constructor(obj: IPoint, scale = 1) {
+    this.x = obj.x * scale;
+    this.y = obj.y * scale;
   }
 
   clone() {
     return new Point({
       x: this.x,
       y: this.y,
-      type: this.type
     });
   }
 }
@@ -42,26 +41,59 @@ export type PartialCurve = {
   pathType?: "linear" | "quadratic" | "cubic";
   strokeWidth: number;
   strokeDasharray: string;
+  markerSize?: number;
+  startMarker?: MarkerType;
+  endMarker?: MarkerType;
 }
+
+export type MarkerType = "none" | "fill-arrow" | "outline-arrrow" | "fill-circle" | "outline-circle";
 
 export class Curve implements ICurve, IBaseMethods {
   type = "curve" as const;
+  id = shortUUID.generate();
+  markerId = shortUUID.generate();
   stroke = $state("#000000");
   isQuadratic = $state(false);
   strokeWidth = $state(1);
   strokeDasharray = $state("");
   points = $state<Point[]>([]);
-  rotation = $state(0);
   opacity = $state(1);
   pathType = $state("linear");
   path = $derived(getPathFromPoints(this.points, this.pathType))
+  startMarker = $state<MarkerType>("none");
+  endMarker = $state<MarkerType>("none");
+  markerSize = $state(30);
 
-  constructor(obj: PartialCurve) {
+  constructor(obj: PartialCurve, scale = 1) {
     this.stroke = obj.stroke;
     this.strokeWidth = obj.strokeWidth;
     this.pathType = obj.pathType || "linear";
     this.strokeDasharray = obj.strokeDasharray;
-    this.points = obj.points.map(p => new Point(p));
+    this.points = obj.points.map(p => new Point(p, scale));
+
+    if (obj.startMarker) {
+      this.startMarker = obj.startMarker;
+    }
+
+    if (obj.endMarker) {
+      this.endMarker = obj.endMarker;
+    }
+
+    if (obj.markerSize) {
+      this.markerSize = obj.markerSize;
+    }
+  }
+
+  get rotation() {
+    return 0;
+  }
+
+  set rotation(val: number) {
+    //
+  }
+
+  getScaledPath(scale: number) {
+    return getPathFromPoints(this.points.map(p => ({ x: p.x * scale, y: p.y * scale })), this.pathType);
   }
 
   get x() {
@@ -120,15 +152,18 @@ export class Curve implements ICurve, IBaseMethods {
     return this.bounds;
   }
 
-  clone() {
+  clone(scale = 1) {
     return new Curve({
       type: "curve",
       stroke: this.stroke,
       strokeWidth: this.strokeWidth,
+      startMarker: this.startMarker,
+      endMarker: this.endMarker,
+      markerSize: this.markerSize,
       strokeDasharray: this.strokeDasharray,
       points: this.points.map(p => p.clone()),
       pathType: this.pathType as "linear" | "quadratic" | "cubic"
-    });
+    }, scale);
   }
 
   static fromObject(obj: PartialCurve) {

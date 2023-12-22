@@ -126,7 +126,7 @@
 		width={store.selectedElements.bounds.width}
 		height={store.selectedElements.bounds.height}
 		rotation={store.selectedElements.rotation}
-		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.width = width;
@@ -134,7 +134,9 @@
 			store.selectedElements.x = x;
 			store.selectedElements.y = y;
 		}}
-		onRotate={() => {}}
+		onRotate={(r) => {
+			store.selectedElements.rotation = r;
+		}}
 	></MoveHandler>
 {:else if selected.length === 1}
 	<MoveHandler

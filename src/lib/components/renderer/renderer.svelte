@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CanvasElement } from '$lib/store';
-	import RenderCurve from './render-curve.svelte';
+	import RenderCurve from './render-curve';
 	import RenderGroup from './render-group/render-group.svelte';
 	import RenderShape from './render-shape.svelte';
 
@@ -23,7 +23,7 @@
 	</div>
 {:else if element.type === 'curve'}
 	<div class="absolute origin-center inset-0">
-		<RenderCurve {scale} curve={element} {offset} />
+		<RenderCurve {scale} curve={element} />
 	</div>
 {:else if element.type === 'group'}
 	<RenderGroup {scale} group={element} />

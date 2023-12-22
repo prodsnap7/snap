@@ -1,16 +1,19 @@
 <script lang="ts">
-	import { activeElementStore } from '$lib/store';
+	import { Curve, activeElementStore, Shape, PathShape } from '$lib/store';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
 	import CurveToolbar from './curve';
-	import Shape from './shape.svelte';
+	import ShapeToolbar from './shape.svelte';
+	import PathShapeToolbar from './path-shape.svelte';
 </script>
 
 {#if activeElementStore.element}
 	<div class="flex items-center gap-2 justify-between" id="toolbar">
-		{#if activeElementStore.element.type === 'shape'}
-			<Shape element={activeElementStore.element} />
-		{:else if activeElementStore.element.type === 'curve'}
+		{#if activeElementStore.element instanceof PathShape}
+			<PathShapeToolbar element={activeElementStore.element} />
+		{:else if activeElementStore.element instanceof Shape}
+			<ShapeToolbar element={activeElementStore.element} />
+		{:else if activeElementStore.element instanceof Curve}
 			<CurveToolbar element={activeElementStore.element} />
 		{/if}
 		<div class="flex-1" />

@@ -1,5 +1,6 @@
 // import type { MakeOneRequired } from "$lib/utils";
-import {  BaseObject, type IBaseMethods, type IBaseObject } from "./common.svelte";
+import shortUUID from "short-uuid";
+import {  BaseObject, type IBaseObject } from "./common.svelte";
 
 export interface IShape extends IBaseObject {
   stroke: string;
@@ -80,6 +81,16 @@ export class Shape extends BaseObject implements IShape {
     this.width += width;
     this.height += height;
   }
+
+  get bounds() {
+    const b = super.bounds;
+    return {
+      x: b.x,
+      y: b.y,
+      width: b.width - this.strokeWidth,
+      height: b.height - this.strokeWidth
+    }
+  }
 }
 
 export interface IPathShape extends IShape {
@@ -96,6 +107,7 @@ export class PathShape extends Shape {
   strokeDasharray = $state("");
   _path = $state("");
   path = $derived(scalePathData(this._path, this.width, this.height, this.strokeWidth))
+  clipPathId = shortUUID.generate();
 
   constructor(obj: IPathShape) {
     super(obj);

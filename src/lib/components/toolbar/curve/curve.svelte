@@ -1,50 +1,24 @@
 <script lang="ts">
-	import type { Shape } from '$lib/store';
+	import { sidepanelStore } from '$lib/components/sidepanel/state.svelte';
+	import Slider from '$lib/components/ui/slider/slider.svelte';
+	import * as Popover from '$lib/components/ui/popover';
+	import type { Curve } from '$lib/store';
 	import clsx from 'clsx';
-	import { sidepanelStore } from '../sidepanel/state.svelte';
-	import { Separator } from '../ui/separator';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { CircleDashed } from 'phosphor-svelte';
-	import * as Popover from '../ui/popover';
-	import Slider from '../ui/slider/slider.svelte';
 
-	type State = 'fill' | 'stroke' | 'border' | '';
-	let chosen = $state<State>('');
+	type Props = {
+		element: Curve;
+	};
 
 	const DASHARRAYS = [
 		{ dash: '', style: 'solid' },
 		{ dash: '4,4', style: 'dotted' },
 		{ dash: '8,4', style: 'dashed' }
 	];
-	let { element } = $props<{ element: Shape }>();
 
-	function onBorderClick() {
-		chosen = 'border';
-	}
-
-	function onStrokeStyleClick(dash: string) {
-		element.strokeType = dash;
-		if (!element.strokeWidth) {
-			element.strokeWidth = 1;
-		}
-	}
-
-	function onFillClick() {
-		chosen = 'fill';
-		sidepanelStore.state = 'colors';
-		sidepanelStore.val = element.fill;
-		sidepanelStore.cb = (val: string) => {
-			element.fill = val;
-		};
-	}
-
-	$effect(() => {
-		if (chosen === 'fill') {
-			sidepanelStore.val = element.fill;
-		} else if (chosen === 'stroke') {
-			sidepanelStore.val = element.stroke;
-		}
-	});
-
+	let { element } = $props<Props>();
+	let chosen = $state('');
 	function onStrokeClick() {
 		chosen = 'stroke';
 		sidepanelStore.state = 'colors';
@@ -53,15 +27,25 @@
 			element.stroke = val;
 		};
 	}
+
+	$effect(() => {
+		if (chosen === 'stroke') {
+			sidepanelStore.val = element.stroke;
+		}
+	});
+
+	function onBorderClick() {
+		chosen = 'border';
+	}
+
+	function onStrokeStyleClick(dash: string) {
+		element.strokeDasharray = dash;
+		if (!element.strokeWidth) {
+			element.strokeWidth = 1;
+		}
+	}
 </script>
 
-<button
-	onclick={onFillClick}
-	class={clsx('w-6 h-6 rounded border border-gray-400', {
-		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'fill'
-	})}
-	style="background-color: {element.fill}"
-></button>
 <button
 	onclick={onStrokeClick}
 	class={clsx('w-6 h-6 rounded flex items-center justify-center border', {
@@ -109,12 +93,12 @@
 					><circle cx="12" cy="12" r="10" /><path d="m4.9 4.9 14.2 14.2" /></svg
 				>
 			</button>
-			{#each DASHARRAYS as { dash, style }}
+			{#each DASHARRAYS as { dash }}
 				<button
-					onclick={() => onStrokeStyleClick(style)}
+					onclick={() => onStrokeStyleClick(dash)}
 					class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
 						'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700':
-							element.strokeType === style && element.strokeWidth
+							element.strokeDasharray === dash && element.strokeWidth
 					})}
 				>
 					<svg width={30} height={2}>
@@ -143,20 +127,6 @@
 					element.strokeWidth = val[0];
 				}}
 				value={[element.strokeWidth]}
-			/>
-		</div>
-
-		<div class="space-y-4 px-2">
-			<div class="flex items-center justify-between">
-				<label for="border width" class="text-xs font-semibold">Border Radius</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.radius} />
-			</div>
-
-			<Slider
-				onValueChange={(val) => {
-					element.radius = val[0];
-				}}
-				value={[element.radius]}
 			/>
 		</div>
 	</Popover.Content>

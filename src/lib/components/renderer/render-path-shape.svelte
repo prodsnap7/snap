@@ -17,14 +17,8 @@
 	style="width: {element.width + element.strokeWidth}px; height: {element.height +
 		element.strokeWidth}px; padding: {element.strokeWidth / 2}px;"
 >
-	<defs>
-		<clipPath id={element.clipPathId}>
-			<path d={element.path + 'Z'} />
-		</clipPath>
-	</defs>
 	<path
 		d={element.path + 'Z'}
-		clip-path={`url(#${element.clipPathId})`}
 		stroke={element.stroke}
 		stroke-width={element.strokeWidth}
 		stroke-linecap={element.strokeLinecap as any}

@@ -22,6 +22,7 @@
 	}
 
 	function onStrokeStyleClick(dash: string) {
+		console.log('Dash: ', dash, element.strokeDasharray);
 		element.strokeDasharray = dash;
 		if (!element.strokeWidth) {
 			element.strokeWidth = 1;
@@ -114,7 +115,7 @@
 					onclick={() => onStrokeStyleClick(dash)}
 					class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
 						'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700':
-							element.strokeType === dash && element.strokeWidth
+							element.strokeDasharray === dash && element.strokeWidth
 					})}
 				>
 					<svg width={30} height={2}>

@@ -3,19 +3,26 @@
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
-	import { paths } from './data/paths';
 	import Button from '../ui/button/button.svelte';
+	import { sidepanelStore } from './state.svelte';
 
 	let scale = 0.6;
 
 	function addElement(el: CanvasElement) {
-		console.log('add element', el);
 		store.elements.addElement(el);
 	}
 </script>
 
-<div class="mb-4">
+<div class="mb-4 flex items-center justify-between">
 	<h2 class="font-bold">Shapes</h2>
+	<Button
+		onclick={() => {
+			sidepanelStore.state = 'all-shapes';
+		}}
+		variant="ghost"
+		size="sm"
+		class="text-xs">See All</Button
+	>
 </div>
 
 <div class="flex flex-nowrap no-scrollbar overflow-x-auto overflow-hidden items-center gap-3">
@@ -29,19 +36,6 @@
 			class="relative p-2 flex-initial shrink-0"
 		>
 			<Renderer element={shape} {scale} />
-		</div>
-	{/each}
-
-	{#each paths as path}
-		<div
-			tabindex="0"
-			role="button"
-			on:click={() => addElement(path.clone())}
-			on:keydown={() => addElement(path.clone())}
-			style="width: {path.width}px; height: {path.height}px;"
-			class="relative p-2 flex-initial shrink-0"
-		>
-			<Renderer element={path} {scale} />
 		</div>
 	{/each}
 </div>

@@ -5,6 +5,7 @@
 	import ElementsPanel from './elements-panel.svelte';
 	import Colors from './colors.svelte';
 	import { sidepanelStore } from './state.svelte';
+	import AllShapes from './all-shapes.svelte';
 
 	function onclick(val: string) {
 		$page.url.searchParams.set('sidepanel', val);
@@ -80,6 +81,10 @@
 		{:else if sidepanelStore.state === 'colors'}
 			<div in:fade>
 				<Colors />
+			</div>
+		{:else if sidepanelStore.state === 'all-shapes'}
+			<div in:fade>
+				<AllShapes />
 			</div>
 		{/if}
 	</div>

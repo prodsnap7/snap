@@ -1,6 +1,7 @@
 export const sidepanelStore = new class {
   private _prev = $state("elements");
   private _state = $state("elements");
+  private base_states = ["elements", "uploads"];
   val = $state("");
   cb = $state<(x: any) => void>(() => {});
 
@@ -12,7 +13,11 @@ export const sidepanelStore = new class {
     if (val.length && this._state === val) {
       return;
     }
-    this._prev = this._state;
+
+    if (this.base_states.includes(this._state)) {
+      this._prev = this._state;
+    }
+    
     this._state = val;
   }
 

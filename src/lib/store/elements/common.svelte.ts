@@ -1,4 +1,4 @@
-import type { Curve, Group, IShape, PartialCurve, Shape } from "..";
+import type { Curve, TextBox, Group, IShape, PartialCurve, Shape, PartialShape } from "..";
 
 export interface IBaseObject {
   x: number;
@@ -15,8 +15,8 @@ export interface IBaseMethods {
 }
 
 
-export type CanvasElement = Shape | Curve | Group;
-export type CanvasObject = Partial<IShape> | PartialCurve
+export type CanvasElement = Shape | Curve | Group | TextBox;
+export type CanvasObject = PartialShape | PartialCurve
 
 export class BaseObject {
   x = $state(0);

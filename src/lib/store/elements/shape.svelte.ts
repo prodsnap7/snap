@@ -25,7 +25,7 @@ export const defaultShape: IShape = {
 };
 
 // export type PartialShape = MakeOneRequired<IShape, "type">;
-export type PartialShape = Partial<IShape>;
+export type PartialShape = Partial<IShape> & { type: 'shape' };
 
 export class Shape extends BaseObject implements IShape {
 	type = 'shape';

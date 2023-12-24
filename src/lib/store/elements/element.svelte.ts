@@ -1,6 +1,7 @@
 import { Shape } from './shape.svelte';
-import type { CanvasElement, CanvasObject } from './common.svelte';
+import { Group } from './group.svelte';
 import { Curve } from './curve.svelte';
+import type { CanvasElement, CanvasObject } from './common.svelte';
 
 export const elementStore = new (class {
 	elements = $state<CanvasElement[]>([]);
@@ -149,7 +150,7 @@ export const selectedElementsStore = new (class {
 
 	set x(value: number) {
 		this.elements.forEach((element) => {
-			if (element.type === 'curve' || element.type === 'group') {
+			if (element instanceof Curve || element instanceof Group) {
 				element.x = value;
 			} else {
 				element.x += value;
@@ -159,7 +160,7 @@ export const selectedElementsStore = new (class {
 
 	set y(value: number) {
 		this.elements.forEach((element) => {
-			if (element.type === 'curve' || element.type === 'group') {
+			if (element instanceof Curve || element instanceof Group) {
 				element.y = value;
 			} else {
 				element.y += value;
@@ -169,7 +170,7 @@ export const selectedElementsStore = new (class {
 
 	set width(value: number) {
 		this.elements.forEach((element) => {
-			if (element.type === 'curve' || element.type === 'group') {
+			if (element instanceof Curve || element instanceof Group) {
 				element.width = value;
 			} else {
 				element.width += value;
@@ -179,7 +180,7 @@ export const selectedElementsStore = new (class {
 
 	set height(value: number) {
 		this.elements.forEach((element) => {
-			if (element.type === 'curve' || element.type === 'group') {
+			if (element instanceof Curve || element instanceof Group) {
 				element.height = value;
 			} else {
 				element.height += value;

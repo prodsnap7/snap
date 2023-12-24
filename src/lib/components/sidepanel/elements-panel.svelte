@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { store, type CanvasElement } from '$lib/store';
+	import { store, type CanvasElement, TextBox } from '$lib/store';
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
@@ -10,6 +10,14 @@
 
 	function addElement(el: CanvasElement) {
 		store.elements.addElement(el);
+	}
+
+	function addTextElement() {
+		const text = new TextBox({
+			content: 'Text Goes Here'
+		});
+
+		addElement(text);
 	}
 
 	const fourCurves = curves.slice(0, 5);
@@ -53,6 +61,7 @@
 		class="text-xs">See All</Button
 	>
 </div>
+
 <div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
 	{#each fourCurves as curve}
 		<div
@@ -74,4 +83,7 @@
 <div class="my-4">
 	<h2 class="font-bold">Text</h2>
 </div>
-<Button variant="secondary" class="w-full border hover:bg-neutral-200">Add Some Text</Button>
+
+<Button onclick={addTextElement} variant="secondary" class="w-full border hover:bg-neutral-200">
+	Add Some Text
+</Button>

@@ -3,10 +3,7 @@
 	import { ArrowsCounterClockwise, ArrowsOutCardinal } from 'phosphor-svelte';
 
 	type Props = {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
+		bounds: { x: number; y: number; width: number; height: number };
 		exclude?: State[];
 		children?: any;
 		rotation: number;
@@ -30,18 +27,7 @@
 
 	let frameid = $state<number | null>(null);
 	let status = $state<State>('idle');
-	let {
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		exclude = [],
-		onMove,
-		onResize,
-		children,
-		onRotate
-	} = $props<Props>();
+	let { bounds, rotation, exclude = [], onMove, onResize, children, onRotate } = $props<Props>();
 
 	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -178,6 +164,11 @@
 	const finalClasses = classes.map((c) => classMap[c]);
 
 	function onMoveHandlerMouseUp(event: MouseEvent) {}
+
+	let x = $derived(bounds.x);
+	let y = $derived(bounds.y);
+	let width = $derived(bounds.width);
+	let height = $derived(bounds.height);
 </script>
 
 {#snippet controller(classes)}

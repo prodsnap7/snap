@@ -70,72 +70,12 @@ class SelectedEleemnts {
 		});
 	}
 
-	get x() {
-		return Math.min(...this.elements.map((element) => element.x), Infinity);
-	}
-
-	get y() {
-		return Math.min(...this.elements.map((element) => element.y), Infinity);
-	}
-
-	get width() {
-		return (
-			Math.max(...this.elements.map((element) => element.x + element.width), -Infinity) - this.x
-		);
-	}
-
-	get height() {
-		return (
-			Math.max(...this.elements.map((element) => element.y + element.height), -Infinity) - this.y
-		);
-	}
-
 	get rotation() {
 		if (this.elements.length === 1) {
 			return this.elements[0].rotation;
 		}
 		
 		return this._rotation;
-	}
-
-	set x(value: number) {
-		this.elements.forEach((element) => {
-			if (element instanceof Curve || element instanceof Group) {
-				element.x = value;
-			} else {
-				element.x += value;
-			}
-		});
-	}
-
-	set y(value: number) {
-		this.elements.forEach((element) => {
-			if (element instanceof Curve || element instanceof Group) {
-				element.y = value;
-			} else {
-				element.y += value;
-			}
-		});
-	}
-
-	set width(value: number) {
-		this.elements.forEach((element) => {
-			if (element instanceof Curve || element instanceof Group) {
-				element.width = value;
-			} else {
-				element.width += value;
-			}
-		});
-	}
-
-	set height(value: number) {
-		this.elements.forEach((element) => {
-			if (element instanceof Curve || element instanceof Group) {
-				element.height = value;
-			} else {
-				element.height += value;
-			}
-		});
 	}
 
 	set rotation(value: number) {

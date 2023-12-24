@@ -52,10 +52,10 @@
 		height: number;
 	}) {
 		const currentEl = {
-			x: store.selectedElements.x + x,
-			y: store.selectedElements.y + y,
-			width: store.selectedElements.width + width,
-			height: store.selectedElements.height + height
+			x: store.selectedElements.bounds.x + x,
+			y: store.selectedElements.bounds.y + y,
+			width: store.selectedElements.bounds.width + width,
+			height: store.selectedElements.bounds.height + height
 		};
 
 		const otherEls = [
@@ -66,20 +66,19 @@
 		const snap = snapToGrid(currentEl, otherEls, 5);
 
 		store.selectedElements.updateBounds({
-			x: snap.x - store.selectedElements.x,
-			y: snap.y - store.selectedElements.y,
-			width: snap.width - store.selectedElements.width,
-			height: snap.height - store.selectedElements.height
+			x: snap.x - store.selectedElements.bounds.x,
+			y: snap.y - store.selectedElements.bounds.y,
+			width: snap.width - store.selectedElements.bounds.width,
+			height: snap.height - store.selectedElements.bounds.height
 		});
 	}
+
+	const bounds = $derived(store.selectedElements.bounds);
 </script>
 
 {#if selected.length > 1}
 	<MoveHandler
-		x={store.selectedElements.bounds.x}
-		y={store.selectedElements.bounds.y}
-		width={store.selectedElements.bounds.width}
-		height={store.selectedElements.bounds.height}
+		{bounds}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
@@ -92,10 +91,7 @@
 	></MoveHandler>
 {:else if selected.length === 1 && selected[0] instanceof Curve}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
+		{bounds}
 		rotation={store.selectedElements.rotation}
 		exclude={[
 			'rotating',
@@ -109,12 +105,7 @@
 			'resizing-tl'
 		]}
 		{onMove}
-		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onResize}
 		onRotate={() => {}}
 	>
 		{#each points as point}
@@ -123,29 +114,18 @@
 	</MoveHandler>
 {:else if selected.length === 1 && selected[0] instanceof Group}
 	<MoveHandler
-		x={store.selectedElements.bounds.x}
-		y={store.selectedElements.bounds.y}
-		width={store.selectedElements.bounds.width}
-		height={store.selectedElements.bounds.height}
+		{bounds}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
-		onResize={({ width, height, x, y }) => {
-			store.selectedElements.width = width;
-			store.selectedElements.height = height;
-			store.selectedElements.x = x;
-			store.selectedElements.y = y;
-		}}
+		{onResize}
 		onRotate={(r) => {
 			store.selectedElements.rotation = r;
 		}}
 	></MoveHandler>
 {:else if selected.length === 1}
 	<MoveHandler
-		x={store.selectedElements.x}
-		y={store.selectedElements.y}
-		width={store.selectedElements.width}
-		height={store.selectedElements.height}
+		{bounds}
 		rotation={store.selectedElements.rotation}
 		{onMove}
 		{onResize}

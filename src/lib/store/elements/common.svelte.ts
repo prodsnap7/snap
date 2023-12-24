@@ -18,30 +18,24 @@ export interface IBaseMethods {
 export type CanvasElement = Shape | Curve | Group | TextBox;
 export type CanvasObject = PartialShape | PartialCurve
 
-export class BaseObject {
-  x = $state(0);
-  y = $state(0);
-  width = $state(100);
-  height = $state(100);
-  colors = $state<string[]>([]);
-  rotation = $state(0);
+export abstract class BaseObject {
   opacity = $state(1);
 
-  constructor(obj: IBaseObject) {
-    this.x = obj.x;
-    this.y = obj.y;
-    this.width = obj.width;
-    this.height = obj.height;
-    this.rotation = obj.rotation;
-    this.opacity = obj.opacity;
+  constructor(obj: Partial<BaseObject>) {
+    if (obj.opacity) {
+      this.opacity = obj.opacity;
+    }
   }
-
-  clone(): CanvasElement {
-    throw new Error("Method not implemented.");
-  }
+  
+  abstract clone(): CanvasElement; 
+  abstract get colors(): string[];
+  abstract get rotation(): number;
+  abstract set rotation(value: number);
+  abstract get rect(): { x: number; y: number; width: number; height: number; };
 
   get bounds() {
-    const { minX, maxX, minY, maxY } = getRotatedBoundingBox(this.x, this.y, this.width, this.height, this.rotation);
+    const { x, y, width, height } = this.rect;
+    const { minX, maxX, minY, maxY } = getRotatedBoundingBox(x, y, width, height, this.rotation);
 
     return {
       x: minX,

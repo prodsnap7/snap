@@ -28,6 +28,10 @@ export const defaultShape: IShape = {
 export type PartialShape = Partial<IShape> & { type: 'shape' };
 
 export class Shape extends BaseObject implements IShape {
+	x = $state(0);
+	y = $state(0);
+	width = $state(100);
+	height = $state(100);
 	type = 'shape';
 	stroke = $state('#000000');
 	fill = $state('#ffffff');
@@ -35,21 +39,11 @@ export class Shape extends BaseObject implements IShape {
 	radius = $state(0);
 	strokeType = $state('solid');
 	colors = $derived([this.stroke, this.fill]);
+	_rotation = $state(0);
 
-	constructor(obj: IShape) {
-		super({
-			x: obj.x,
-			y: obj.y,
-			width: obj.width,
-			height: obj.height,
-			rotation: obj.rotation,
-			opacity: obj.opacity
-		});
-		this.stroke = obj.stroke;
-		this.fill = obj.fill;
-		this.strokeWidth = obj.strokeWidth;
-		this.radius = obj.radius;
-		this.strokeType = obj.strokeType;
+	constructor(obj: Partial<Shape>) {
+		super(obj);
+		Object.assign(this, obj);
 	}
 
 	static fromObject(obj: Partial<IShape>): Shape {
@@ -57,6 +51,23 @@ export class Shape extends BaseObject implements IShape {
 			...defaultShape,
 			...obj
 		});
+	}
+
+	get rotation() {
+		return this._rotation;
+	}
+
+	set rotation(value: number) {
+		this._rotation = value;
+	}
+
+	get rect() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height
+		};
 	}
 
 	clone(): Shape {
@@ -100,13 +111,24 @@ export interface IPathShape extends IShape {
 	strokeDasharray?: string;
 }
 
-export class PathShape extends Shape {
+export class PathShape extends BaseObject {
+	x = $state(0);
+	y = $state(0);
+	width = $state(100);
+	height = $state(100);
+	stroke = $state('#000000');
+	fill = $state('#ffffff');
+	strokeWidth = $state(0);
+	radius = $state(0);
+	strokeType = $state('solid');
+	colors = $derived([this.stroke, this.fill]);
+	_rotation = $state(0);
 	type = 'path-shape';
 	strokeLinecap = $state('butt');
 	strokeLinejoin = $state('miter');
 	strokeDasharray = $state('');
 	_path = $state('');
-	path = $derived(scalePathData(this._path, this.width, this.height, this.strokeWidth));
+	// path = $derived(scalePathData(this._path, this.width, this.height, this.strokeWidth));
 	clipPathId = shortUUID.generate();
 	viewBox = $derived(
 		`${-this.strokeWidth} ${-this.strokeWidth} ${this.width + 2 * this.strokeWidth} ${
@@ -114,12 +136,41 @@ export class PathShape extends Shape {
 		}`
 	);
 
-	constructor(obj: IPathShape) {
+	constructor(obj: Partial<PathShape>) {
 		super(obj);
-		if (obj.strokeLinecap) this.strokeLinecap = obj.strokeLinecap;
-		if (obj.strokeLinejoin) this.strokeLinejoin = obj.strokeLinejoin;
-		if (obj.strokeDasharray) this.strokeDasharray = obj.strokeDasharray;
-		this._path = obj.path;
+		Object.assign(this, obj);
+	}
+
+	get path() {
+		return scalePathData(this._path, this.width, this.height, this.strokeWidth);
+	}
+
+	set path(value: string) {
+		this._path = value;
+	}
+
+	get rotation() {
+		return this._rotation;
+	}
+
+	set rotation(value: number) {
+		this._rotation = value;
+	}
+
+	get rect() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height
+		};
+	}
+
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		this.x += x;
+		this.y += y;
+		this.width += width;
+		this.height += height;
 	}
 
 	clone(): PathShape {
@@ -140,6 +191,16 @@ export class PathShape extends Shape {
 			strokeDasharray: this.strokeDasharray,
 			path: this._path
 		});
+	}
+
+	get bounds() {
+		const b = super.bounds;
+		return {
+			x: b.x,
+			y: b.y,
+			width: b.width - this.strokeWidth,
+			height: b.height - this.strokeWidth
+		};
 	}
 }
 

@@ -4,8 +4,8 @@ import {
 	activeElementStore,
 	elementStore,
 	highlightedElementsStore,
-	selectedElementsStore
-} from './elements/element.svelte';
+} from './elements/elements.svelte';
+import { selectedElementsStore } from './elements/selected-elements.svelte';
 import type { CanvasElement } from '.';
 
 type StoreObj = {
@@ -43,7 +43,7 @@ export const store = new (class {
 		// const selected = this.selectedElements.elements.map((element) => element.clone());
 		const selected: CanvasElement[] = [];
 		this.selectedElements.elements.forEach((element) => {
-			if (element.type === 'group') {
+			if (element instanceof Group) {
 				selected.push(...element.ungroup());
 			} else {
 				selected.push(element.clone());

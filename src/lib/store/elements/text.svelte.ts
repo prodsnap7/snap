@@ -3,6 +3,7 @@ import shortUUID from "short-uuid";
 type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
 export class TextBox {
+  type = 'text' as const;
   x = $state(0);
   y = $state(0);
   width = $state(100);
@@ -46,11 +47,15 @@ export class TextBox {
     return new TextBox(newObj);
   }
 
-  updateBounds({ x, y, width }: { x: number; y: number; width: number; height: number }) {
+  updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
     this.x += x;
     this.y += y;
+    const oldWidth = this.width;
     this.width += width;
-    // this.height += height;
+    if (height !== 0) {
+      this.fontSize = (this.width / oldWidth) * this.fontSize;
+      this.height = (this.width / oldWidth) * this.height;
+    }
   }
   
 }

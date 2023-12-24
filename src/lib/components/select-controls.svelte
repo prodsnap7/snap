@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { store } from '$lib/store';
+	import { Group, Curve, store } from '$lib/store';
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
@@ -9,7 +9,7 @@
 	function getPoints() {
 		const points = [];
 		for (const element of selected) {
-			if (element.type === 'curve') {
+			if (element instanceof Curve) {
 				points.push(...element.points);
 			}
 		}
@@ -26,7 +26,7 @@
 		};
 
 		const otherEls = [
-			...store.unselectedElements,
+			...store.unselectedElements.map((el) => el.bounds),
 			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
 		];
 
@@ -59,7 +59,7 @@
 		};
 
 		const otherEls = [
-			...store.unselectedElements,
+			...store.unselectedElements.map((el) => el.bounds),
 			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
 		];
 
@@ -81,14 +81,16 @@
 		width={store.selectedElements.bounds.width}
 		height={store.selectedElements.bounds.height}
 		rotation={store.selectedElements.rotation}
-		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
 		onResize={({ width, height, x, y }) => {
 			store.selectedElements.updateBounds({ x, y, width, height });
 		}}
-		onRotate={() => {}}
+		onRotate={(r) => {
+			store.selectedElements.rotation = r;
+		}}
 	></MoveHandler>
-{:else if selected.length === 1 && selected[0].type === 'curve'}
+{:else if selected.length === 1 && selected[0] instanceof Curve}
 	<MoveHandler
 		x={store.selectedElements.x}
 		y={store.selectedElements.y}
@@ -119,7 +121,7 @@
 			<PointControls {point} />
 		{/each}
 	</MoveHandler>
-{:else if selected.length === 1 && selected[0].type === 'group'}
+{:else if selected.length === 1 && selected instanceof Group}
 	<MoveHandler
 		x={store.selectedElements.bounds.x}
 		y={store.selectedElements.bounds.y}

@@ -1,5 +1,5 @@
 import shortUUID from "short-uuid";
-import type { IBaseMethods, IBaseObject } from "./common.svelte";
+import { BaseObject, type IBaseMethods, type IBaseObject } from "./common.svelte";
 
 export interface IPoint {
   x: number;
@@ -48,7 +48,7 @@ export type PartialCurve = {
 
 export type MarkerType = "none" | "fill-arrow" | "outline-arrow" | "fill-circle" | "outline-circle";
 
-export class Curve implements ICurve, IBaseMethods {
+export class Curve extends BaseObject {
   type = "curve" as const;
   id = shortUUID.generate();
   markerId = shortUUID.generate();
@@ -64,23 +64,13 @@ export class Curve implements ICurve, IBaseMethods {
   endMarker = $state<MarkerType>("none");
   markerSize = $state(30);
 
-  constructor(obj: PartialCurve, scale = 1) {
-    this.stroke = obj.stroke;
-    this.strokeWidth = obj.strokeWidth;
-    this.pathType = obj.pathType || "linear";
-    this.strokeDasharray = obj.strokeDasharray;
-    this.points = obj.points.map(p => new Point(p, scale));
+  constructor(obj: Partial<Curve>, scale = 1) {
+    super(obj);
+    const { points, ...rest } = obj;
+    Object.assign(this, rest);
 
-    if (obj.startMarker) {
-      this.startMarker = obj.startMarker;
-    }
-
-    if (obj.endMarker) {
-      this.endMarker = obj.endMarker;
-    }
-
-    if (obj.markerSize) {
-      this.markerSize = obj.markerSize;
+    if (obj.points) {
+      this.points = obj.points.map(p => new Point(p, scale));
     }
   }
 
@@ -166,7 +156,7 @@ export class Curve implements ICurve, IBaseMethods {
     }, scale);
   }
 
-  static fromObject(obj: PartialCurve) {
+  static fromObject(obj: Partial<Curve>) {
     return new Curve(obj);
   }
 }

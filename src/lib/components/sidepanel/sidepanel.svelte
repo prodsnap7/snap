@@ -73,7 +73,7 @@
 		</button>
 	</nav>
 
-	<div class="p-4 w-[320px]">
+	<div class="p-4 w-[320px] overflow-y-auto max-h-[calc(100vh-100px)]">
 		{#if sidepanelStore.state === 'elements'}
 			<div in:fade>
 				<ElementsPanel />

@@ -11,6 +11,8 @@
 	function addElement(el: CanvasElement) {
 		store.elements.addElement(el);
 	}
+
+	const fourCurves = curves.slice(0, 5);
 </script>
 
 <div class="mb-4 flex items-center justify-between">
@@ -40,11 +42,19 @@
 	{/each}
 </div>
 
-<div class="mt-4">
+<div class="mt-4 flex items-center justify-between">
 	<h2 class="font-bold">Curves</h2>
+	<Button
+		onclick={() => {
+			sidepanelStore.state = 'all-shapes';
+		}}
+		variant="ghost"
+		size="sm"
+		class="text-xs">See All</Button
+	>
 </div>
 <div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
-	{#each curves as curve}
+	{#each fourCurves as curve}
 		<div
 			id="curve-renderer-elements-panel"
 			on:click={() => addElement(curve.clone(2.5))}
@@ -52,7 +62,7 @@
 			role="button"
 			on:keydown={() => addElement(curve.clone(2.5))}
 			style="width: {curve.width}px; height: {curve.height}px;"
-			class="relative flex-initial shrink-0"
+			class="relative flex-initial shrink-0 mx-2 my-4 ml-0"
 		>
 			<div class="absolute origin-center inset-0">
 				<Renderer element={curve} />
@@ -64,4 +74,4 @@
 <div class="my-4">
 	<h2 class="font-bold">Text</h2>
 </div>
-<Button variant="secondary" class="w-full">Add Some Text</Button>
+<Button variant="secondary" class="w-full border hover:bg-neutral-200">Add Some Text</Button>

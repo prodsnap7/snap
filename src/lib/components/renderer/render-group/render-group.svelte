@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { Group } from '$lib/store/elements/group.svelte';
+	import { type Group, Shape, Curve, PathShape } from '$lib/store';
 	import RenderCurve from '../render-curve';
+	import RenderPathShape from '../render-path-shape.svelte';
 	import RenderShape from '../render-shape.svelte';
 
 	type Props = {
@@ -24,7 +25,15 @@
 		"
 >
 	{#each group.elements as element}
-		{#if element.type === 'shape'}
+		{#if element instanceof PathShape}
+			<div
+				class="absolute top-0 left-0"
+				style="transform: translate({element.x - offset.x}px, {element.y -
+					offset.y}px) rotate({element.rotation}deg)"
+			>
+				<RenderPathShape {scale} {element} />
+			</div>
+		{:else if element instanceof Shape}
 			<div
 				class="absolute top-0 left-0"
 				style="transform: translate({element.x - offset.x}px, {element.y -
@@ -32,7 +41,7 @@
 			>
 				<RenderShape {scale} shape={element} />
 			</div>
-		{:else if element.type === 'curve'}
+		{:else if element instanceof Curve}
 			<div id="curve-group-helper" class="absolute" style="left: {-group.x}px; top: {-group.y}px">
 				<RenderCurve {scale} curve={element} />
 			</div>

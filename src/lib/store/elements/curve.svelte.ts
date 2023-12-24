@@ -46,7 +46,7 @@ export type PartialCurve = {
   endMarker?: MarkerType;
 }
 
-export type MarkerType = "none" | "fill-arrow" | "outline-arrrow" | "fill-circle" | "outline-circle";
+export type MarkerType = "none" | "fill-arrow" | "outline-arrow" | "fill-circle" | "outline-circle";
 
 export class Curve implements ICurve, IBaseMethods {
   type = "curve" as const;

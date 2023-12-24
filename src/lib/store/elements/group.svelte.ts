@@ -1,51 +1,31 @@
 import shortUUID from "short-uuid";
-import type {  CanvasElement,IBaseMethods } from "./common.svelte";
+import {  BaseObject, type CanvasElement,type IBaseMethods } from "./common.svelte";
 
 export interface IGroup {
   type: "group";
   elements: CanvasElement[];
 }
 
-type Moveable = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+// type Moveable = {
+//   x: number;
+//   y: number;
+//   width: number;
+//   height: number;
+// }
 
-export class Group implements IGroup, IBaseMethods {
+export class Group extends BaseObject {
   type = "group" as const;
   id = shortUUID.generate();
   elements = $state<CanvasElement[]>([]);
-  _x = $derived(Math.min(...this.elements.map(e => e.x)));
-  _y = $derived(Math.min(...this.elements.map(e => e.y)));
-  _width = $derived(Math.max(...this.elements.map(e => e.x + e.width)) - this.x);
-  _height = $derived(Math.max(...this.elements.map(e => e.y + e.height)) - this.y);
   _rotation = $state(0);  
   opacity = $state(1);
-  private _bounds: Moveable = $derived(this._getBounds(this.elements));
+  // private _bounds: Moveable = $derived(this._getBounds(this.elements));
 
-  constructor(obj: IGroup) {
-    this.elements = obj.elements;
+  constructor(obj: Partial<Group>) {
+    super(obj);
+    Object.assign(this, obj);
   }
 
-  get x() {
-    return this._x;
-    // return Math.min(...this.elements.map((element) => element.x), Infinity);
-  }
-
-  get y() {
-    return this._y;
-    // return Math.min(...this.elements.map((element) => element.y), Infinity);
-  }
-
-  get width() {
-    return this._width;
-  }
-
-  get height() {
-    return this._height;
-  }
 
   get colors(): string[] {
     return this.elements.map((element) => element.colors).flat();
@@ -59,6 +39,29 @@ export class Group implements IGroup, IBaseMethods {
     }
   }
 
+  get rect(): { x: number; y: number; width: number; height: number; } {
+    // loop over elements and get min x, min y, max x + width, max y + height
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    this.elements.forEach((element) => {
+      const { x, y, width, height } = element.rect;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x + width);
+      maxY = Math.max(maxY, y + height);
+    });
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    }
+  }
+
   set rotation(value: number) {
     this._rotation = value;
   }
@@ -69,54 +72,23 @@ export class Group implements IGroup, IBaseMethods {
     })
   }
 
-  get bounds() {
-    return this._bounds;
-  }
+  // get bounds() {
+  //   return this._bounds;
+  // }
 
-  private _getBounds(elements: CanvasElement[]) {
-		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
-		let width =
-			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
-			x;
-		let height =
-			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
-			y;
+  // private _getBounds(elements: CanvasElement[]) {
+	// 	let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
+	// 	let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
+	// 	let width =
+	// 		Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
+	// 		x;
+	// 	let height =
+	// 		Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
+	// 		y;
 
-		return { x, y, width, height };
-	}
+	// 	return { x, y, width, height };
+	// }
 
-  set x(value: number) {
-    this.elements.forEach((element) => {
-      if (element.type === 'curve') {
-        element.x = value;
-      } else {
-      	element.x += value;
-      }
-    });
-  }
-
-  set y(value: number) {
-    this.elements.forEach((element) => {
-      if (element.type === 'curve') {
-        element.y = value;
-      } else {
-      	element.y += value;
-      }
-    });
-  }
-
-  set width(value: number) {
-    this.elements.forEach((element) => {
-      element.width += value;
-    });
-  }
-
-  set height(value: number) {
-    this.elements.forEach((element) => {
-      element.height += value;
-    });
-  }
 
   clone(): Group {
     return new Group({

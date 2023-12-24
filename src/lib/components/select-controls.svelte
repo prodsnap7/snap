@@ -19,10 +19,10 @@
 
 	function onMove({ x, y }: { x: number; y: number }) {
 		const currentEl = {
-			x: store.selectedElements.x + x,
-			y: store.selectedElements.y + y,
-			width: store.selectedElements.width,
-			height: store.selectedElements.height
+			x: store.selectedElements.bounds.x + x,
+			y: store.selectedElements.bounds.y + y,
+			width: store.selectedElements.bounds.width,
+			height: store.selectedElements.bounds.height
 		};
 
 		const otherEls = [
@@ -33,8 +33,8 @@
 		const snap = snapToGrid(currentEl, otherEls, 3);
 
 		store.selectedElements.updateBounds({
-			x: snap.x - store.selectedElements.x,
-			y: snap.y - store.selectedElements.y,
+			x: snap.x - store.selectedElements.bounds.x,
+			y: snap.y - store.selectedElements.bounds.y,
 			width: 0,
 			height: 0
 		});
@@ -121,7 +121,7 @@
 			<PointControls {point} />
 		{/each}
 	</MoveHandler>
-{:else if selected.length === 1 && selected instanceof Group}
+{:else if selected.length === 1 && selected[0] instanceof Group}
 	<MoveHandler
 		x={store.selectedElements.bounds.x}
 		y={store.selectedElements.bounds.y}

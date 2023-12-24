@@ -1,8 +1,9 @@
 import shortUUID from "short-uuid";
+import { BaseObject } from "..";
 
 type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
-export class TextBox {
+export class TextBox extends BaseObject {
   type = 'text' as const;
   x = $state(0);
   y = $state(0);
@@ -26,6 +27,7 @@ export class TextBox {
   opacity = $state(1);
   
   constructor(obj: Partial<TextBox>) {
+    super(obj);
     Object.assign(this, obj);
   }
 
@@ -33,12 +35,12 @@ export class TextBox {
     return [this.color]
   }
 
-  get bounds() {
+  get rect() {
     return {
       x: this.x,
       y: this.y,
       width: this.width,
-      height: this.fontSize * this.lineHeight
+      height: this.height
     }
   }
 

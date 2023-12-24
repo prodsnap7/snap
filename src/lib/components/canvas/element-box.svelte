@@ -12,7 +12,7 @@
 	const { element, dragRect, onSelect } = $props<Props>();
 
 	$effect(() => {
-		if (isOverlapping(element, dragRect)) {
+		if (isOverlapping(element.bounds, dragRect)) {
 			if (!store.highlightedElements.elements.includes(element)) {
 				store.highlightedElements.addElement(element);
 			}

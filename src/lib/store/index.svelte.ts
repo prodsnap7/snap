@@ -58,12 +58,15 @@ export const store = new (class {
 })();
 
 function getGrid() {
-	const grid = store.unselectedElements.map((el) => ({
-		left: el.x,
-		top: el.y,
-		right: el.x + el.width,
-		bottom: el.y + el.height
-	}));
+	const grid = store.unselectedElements.map((el) => {
+		const { x, y, width, height } = el.bounds;
+		return {
+		left: x,
+		top: y,
+		right: x + width,
+		bottom: y + height
+		}
+	});
 
 	return grid;
 }
@@ -75,7 +78,7 @@ export function getGridLines() {
   $inspect(selectedElements);
 	const lines = selectedElements.reduce(
 		(acc, el) => {
-			const { x, y, width, height } = el;
+			const { x, y, width, height } = el.bounds;
 			const elMiddleX = x + width / 2;
 			const elMiddleY = y + height / 2;
 			const tolerance = 1e-6;

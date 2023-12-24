@@ -10,17 +10,17 @@
 	};
 
 	const { group, scale = 1 } = $props<Props>();
-	const offset = $derived({ x: group.x, y: group.y });
+	const offset = $derived({ x: group.bounds.x, y: group.bounds.y });
 </script>
 
 <div
 	id={group.id}
 	style="
 			position: absolute;
-			left: {group.x}px;
-			top: {group.y}px;
-			width: {group.width * scale}px;
-			height: {group.height * scale}px;
+			left: {group.bounds.x}px;
+			top: {group.bounds.y}px;
+			width: {group.bounds.width * scale}px;
+			height: {group.bounds.height * scale}px;
 			transform: rotate({group.rotation}deg);
 		"
 >
@@ -42,7 +42,11 @@
 				<RenderShape {scale} shape={element} />
 			</div>
 		{:else if element instanceof Curve}
-			<div id="curve-group-helper" class="absolute" style="left: {-group.x}px; top: {-group.y}px">
+			<div
+				id="curve-group-helper"
+				class="absolute"
+				style="left: {-group.bounds.x}px; top: {-group.bounds.y}px"
+			>
 				<RenderCurve {scale} curve={element} />
 			</div>
 		{/if}

@@ -9,7 +9,7 @@
 </script>
 
 <div
-	class="origin-center"
+	id={shape.id}
 	style="
     width: {shape.width * scale}px;
     height: {shape.height * scale}px;
@@ -17,5 +17,6 @@
     border-radius: {shape.radius}px;
     border: {shape.strokeWidth}px {shape.strokeType} {shape.stroke};
     opacity: {shape.opacity};
+		transform-origin: {shape.transformOrigin};
   "
 />

@@ -48,16 +48,32 @@ class SelectedEleemnts {
 	}
 
 	private _getBounds(elements: CanvasElement[]) {
-		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
+		let x = Math.min(...elements.map((element) => element.rect.x), Infinity);
+		let y = Math.min(...elements.map((element) => element.rect.y), Infinity);
 		let width =
-			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
+			Math.max(...elements.map((element) => element.rect.x + element.rect.width), -Infinity) -
 			x;
 		let height =
-			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
+			Math.max(...elements.map((element) => element.rect.y + element.rect.height), -Infinity) -
 			y;
 
 		return { x, y, width, height };
+	}
+
+	get center(): { x: number; y: number } {
+		let x = Math.min(...this.elements.map((element) => element.bounds.x), Infinity);
+		let y = Math.min(...this.elements.map((element) => element.bounds.y), Infinity);
+		let width =
+			Math.max(...this.elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
+			x;
+		let height =
+			Math.max(...this.elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
+			y;
+		// const { x, y, width, height } = this.bounds;
+		return {
+			x: x + width / 2,
+			y: y + height / 2
+		};
 	}
 
 	get bounds() {

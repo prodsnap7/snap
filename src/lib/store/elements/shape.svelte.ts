@@ -29,6 +29,7 @@ export type PartialShape = Partial<IShape> & { type: 'shape' };
 
 export class Shape extends BaseObject implements IShape {
 	x = $state(0);
+	id = shortUUID.generate();
 	y = $state(0);
 	width = $state(100);
 	height = $state(100);
@@ -89,8 +90,13 @@ export class Shape extends BaseObject implements IShape {
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		this.x += x;
 		this.y += y;
-		this.width += width;
-		this.height += height;
+		// this.width += width;
+		// this.height += height;
+		const newWidth = this.width + width;
+		const newHeight = this.height + height;
+
+		this.scaleX = newWidth / this.width;
+		this.scaleY = newHeight / this.height;
 	}
 
 	get bounds() {
@@ -115,6 +121,7 @@ export class PathShape extends BaseObject {
 	x = $state(0);
 	y = $state(0);
 	width = $state(100);
+	id = shortUUID.generate();
 	height = $state(100);
 	stroke = $state('#000000');
 	fill = $state('#ffffff');
@@ -174,23 +181,9 @@ export class PathShape extends BaseObject {
 	}
 
 	clone(): PathShape {
-		return new PathShape({
-			x: this.x,
-			y: this.y,
-			width: this.width,
-			height: this.height,
-			rotation: this.rotation,
-			opacity: this.opacity,
-			stroke: this.stroke,
-			fill: this.fill,
-			strokeWidth: this.strokeWidth,
-			radius: this.radius,
-			strokeType: this.strokeType,
-			strokeLinecap: this.strokeLinecap,
-			strokeLinejoin: this.strokeLinejoin,
-			strokeDasharray: this.strokeDasharray,
-			path: this._path
-		});
+		const newObj = Object.assign({}, this);
+
+		return new PathShape(newObj);
 	}
 
 	get bounds() {

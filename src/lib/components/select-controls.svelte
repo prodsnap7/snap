@@ -74,6 +74,14 @@
 	}
 
 	const bounds = $derived(store.selectedElements.bounds);
+
+	$effect(() => {
+		store.selectedElements.elements.forEach((el) => {
+			// const originX = store.selectedElements.center.x - el.rect.x;
+			// const originY = store.selectedElements.center.y - el.rect.y;
+			el.transformOrigin = `top left`;
+		});
+	});
 </script>
 
 {#if selected.length > 1}
@@ -126,6 +134,8 @@
 {:else if selected.length === 1}
 	<MoveHandler
 		{bounds}
+		scaleX={store.selectedElements.elements[0].scaleX}
+		scaleY={store.selectedElements.elements[0].scaleY}
 		rotation={store.selectedElements.rotation}
 		{onMove}
 		{onResize}

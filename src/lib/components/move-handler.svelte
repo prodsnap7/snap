@@ -4,6 +4,8 @@
 
 	type Props = {
 		bounds: { x: number; y: number; width: number; height: number };
+		scaleX?: number;
+		scaleY?: number;
 		exclude?: State[];
 		children?: any;
 		rotation: number;
@@ -27,7 +29,17 @@
 
 	let frameid = $state<number | null>(null);
 	let status = $state<State>('idle');
-	let { bounds, rotation, exclude = [], onMove, onResize, children, onRotate } = $props<Props>();
+	let {
+		bounds,
+		rotation,
+		exclude = [],
+		onMove,
+		onResize,
+		children,
+		onRotate,
+		scaleX = 1,
+		scaleY = 1
+	} = $props<Props>();
 
 	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -189,7 +201,7 @@
 		'border-2': status !== 'idle'
 	})}
 	style="left: 0px;
-	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
+	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg) scale({scaleX}, {scaleY});"
 >
 	<div
 		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"

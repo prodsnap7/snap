@@ -10,6 +10,8 @@
 
 	function addElement(el: CanvasElement) {
 		store.elements.addElement(el);
+		store.activeElement.element = el;
+		store.selectedElements.setElements([el]);
 	}
 
 	function addTextElement() {

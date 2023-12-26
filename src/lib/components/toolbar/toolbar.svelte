@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Curve, activeElementStore, Shape, PathShape } from '$lib/store';
+	import { Curve, activeElementStore, Shape, PathShape, TextBox } from '$lib/store';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
 	import CurveToolbar from './curve';
 	import ShapeToolbar from './shape.svelte';
 	import PathShapeToolbar from './path-shape.svelte';
+	import TextToolbar from './text.svelte';
 </script>
 
 {#if activeElementStore.element}
@@ -15,6 +16,8 @@
 			<ShapeToolbar element={activeElementStore.element} />
 		{:else if activeElementStore.element instanceof Curve}
 			<CurveToolbar element={activeElementStore.element} />
+		{:else if activeElementStore.element instanceof TextBox}
+			<TextToolbar element={activeElementStore.element} />
 		{/if}
 		<div class="flex-1" />
 

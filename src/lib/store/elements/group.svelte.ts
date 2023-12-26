@@ -1,69 +1,88 @@
-import shortUUID from "short-uuid";
-import {  BaseObject, type CanvasElement } from "./common.svelte";
+import shortUUID from 'short-uuid';
+import { BaseObject, type CanvasElement } from './common.svelte';
 
 export class Group extends BaseObject {
-  type = "group" as const;
-  id = shortUUID.generate();
-  elements = $state<CanvasElement[]>([]);
-  _rotation = $state(0);  
-  opacity = $state(1);
-  // private _bounds: Moveable = $derived(this._getBounds(this.elements));
+	type = 'group' as const;
+	id = shortUUID.generate();
+	elements = $state<CanvasElement[]>([]);
+	_rotation = $state(0);
+	opacity = $state(1);
+	// private _bounds: Moveable = $derived(this._getBounds(this.elements));
 
-  constructor(obj: Partial<Group>) {
-    super(obj);
-    Object.assign(this, obj);
-  }
+	constructor(obj: Partial<Group>) {
+		super(obj);
+		Object.assign(this, obj);
+	}
 
-  get bounds(): { x: number; y: number; width: number; height: number; } {
-    return this._getBounds(this.elements);
-  }
+	get bounds(): { x: number; y: number; width: number; height: number } {
+		return this._getBounds(this.elements);
+	}
 
-  get colors(): string[] {
-    return this.elements.map((element) => element.colors).flat();
-  }
+	get colors(): string[] {
+		return this.elements.map((element) => element.colors).flat();
+	}
 
-  get rotation(): number {
-    if (this.elements.length === 1) {
-      return this.elements[0].rotation;
-    } else {
-      return this._rotation;
-    }
-  }
+	get rotation(): number {
+		if (this.elements.length === 1) {
+			return this.elements[0].rotation;
+		} else {
+			return this._rotation;
+		}
+	}
 
-  get rect(): { x: number; y: number; width: number; height: number; } {
-    // loop over elements and get min x, min y, max x + width, max y + height
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
+	get rect(): { x: number; y: number; width: number; height: number } {
+		// loop over elements and get min x, min y, max x + width, max y + height
+		let minX = Infinity;
+		let minY = Infinity;
+		let maxX = -Infinity;
+		let maxY = -Infinity;
 
-    this.elements.forEach((element) => {
-      const { x, y, width, height } = element.rect;
-      minX = Math.min(minX, x);
-      minY = Math.min(minY, y);
-      maxX = Math.max(maxX, x + width);
-      maxY = Math.max(maxY, y + height);
-    });
+		this.elements.forEach((element) => {
+			const { x, y, width, height } = element.rect;
+			minX = Math.min(minX, x);
+			minY = Math.min(minY, y);
+			maxX = Math.max(maxX, x + width);
+			maxY = Math.max(maxY, y + height);
+		});
 
-    return {
-      x: minX,
-      y: minY,
-      width: maxX - minX,
-      height: maxY - minY
-    }
-  }
+		return {
+			x: minX,
+			y: minY,
+			width: maxX - minX,
+			height: maxY - minY
+		};
+	}
 
-  set rotation(value: number) {
-    this._rotation = value;
-  }
+	set rotation(value: number) {
+		this._rotation = value;
+	}
 
-  updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-    this.elements.forEach((element) => {
-      element.updateBounds({ x, y, width, height });
-    })
-  }
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		const newGroupWidth = this.bounds.width + width;
+		const newGroupHeight = this.bounds.height + height;
 
-  private _getBounds(elements: CanvasElement[]) {
+		const scaleX = newGroupWidth / this.bounds.width;
+		const scaleY = newGroupHeight / this.bounds.height;
+
+		this.elements.forEach((element) => {
+			// Calculate scaled position relative to the group's new position
+			const elementDeltaX = (element.bounds.x - this.bounds.x) * scaleX;
+			const elementDeltaY = (element.bounds.y - this.bounds.y) * scaleY;
+
+			// Calculate new position including the group's delta movement
+			const newX = this.bounds.x + elementDeltaX + x - element.bounds.x;
+			const newY = this.bounds.y + elementDeltaY + y - element.bounds.y;
+
+			// Calculate new size
+			const elementNewWidth = element.bounds.width * scaleX - element.bounds.width;
+			const elementNewHeight = element.bounds.height * scaleY - element.bounds.height;
+
+			// Update element bounds
+			element.updateBounds({ x: newX, y: newY, width: elementNewWidth, height: elementNewHeight });
+		});
+	}
+
+	private _getBounds(elements: CanvasElement[]) {
 		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
 		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
 		let width =
@@ -76,20 +95,19 @@ export class Group extends BaseObject {
 		return { x, y, width, height };
 	}
 
+	clone(): Group {
+		return new Group({
+			type: 'group',
+			elements: this.elements.map((e) => e.clone())
+		});
+	}
 
-  clone(): Group {
-    return new Group({
-      type: "group",
-      elements: this.elements.map(e => e.clone())
-    });
-  }
+	ungroup(): CanvasElement[] {
+		return this.elements.map((element) => {
+			const el = element.clone();
+			el.rotation += this.rotation;
 
-  ungroup(): CanvasElement[] {
-    return this.elements.map((element) => {
-      const el = element.clone();
-      el.rotation += this.rotation;
-
-      return el;
-    });
-  }
+			return el;
+		});
+	}
 }

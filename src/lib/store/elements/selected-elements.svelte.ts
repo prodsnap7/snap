@@ -58,6 +58,7 @@ class SelectedEleemnts {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;
 
+		console.log(this.bounds.height)
 		const scaleX = newGroupWidth / this.bounds.width;
 		const scaleY = newGroupHeight / this.bounds.height;
 

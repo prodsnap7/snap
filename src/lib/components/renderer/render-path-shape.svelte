@@ -10,8 +10,6 @@
 </script>
 
 <svg
-	class="absolute inset-0"
-	origin="center"
 	opacity={element.opacity}
 	viewBox={element.viewBox}
 	style="width: {element.width + element.strokeWidth}px; height: {element.height +

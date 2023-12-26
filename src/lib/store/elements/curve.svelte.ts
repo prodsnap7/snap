@@ -54,7 +54,7 @@ export class Curve extends BaseObject {
   markerId = shortUUID.generate();
   stroke = $state("#000000");
   isQuadratic = $state(false);
-  strokeWidth = $state(1);
+  strokeWidth = $state(2);
   strokeDasharray = $state("");
   points = $state<Point[]>([]);
   opacity = $state(1);
@@ -62,7 +62,7 @@ export class Curve extends BaseObject {
   path = $derived(getPathFromPoints(this.points, this.pathType))
   startMarker = $state<MarkerType>("none");
   endMarker = $state<MarkerType>("none");
-  markerSize = $state(30);
+  markerSize = $state(20);
 
   constructor(obj: Partial<Curve>, scale = 1) {
     super(obj);
@@ -99,7 +99,7 @@ export class Curve extends BaseObject {
   }
 
   get height() {
-    return this.points.reduce((acc, cur) => Math.max(acc, cur.y), -Infinity) - this.y;
+    return this.points.reduce((acc, cur) => Math.max(acc, cur.y), -Infinity) - this.y + 1;
   }
 
   set x(val: number) {

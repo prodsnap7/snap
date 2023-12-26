@@ -27,6 +27,7 @@
       top: {store.selectedElements.bounds.y}px;
       width: {store.selectedElements.bounds.width}px;
       height: {store.selectedElements.bounds.height}px;
+			transform: rotate({store.selectedElements.rotation}deg);
     "
 	class="absolute"
 >

@@ -1,10 +1,11 @@
+import { getBounds } from "$lib/utils/bounds-utils";
 import type { CanvasElement } from "..";
 import { Curve } from "./curve.svelte";
 import { Group } from "./group.svelte";
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
-	private _bounds = $derived(this._getBounds(this.elements));
+	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);
   private static instance: SelectedEleemnts;
 
@@ -19,7 +20,9 @@ class SelectedEleemnts {
   }
 
 	addElement(element: CanvasElement) {
-		this.elements.push(element);
+		if (!this.elements.includes(element)) {
+			this.elements.push(element);
+		}
 	}
 
 	addElements(elements: CanvasElement[]) {
@@ -47,26 +50,33 @@ class SelectedEleemnts {
 		this._rotation = 0;
 	}
 
-	private _getBounds(elements: CanvasElement[]) {
-		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
-		let width =
-			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
-			x;
-		let height =
-			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
-			y;
-
-		return { x, y, width, height };
-	}
-
 	get bounds() {
 		return this._bounds;
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		const newGroupWidth = this.bounds.width + width;
+		const newGroupHeight = this.bounds.height + height;
+
+		console.log(this.bounds.height)
+		const scaleX = newGroupWidth / this.bounds.width;
+		const scaleY = newGroupHeight / this.bounds.height;
+
 		this.elements.forEach((element) => {
-			element.updateBounds({ x, y, width, height });
+			// Calculate scaled position relative to the group's new position
+			const elementDeltaX = (element.bounds.x - this.bounds.x) * scaleX;
+			const elementDeltaY = (element.bounds.y - this.bounds.y) * scaleY;
+
+			// Calculate new position including the group's delta movement
+			const newX = this.bounds.x + elementDeltaX + x - element.bounds.x;
+			const newY = this.bounds.y + elementDeltaY + y - element.bounds.y;
+
+			// Calculate new size
+			const elementNewWidth = element.bounds.width * scaleX - element.bounds.width;
+			const elementNewHeight = element.bounds.height * scaleY - element.bounds.height;
+
+			// Update element bounds
+			element.updateBounds({ x: newX, y: newY, width: elementNewWidth, height: elementNewHeight });
 		});
 	}
 
@@ -79,10 +89,11 @@ class SelectedEleemnts {
 	}
 
 	set rotation(value: number) {
-		this._rotation = value;
-		this.elements.forEach((element) => {
-			element.rotation = value;
-		});
+		if (this.elements.length === 1) {
+			this.elements[0].rotation = value;
+		} else {
+			this._rotation = value;
+		}
 	}
 }
 

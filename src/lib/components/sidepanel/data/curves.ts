@@ -1,4 +1,4 @@
-import { Curve, type MarkerType, type PartialCurve } from '$lib/store/elements/curve.svelte';
+import { Curve, Point, type MarkerType, type PartialCurve } from '$lib/store/elements/curve.svelte';
 
 const CURVES: PartialCurve[] = [
 	{
@@ -13,11 +13,10 @@ const CURVES: PartialCurve[] = [
 	},
 	{
 		type: 'curve',
-		strokeWidth: 2,
+		strokeWidth: 1,
 		stroke: 'black',
 		strokeDasharray: '',
 		startMarker: 'fill-arrow',
-		markerSize: 30,
 		endMarker: 'outline-circle',
 		points: [
 			{
@@ -42,7 +41,6 @@ const CURVES: PartialCurve[] = [
 		type: 'curve',
 		stroke: '#262626',
 		strokeWidth: 1,
-		markerSize: 20,
 		startMarker: 'fill-arrow',
 		strokeDasharray: '',
 		points: [
@@ -128,7 +126,6 @@ const CURVES: PartialCurve[] = [
 	}
 ];
 
-
 const markers: MarkerType[] = [
 	'none',
 	'fill-arrow',
@@ -138,11 +135,10 @@ const markers: MarkerType[] = [
 ];
 export const StaightLines = markers.flatMap((startMarker) =>
 	markers.map((endMarker) => ({
-		strokeWidth: 2,
+		strokeWidth: 1,
 		strokeDasharray: '',
 		stroke: 'black',
 		startMarker: startMarker,
-		markerSize: 30,
 		endMarker: endMarker,
 		points: [
 			{
@@ -160,11 +156,8 @@ export const StaightLines = markers.flatMap((startMarker) =>
 export const CURVES_DATA = [
 	...StaightLines,
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		stroke: 'black',
 		startMarker: 'none' as MarkerType,
-		markerSize: 30,
 		endMarker: 'none' as MarkerType,
 		points: [
 			{
@@ -182,11 +175,8 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		stroke: 'black',
 		startMarker: 'none' as MarkerType,
-		markerSize: 30,
 		endMarker: 'none' as MarkerType,
 		points: [
 			{
@@ -204,12 +194,9 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: true,
 		stroke: 'black',
 		startMarker: 'none' as MarkerType,
-		markerSize: 30,
 		endMarker: 'none' as MarkerType,
 		points: [
 			{
@@ -227,12 +214,9 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: true,
 		stroke: 'black',
 		startMarker: 'fill-arrow' as MarkerType,
-		markerSize: 30,
 		endMarker: 'fill-circle' as MarkerType,
 		points: [
 			{
@@ -254,12 +238,9 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: true,
 		stroke: 'black',
 		startMarker: 'fill-arrow' as MarkerType,
-		markerSize: 30,
 		endMarker: 'outline-circle' as MarkerType,
 		points: [
 			{
@@ -281,12 +262,9 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: false,
 		stroke: 'black',
 		startMarker: 'none' as MarkerType,
-		markerSize: 30,
 		endMarker: 'none' as MarkerType,
 		points: [
 			{
@@ -308,12 +286,9 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: true,
 		stroke: 'black',
 		startMarker: 'none' as MarkerType,
-		markerSize: 30,
 		endMarker: 'none' as MarkerType,
 		points: [
 			{
@@ -335,12 +310,8 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		strokeDasharray: '',
-		strokeWidth: 2,
 		isQuadratic: false,
-		stroke: 'black',
 		startMarker: 'fill-arrow' as MarkerType,
-		markerSize: 30,
 		endMarker: 'outline-circle' as MarkerType,
 		points: [
 			{
@@ -363,4 +334,6 @@ export const CURVES_DATA = [
 	}
 ];
 
-export const curves = CURVES_DATA.map((c) => new Curve({ ...c, type: "curve"}, 0.3));
+export const curves = CURVES_DATA.map(
+	(c) => new Curve({ ...c, points: c.points.map((p) => new Point(p)), type: 'curve' }, 0.25)
+);

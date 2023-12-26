@@ -70,8 +70,27 @@ class SelectedEleemnts {
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		const newGroupWidth = this.bounds.width + width;
+		const newGroupHeight = this.bounds.height + height;
+
+		const scaleX = newGroupWidth / this.bounds.width;
+		const scaleY = newGroupHeight / this.bounds.height;
+
 		this.elements.forEach((element) => {
-			element.updateBounds({ x, y, width, height });
+			// Calculate scaled position relative to the group's new position
+			const elementDeltaX = (element.bounds.x - this.bounds.x) * scaleX;
+			const elementDeltaY = (element.bounds.y - this.bounds.y) * scaleY;
+
+			// Calculate new position including the group's delta movement
+			const newX = this.bounds.x + elementDeltaX + x - element.bounds.x;
+			const newY = this.bounds.y + elementDeltaY + y - element.bounds.y;
+
+			// Calculate new size
+			const elementNewWidth = element.bounds.width * scaleX - element.bounds.width;
+			const elementNewHeight = element.bounds.height * scaleY - element.bounds.height;
+
+			// Update element bounds
+			element.updateBounds({ x: newX, y: newY, width: elementNewWidth, height: elementNewHeight });
 		});
 	}
 

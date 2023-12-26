@@ -6,6 +6,7 @@ export class Group extends BaseObject {
 	id = shortUUID.generate();
 	elements = $state<CanvasElement[]>([]);
 	_rotation = $state(0);
+	private _bounds = $derived(this._getBounds(this.elements));
 	opacity = $state(1);
 	// private _bounds: Moveable = $derived(this._getBounds(this.elements));
 
@@ -15,7 +16,7 @@ export class Group extends BaseObject {
 	}
 
 	get bounds(): { x: number; y: number; width: number; height: number } {
-		return this._getBounds(this.elements);
+		return this._bounds;
 	}
 
 	get colors(): string[] {

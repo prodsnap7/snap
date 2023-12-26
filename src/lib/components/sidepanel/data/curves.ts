@@ -1,4 +1,4 @@
-import { Curve, type MarkerType, type PartialCurve } from '$lib/store/elements/curve.svelte';
+import { Curve, Point, type MarkerType, type PartialCurve } from '$lib/store/elements/curve.svelte';
 
 const CURVES: PartialCurve[] = [
 	{
@@ -127,7 +127,6 @@ const CURVES: PartialCurve[] = [
 		]
 	}
 ];
-
 
 const markers: MarkerType[] = [
 	'none',
@@ -363,4 +362,6 @@ export const CURVES_DATA = [
 	}
 ];
 
-export const curves = CURVES_DATA.map((c) => new Curve({ ...c, type: "curve"}, 0.3));
+export const curves = CURVES_DATA.map(
+	(c) => new Curve({ ...c, points: c.points.map((p) => new Point(p)), type: 'curve' }, 0.25)
+);

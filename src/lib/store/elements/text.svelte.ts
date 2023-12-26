@@ -16,13 +16,13 @@ export class TextBox extends BaseObject {
   fontFamily = $state('Lato');
   fontStyle = $state<'normal' | 'italic'>('normal');
   fontWeight = $state<FontWeight>('normal');
-  align = $state<'left' | 'center' | 'right'>('left');
+  align = $state<'left' | 'center' | 'right' | 'justify'>('left');
   color = $state('#000000');
   decoration = $state<'none' | 'underline' | 'line-through'>('none');
   uppercase = $state(false);
-  letterSpacing = $state(0);
-  lineHeight = $state(1.2);
-  listType = $state<'none' | 'bullet' | 'number'>('none');
+  letterSpacing = $state(1.5);
+  lineHeight = $state(this.fontSize * 1.2);
+  listType = $state<'none' | 'ordered' | 'unordered'>('none');
   rotation = $state(0);
   opacity = $state(1);
   
@@ -55,7 +55,7 @@ export class TextBox extends BaseObject {
     const oldWidth = this.width;
     this.width += width;
     if (height !== 0) {
-      this.fontSize = (this.width / oldWidth) * this.fontSize;
+      this.fontSize = Math.ceil((this.width / oldWidth) * this.fontSize);
       this.height = (this.width / oldWidth) * this.height;
     }
   }

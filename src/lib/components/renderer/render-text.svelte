@@ -20,6 +20,8 @@
     text-decoration: {text.decoration};
     text-align: {text.align};
     width: {text.width}px;
+    letter-spacing: {text.letterSpacing}px;
+    line-height: {text.lineHeight}px;
   "
 >
 	{text.content}

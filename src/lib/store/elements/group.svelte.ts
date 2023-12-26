@@ -1,17 +1,5 @@
 import shortUUID from "short-uuid";
-import {  BaseObject, type CanvasElement,type IBaseMethods } from "./common.svelte";
-
-export interface IGroup {
-  type: "group";
-  elements: CanvasElement[];
-}
-
-// type Moveable = {
-//   x: number;
-//   y: number;
-//   width: number;
-//   height: number;
-// }
+import {  BaseObject, type CanvasElement } from "./common.svelte";
 
 export class Group extends BaseObject {
   type = "group" as const;
@@ -26,6 +14,9 @@ export class Group extends BaseObject {
     Object.assign(this, obj);
   }
 
+  get bounds(): { x: number; y: number; width: number; height: number; } {
+    return this._getBounds(this.elements);
+  }
 
   get colors(): string[] {
     return this.elements.map((element) => element.colors).flat();
@@ -72,22 +63,18 @@ export class Group extends BaseObject {
     })
   }
 
-  // get bounds() {
-  //   return this._bounds;
-  // }
+  private _getBounds(elements: CanvasElement[]) {
+		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
+		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
+		let width =
+			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
+			x;
+		let height =
+			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
+			y;
 
-  // private _getBounds(elements: CanvasElement[]) {
-	// 	let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-	// 	let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
-	// 	let width =
-	// 		Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
-	// 		x;
-	// 	let height =
-	// 		Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
-	// 		y;
-
-	// 	return { x, y, width, height };
-	// }
+		return { x, y, width, height };
+	}
 
 
   clone(): Group {

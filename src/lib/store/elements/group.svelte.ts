@@ -1,14 +1,14 @@
 import shortUUID from 'short-uuid';
 import { BaseObject, type CanvasElement } from './common.svelte';
+import { getBounds } from '$lib/utils/bounds-utils';
 
 export class Group extends BaseObject {
 	type = 'group' as const;
 	id = shortUUID.generate();
 	elements = $state<CanvasElement[]>([]);
-	_rotation = $state(0);
-	private _bounds = $derived(this._getBounds(this.elements));
 	opacity = $state(1);
-	// private _bounds: Moveable = $derived(this._getBounds(this.elements));
+	private _rotation = $state(0);
+	private _bounds = $derived(getBounds(this.elements));
 
 	constructor(obj: Partial<Group>) {
 		super(obj);
@@ -39,7 +39,7 @@ export class Group extends BaseObject {
 		let maxY = -Infinity;
 
 		this.elements.forEach((element) => {
-			const { x, y, width, height } = element.rect;
+			const { x, y, width, height } = element.bounds;
 			minX = Math.min(minX, x);
 			minY = Math.min(minY, y);
 			maxX = Math.max(maxX, x + width);
@@ -81,19 +81,6 @@ export class Group extends BaseObject {
 			// Update element bounds
 			element.updateBounds({ x: newX, y: newY, width: elementNewWidth, height: elementNewHeight });
 		});
-	}
-
-	private _getBounds(elements: CanvasElement[]) {
-		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
-		let width =
-			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
-			x;
-		let height =
-			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
-			y;
-
-		return { x, y, width, height };
 	}
 
 	clone(): Group {

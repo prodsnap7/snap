@@ -1,10 +1,11 @@
+import { getBounds } from "$lib/utils/bounds-utils";
 import type { CanvasElement } from "..";
 import { Curve } from "./curve.svelte";
 import { Group } from "./group.svelte";
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
-	private _bounds = $derived(this._getBounds(this.elements));
+	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);
   private static instance: SelectedEleemnts;
 
@@ -47,22 +48,6 @@ class SelectedEleemnts {
 	clear() {
 		this.elements = [];
 		this._rotation = 0;
-	}
-
-	private _getBounds(elements: CanvasElement[]) {
-		if (elements.length === 1) {
-			return elements[0].rect;
-		}
-		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
-		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
-		let width =
-			Math.max(...elements.map((element) => element.bounds.x + element.bounds.width), -Infinity) -
-			x;
-		let height =
-			Math.max(...elements.map((element) => element.bounds.y + element.bounds.height), -Infinity) -
-			y;
-
-		return { x, y, width, height };
 	}
 
 	get bounds() {

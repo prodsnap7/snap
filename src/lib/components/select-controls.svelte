@@ -80,11 +80,9 @@
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
-		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
-		onResize={({ width, height, x, y }) => {
-			store.selectedElements.updateBounds({ x, y, width, height });
-		}}
+		{onResize}
 		onRotate={(r) => {
 			store.selectedElements.rotation = r;
 		}}

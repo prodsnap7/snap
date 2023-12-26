@@ -19,7 +19,9 @@ class SelectedEleemnts {
   }
 
 	addElement(element: CanvasElement) {
-		this.elements.push(element);
+		if (!this.elements.includes(element)) {
+			this.elements.push(element);
+		}
 	}
 
 	addElements(elements: CanvasElement[]) {
@@ -48,6 +50,9 @@ class SelectedEleemnts {
 	}
 
 	private _getBounds(elements: CanvasElement[]) {
+		if (elements.length === 1) {
+			return elements[0].rect;
+		}
 		let x = Math.min(...elements.map((element) => element.bounds.x), Infinity);
 		let y = Math.min(...elements.map((element) => element.bounds.y), Infinity);
 		let width =
@@ -79,10 +84,11 @@ class SelectedEleemnts {
 	}
 
 	set rotation(value: number) {
-		this._rotation = value;
-		this.elements.forEach((element) => {
-			element.rotation = value;
-		});
+		if (this.elements.length === 1) {
+			this.elements[0].rotation = value;
+		} else {
+			this._rotation = value;
+		}
 	}
 }
 

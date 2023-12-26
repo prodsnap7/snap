@@ -19,7 +19,7 @@
 	<div
 		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x - offset.x}px, {element.y -
-			offset.y}px) rotate({element.rotation}deg)"
+			offset.y}px) rotate({element.rotation}deg);"
 	>
 		<RenderPathShape {scale} {element} />
 	</div>
@@ -27,7 +27,7 @@
 	<div
 		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x - offset.x}px, {element.y -
-			offset.y}px) rotate({element.rotation}deg)"
+			offset.y}px) rotate({element.rotation}deg);"
 	>
 		<RenderShape {scale} shape={element} />
 	</div>
@@ -41,7 +41,7 @@
 	<div
 		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x - offset.x}px, {element.y -
-			offset.y}px) rotate({element.rotation}deg)"
+			offset.y}px) rotate({element.rotation}deg);"
 	>
 		<RenderText {scale} text={element} />
 	</div>

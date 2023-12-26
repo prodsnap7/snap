@@ -29,7 +29,7 @@
 	<label for="shapes" class="font-bold">Curves</label>
 </div>
 
-<div class="flex items-center mt-4 mb-2 flex-wrap gap-2 justify-between">
+<div class="mt-4 mb-2 grid grid-cols-3 gap-2">
 	{#each curves as curve}
 		<div
 			id="curve-renderer-elements-panel"
@@ -38,7 +38,7 @@
 			role="button"
 			on:keydown={() => addElement(curve.clone(2.5))}
 			style="width: {curve.width}px; height: {curve.height}px;"
-			class="relative flex-initial shrink-0 m-4 ml-0"
+			class="relative min-w-10 min-h-10 flex-initial shrink-0 p-4 ml-0"
 		>
 			<div class="absolute origin-center inset-0">
 				<Renderer element={curve} />

@@ -62,7 +62,7 @@ export class Curve extends BaseObject {
   path = $derived(getPathFromPoints(this.points, this.pathType))
   startMarker = $state<MarkerType>("none");
   endMarker = $state<MarkerType>("none");
-  markerSize = $state(30);
+  markerSize = $state(20);
 
   constructor(obj: Partial<Curve>, scale = 1) {
     super(obj);

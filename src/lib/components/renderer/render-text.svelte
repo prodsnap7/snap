@@ -4,14 +4,16 @@
 	type Props = {
 		text: TextBox;
 		scale?: number;
+		hide?: boolean;
 	};
 
-	const { text, scale = 1 } = $props<Props>();
+	const { text, hide = false, scale = 1 } = $props<Props>();
 </script>
 
-<div
-	class="text-renderer overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
-	style="
+{#if !hide}
+	<div
+		class="text-renderer overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
+		style="
     font-size: {text.fontSize}px;
     font-family: {text.fontFamily};
     font-weight: {text.fontWeight};
@@ -23,6 +25,7 @@
     letter-spacing: {text.letterSpacing}px;
     line-height: {text.lineHeight * text.fontSize}px;
   "
->
-	{text.content}
-</div>
+	>
+		{text.content}
+	</div>
+{/if}

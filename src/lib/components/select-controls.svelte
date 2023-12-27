@@ -3,6 +3,7 @@
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
+	import TextControls from './text-controls.svelte';
 
 	const selected = $derived(store.selectedElements.elements);
 
@@ -131,7 +132,9 @@
 			store.selectedElements.rotation = rotation;
 		}}
 		exclude={['resizing-tm', 'resizing-bm']}
-	/>
+	>
+		<TextControls element={selected[0]} />
+	</MoveHandler>
 {:else if selected.length === 1}
 	<MoveHandler
 		{bounds}

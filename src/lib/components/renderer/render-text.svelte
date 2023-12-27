@@ -21,7 +21,7 @@
     text-align: {text.align};
     width: {text.width}px;
     letter-spacing: {text.letterSpacing}px;
-    line-height: {text.lineHeight}px;
+    line-height: {text.lineHeight * text.fontSize}px;
   "
 >
 	{text.content}

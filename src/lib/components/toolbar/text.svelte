@@ -78,6 +78,8 @@
 		if (!val) return;
 		element.align = val as 'left' | 'center' | 'right' | 'justify';
 	}
+
+	const fontSize = $derived(Math.ceil(element.fontSize));
 </script>
 
 <button
@@ -93,14 +95,14 @@
 
 <Popover.Root portal="null">
 	<Popover.Trigger>
-		<button class="h-8 w-8 rounded border">{element.fontSize}</button>
+		<button class="h-8 w-8 rounded border">{fontSize}</button>
 	</Popover.Trigger>
 
 	<Popover.Content class="w-60">
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Font Size</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.fontSize} />
+				<input class="w-12 h-6 border rounded p-2 text-xs" value={fontSize} />
 			</div>
 
 			<Slider

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Group, Curve, store } from '$lib/store';
+	import { Group, Curve, store, TextBox } from '$lib/store';
 	import MoveHandler from './move-handler.svelte';
 	import PointControls from './point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
@@ -121,6 +121,17 @@
 			store.selectedElements.rotation = r;
 		}}
 	></MoveHandler>
+{:else if selected.length === 1 && selected[0] instanceof TextBox}
+	<MoveHandler
+		{bounds}
+		rotation={store.selectedElements.rotation}
+		{onMove}
+		{onResize}
+		onRotate={(rotation) => {
+			store.selectedElements.rotation = rotation;
+		}}
+		exclude={['resizing-tm', 'resizing-bm']}
+	/>
 {:else if selected.length === 1}
 	<MoveHandler
 		{bounds}

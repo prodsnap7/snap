@@ -32,7 +32,7 @@ export class Shape extends BaseObject implements IShape {
 	y = $state(0);
 	width = $state(100);
 	height = $state(100);
-	type = 'shape';
+	type = 'shape' as const;
 	stroke = $state('#000000');
 	fill = $state('#ffffff');
 	strokeWidth = $state(0);
@@ -76,6 +76,7 @@ export class Shape extends BaseObject implements IShape {
 			y: this.y,
 			width: this.width,
 			height: this.height,
+			type: this.type,
 			rotation: this.rotation,
 			opacity: this.opacity,
 			stroke: this.stroke,
@@ -104,12 +105,6 @@ export class Shape extends BaseObject implements IShape {
 	}
 }
 
-export interface IPathShape extends IShape {
-	path: string;
-	strokeLinecap?: string;
-	strokeLinejoin?: string;
-	strokeDasharray?: string;
-}
 
 export class PathShape extends BaseObject {
 	x = $state(0);
@@ -123,7 +118,7 @@ export class PathShape extends BaseObject {
 	strokeType = $state('solid');
 	colors = $derived([this.stroke, this.fill]);
 	_rotation = $state(0);
-	type = 'path-shape';
+	type = 'path-shape' as const;
 	strokeLinecap = $state('butt');
 	strokeLinejoin = $state('miter');
 	strokeDasharray = $state('');
@@ -178,6 +173,7 @@ export class PathShape extends BaseObject {
 			x: this.x,
 			y: this.y,
 			width: this.width,
+			type: this.type,
 			height: this.height,
 			rotation: this.rotation,
 			opacity: this.opacity,

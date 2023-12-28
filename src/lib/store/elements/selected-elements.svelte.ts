@@ -3,11 +3,12 @@ import { TextBox, type CanvasElement, Group, Shape, PathShape, Curve } from '..'
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
-	isText = $derived(this.elements.every((element) => element instanceof TextBox));
-	isShape = $derived(this.elements.every((element) => !(element instanceof Shape)));
-	isPathShape = $derived(this.elements.every((element) => element instanceof PathShape));
-	isCurve = $derived(this.elements.every((element) => element instanceof Curve));
-	isGroup = $derived(this.elements.every((element) => element instanceof Group));
+	isSingle = $derived(this.elements.length === 1);
+	isText = $derived(this.isSingle && this.elements[0].type === 'text');
+	isShape = $derived(this.isSingle && this.elements[0].type === 'shape');
+	isCurve = $derived(this.isSingle && this.elements[0].type === 'curve');
+	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
+	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
 
 	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);

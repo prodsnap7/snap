@@ -1,4 +1,4 @@
-import type { Curve, TextBox, Group, IShape, PartialCurve, Shape, PartialShape } from "..";
+import type { Curve, TextBox, Group, IShape, PartialCurve, Shape, PartialShape, PathShape } from "..";
 
 export interface IBaseObject {
   x: number;
@@ -15,7 +15,7 @@ export interface IBaseMethods {
 }
 
 
-export type CanvasElement = Shape | Curve | Group | TextBox;
+export type CanvasElement = Shape | Curve | Group | TextBox | PathShape;
 export type CanvasObject = PartialShape | PartialCurve
 
 export abstract class BaseObject {

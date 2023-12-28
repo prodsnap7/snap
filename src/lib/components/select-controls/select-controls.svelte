@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Group, Curve, store, TextBox } from '$lib/store';
-	import MoveHandler from './move-handler.svelte';
-	import PointControls from './point-controls.svelte';
+	import MoveHandler from '../move-handler.svelte';
+	import PointControls from '../point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
 	import TextControls from './text-controls.svelte';
 
@@ -74,6 +74,10 @@
 		});
 	}
 
+	function onRotate(rotation: number) {
+		store.selectedElements.rotation = rotation;
+	}
+
 	const bounds = $derived(store.selectedElements.bounds);
 </script>
 
@@ -83,10 +87,8 @@
 		rotation={store.selectedElements.rotation}
 		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
+		{onRotate}
 		{onResize}
-		onRotate={(r) => {
-			store.selectedElements.rotation = r;
-		}}
 	></MoveHandler>
 {:else if store.selectedElements.isCurve}
 	<MoveHandler
@@ -117,34 +119,16 @@
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
+		{onRotate}
 		{onResize}
-		onRotate={(r) => {
-			store.selectedElements.rotation = r;
-		}}
 	></MoveHandler>
 {:else if store.selectedElements.isText}
-	<MoveHandler
-		{bounds}
-		rotation={store.selectedElements.rotation}
+	<TextControls
+		element={store.selectedElements.elements[0] as TextBox}
+		{onRotate}
 		{onMove}
 		{onResize}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
-		exclude={['resizing-tm', 'resizing-bm']}
-	>
-		{#if selected[0] instanceof TextBox}
-			<TextControls element={selected[0]} />
-		{/if}
-	</MoveHandler>
-{:else if selected.length === 1}
-	<MoveHandler
-		{bounds}
-		rotation={store.selectedElements.rotation}
-		{onMove}
-		{onResize}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
 	/>
+{:else if selected.length === 1}
+	<MoveHandler {bounds} rotation={store.selectedElements.rotation} {onMove} {onResize} {onRotate} />
 {/if}

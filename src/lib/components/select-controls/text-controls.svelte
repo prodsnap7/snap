@@ -58,10 +58,7 @@
 	}
 
 	const oninput: FormEventHandler<HTMLDivElement> = (event) => {
-		if (input!.offsetHeight > element.height) {
-			element.height = input!.offsetHeight;
-		}
-
+		element.height = input!.offsetHeight;
 		if (input!.offsetWidth > element.width) {
 			element.width = input!.offsetWidth;
 		}

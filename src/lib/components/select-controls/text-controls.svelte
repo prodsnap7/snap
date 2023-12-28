@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { TextBox } from '$lib/store';
+	import type { FormEventHandler } from 'svelte/elements';
 	import MoveHandler from '../move-handler.svelte';
 
 	type Props = {
@@ -20,12 +21,22 @@
 	};
 	let { element, onRotate, onMove, onResize } = $props<Props>();
 
-	let input = $state<HTMLTextAreaElement | null>(null);
+	let input = $state<HTMLDivElement | null>(null);
+
+	function selectText() {
+		if (input?.isContentEditable) {
+			const range = document.createRange();
+			range.selectNodeContents(input);
+			const selection = window.getSelection();
+			selection?.removeAllRanges();
+			selection?.addRange(range);
+		}
+	}
 
 	$effect(() => {
 		if (input) {
 			input.focus();
-			input.select();
+			selectText();
 		}
 	});
 
@@ -40,11 +51,21 @@
 			setTimeout(() => {
 				if (input) {
 					input.focus();
-					input.select();
+					selectText();
 				}
 			}, 0);
 		}
 	}
+
+	const oninput: FormEventHandler<HTMLDivElement> = (event) => {
+		element.content = input?.textContent ?? '';
+	};
+
+	$effect(() => {
+		if (input) {
+			input.textContent = element.content;
+		}
+	});
 </script>
 
 {#if element && element.state === 'editing'}
@@ -53,7 +74,7 @@
 		class="absolute top-0 left-0 origin-center"
 		style="transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);"
 	>
-		<textarea
+		<div
 			bind:this={input}
 			class="text-renderer border border-primary overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
 			style="
@@ -70,8 +91,9 @@
 			line-height: {element.lineHeight * element.fontSize * element.scale}px;
 			text-transform: {element.uppercase ? 'uppercase' : 'none'};
       "
-			bind:value={element.content}
-		/>
+			contenteditable="true"
+			{oninput}
+		></div>
 	</div>
 {:else if element}
 	<MoveHandler

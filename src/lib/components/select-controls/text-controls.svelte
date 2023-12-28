@@ -62,6 +62,7 @@
 		bounds={element.bounds}
 		rotation={element.rotation}
 		exclude={['resizing-tm', 'resizing-bm']}
+		scale={element.scale}
 		{onRotate}
 		{onMove}
 		{onResize}

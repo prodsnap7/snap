@@ -25,8 +25,8 @@ export class TextBox extends BaseObject {
   listType = $state<'none' | 'ordered' | 'unordered'>('none');
   rotation = $state(0);
   opacity = $state(1);
-  height = $derived(this.lineHeight * this.fontSize);
   scale = $state(1);
+  height = $derived(this.lineHeight * this.fontSize * this.scale);
   _bounds = $derived(getBounds([this]));
   
   constructor(obj: Partial<TextBox>) {
@@ -78,17 +78,20 @@ export class TextBox extends BaseObject {
     this.x += x;
     this.y += y;
     
-    const dampingFactor = 0.8; // Adjust this value to control sensitivity
-    const adjustedRatio = (this.height + height) / this.height - 1;
-  
+    const dampingFactor = 0.5; // Adjust this value to control sensitivity
+
     if (height !== 0 && width !== 0) {
-      // this.fontSize += dampingFactor * adjustedRatio * this.fontSize;
-      // this.width += adjustedRatio * this.width * dampingFactor;
-      this.fontSize += adjustedRatio * this.fontSize * dampingFactor;
-      this.width += adjustedRatio * this.width;
+      // Calculate the ratio differently for positive and negative height
+      const adjustedRatio = height > 0 
+        ? (this.height + height) / this.height - 1 
+        : 1 - (this.height / (this.height + height));
+      
+      // Apply the damping factor and adjust the scale
+      this.scale *= 1 + (adjustedRatio * dampingFactor);
+      this.width += width * dampingFactor;
     } else if (width !== 0 && height === 0) {
-      // this.width += width * dampingFactor;
       this.width += width;
     }
   }
+
 }

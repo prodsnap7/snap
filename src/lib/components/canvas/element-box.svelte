@@ -44,15 +44,15 @@
 		role="button"
 		tabindex="0"
 		class={clsx(
-			'absolute cursor-pointer origin-center border-2 border-transparent hover:border-slate-700',
+			'absolute cursor-pointer origin-top-left border border-transparent hover:border-slate-700',
 			{
-				'border-2 border-slate-700': store.highlightedElements.elements.includes(element)
+				'border-slate-700': store.highlightedElements.elements.includes(element)
 			}
 		)}
 		style="
-    width: {width + 20}px;
-    height: {height + 20}px;
-    transform: translate({x - 10}px, {y - 10}px) rotate({element.rotation}deg);
+    width: {width + 5}px;
+    height: {height + 5}px;
+    transform: translate({x - 2.5}px, {y - 2.5}px) rotate({element.rotation}deg);
     left: 0px;
     top: 0px;
   "

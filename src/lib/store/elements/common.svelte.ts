@@ -20,6 +20,7 @@ export type CanvasObject = PartialShape | PartialCurve
 
 export abstract class BaseObject {
   opacity = $state(1);
+  scale = $state(1);
 
   constructor(obj: Partial<BaseObject>) {
     if (obj.opacity) {

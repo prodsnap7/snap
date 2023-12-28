@@ -39,7 +39,7 @@
 	<RenderGroup {scale} group={element} />
 {:else if element instanceof TextBox}
 	<div
-		class="absolute top-0 left-0 origin-center"
+		class="absolute top-0 left-0 origin-top-left"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>

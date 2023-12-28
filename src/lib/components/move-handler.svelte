@@ -7,6 +7,7 @@
 		exclude?: State[];
 		children?: any;
 		rotation: number;
+		scale?: number;
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onRotate: (rotation: number) => void;
@@ -181,15 +182,21 @@
 {/snippet}
 
 <div
+	id="move-handler"
 	{onmousedown}
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border border-slate-800 cursor-move move', {
+	class={clsx('absolute border border-slate-800 cursor-move move origin-top-left', {
 		'border-2': status !== 'idle'
 	})}
-	style="left: 0px;
-	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
+	style="
+		left: 0px;
+		top: 0px;
+		width: {width}px;
+		height: {height}px;
+		transform: translate({x}px, {y}px) rotate({rotation}deg);
+	"
 >
 	<div
 		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"

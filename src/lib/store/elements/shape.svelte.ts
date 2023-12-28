@@ -40,6 +40,7 @@ export class Shape extends BaseObject implements IShape {
 	radius = $state(0);
 	strokeType = $state('solid');
 	colors = $derived([this.stroke, this.fill]);
+	scale = $state(1);
 	_rotation = $state(0);
 	_bounds = $derived(getBounds([this]));
 
@@ -118,6 +119,7 @@ export class PathShape extends BaseObject {
 	strokeLinecap = $state('butt');
 	strokeLinejoin = $state('miter');
 	strokeDasharray = $state('');
+	scale = $state(1);
 	_path = $state('');
 	_bounds = $derived(getBounds([this]));
 	clipPathId = shortUUID.generate();

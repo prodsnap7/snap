@@ -8,13 +8,15 @@
 	};
 
 	const { text, hide = false, scale = 1 } = $props<Props>();
+
+	$inspect(text.scale);
 </script>
 
 {#if !hide}
 	<div
 		class="text-renderer overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
 		style="
-    font-size: {text.fontSize}px;
+    font-size: {text.fontSize * text.scale}px;
     font-family: {text.fontFamily};
     font-weight: {text.fontWeight};
     font-style: {text.fontStyle};
@@ -24,10 +26,8 @@
     width: {text.width}px;
 		height: {text.height}px;
     letter-spacing: {text.letterSpacing}px;
-    line-height: {text.lineHeight * text.fontSize}px;
+    line-height: {text.lineHeight * text.fontSize * text.scale}px;
 		text-transform: {text.uppercase ? 'uppercase' : 'none'};
-		transform: scale({text.scale});
-		transform-origin: top left;
 		"
 	>
 		{text.content}

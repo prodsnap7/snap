@@ -79,7 +79,7 @@
 		element.align = val as 'left' | 'center' | 'right' | 'justify';
 	}
 
-	const fontSize = $derived(Math.ceil(element.fontSize));
+	const fontSize = $derived(Math.ceil(element.fontSize) * element.scale);
 </script>
 
 <button
@@ -95,7 +95,7 @@
 
 <Popover.Root portal="null">
 	<Popover.Trigger>
-		<button class="h-8 w-8 rounded border">{fontSize}</button>
+		<button class="h-8 w-8 rounded border">{Math.ceil(fontSize)}</button>
 	</Popover.Trigger>
 
 	<Popover.Content class="w-60">

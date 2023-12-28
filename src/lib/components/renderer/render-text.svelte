@@ -22,6 +22,7 @@
     text-decoration: {text.decoration};
     text-align: {text.align};
     width: {text.width}px;
+		height: {text.height}px;
     letter-spacing: {text.letterSpacing}px;
     line-height: {text.lineHeight * text.fontSize}px;
   "

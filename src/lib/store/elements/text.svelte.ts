@@ -45,8 +45,25 @@ export class TextBox extends BaseObject {
   }
 
   clone(): TextBox {
-    const newObj = Object.assign({}, this);
-    return new TextBox(newObj);
+    return new TextBox({
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      content: this.content,
+      fontSize: this.fontSize,
+      fontFamily: this.fontFamily,
+      fontStyle: this.fontStyle,
+      fontWeight: this.fontWeight,
+      align: this.align,
+      color: this.color,
+      decoration: this.decoration,
+      uppercase: this.uppercase,
+      letterSpacing: this.letterSpacing,
+      lineHeight: this.lineHeight,
+      listType: this.listType,
+      rotation: this.rotation,
+      opacity: this.opacity,
+    });
   }
 
 
@@ -67,37 +84,4 @@ export class TextBox extends BaseObject {
       this.width += width;
     }
   }
-  
-
-  updateBounds33({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-    this.x += x;
-    this.y += y;
-  
-    let widthRatio = 1, heightRatio = 1;
-  
-    if (width !== 0) {
-      widthRatio = (this.width + width) / this.width;
-    }
-  
-    if (height !== 0) {
-      heightRatio = (this.height + height) / this.height;
-    }
-  
-    const dampingFactor = 0.8;
-    let adjustedRatio = Math.min(widthRatio, heightRatio) - 1;
-  
-    // Apply a different method for decreasing width
-    if (adjustedRatio < 0) {
-      adjustedRatio *= dampingFactor;  // Lessen the decrease rate
-    }
-  
-    if (height !== 0 && width !== 0) {
-      this.fontSize += adjustedRatio * this.fontSize;
-      this.width += adjustedRatio * this.width;
-    } else if (width !== 0 && height === 0) {
-      this.width += width * (adjustedRatio < 0 ? dampingFactor : 1);
-    }
-  }
-
-
 }

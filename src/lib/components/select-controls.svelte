@@ -88,7 +88,7 @@
 			store.selectedElements.rotation = r;
 		}}
 	></MoveHandler>
-{:else if selected.length === 1 && selected[0] instanceof Curve}
+{:else if store.selectedElements.isCurve}
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
@@ -111,7 +111,7 @@
 			<PointControls {point} />
 		{/each}
 	</MoveHandler>
-{:else if selected.length === 1 && selected[0] instanceof Group}
+{:else if store.selectedElements.isGroup}
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
@@ -122,7 +122,7 @@
 			store.selectedElements.rotation = r;
 		}}
 	></MoveHandler>
-{:else if selected.length === 1 && selected[0] instanceof TextBox}
+{:else if store.selectedElements.isText}
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
@@ -133,7 +133,9 @@
 		}}
 		exclude={['resizing-tm', 'resizing-bm']}
 	>
-		<TextControls element={selected[0]} />
+		{#if selected[0] instanceof TextBox}
+			<TextControls element={selected[0]} />
+		{/if}
 	</MoveHandler>
 {:else if selected.length === 1}
 	<MoveHandler

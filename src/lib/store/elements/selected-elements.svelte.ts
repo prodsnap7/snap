@@ -1,23 +1,27 @@
-import { getBounds } from "$lib/utils/bounds-utils";
-import type { CanvasElement } from "..";
-import { Curve } from "./curve.svelte";
-import { Group } from "./group.svelte";
+import { getBounds } from '$lib/utils/bounds-utils';
+import { TextBox, type CanvasElement, Group, Shape, PathShape, Curve } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
+	isText = $derived(this.elements.every((element) => element instanceof TextBox));
+	isShape = $derived(this.elements.every((element) => !(element instanceof Shape)));
+	isPathShape = $derived(this.elements.every((element) => element instanceof PathShape));
+	isCurve = $derived(this.elements.every((element) => element instanceof Curve));
+	isGroup = $derived(this.elements.every((element) => element instanceof Group));
+
 	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);
-  private static instance: SelectedEleemnts;
+	private static instance: SelectedEleemnts;
 
-  private constructor() {}
+	private constructor() {}
 
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new SelectedEleemnts();
-    }
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new SelectedEleemnts();
+		}
 
-    return this.instance;
-  }
+		return this.instance;
+	}
 
 	addElement(element: CanvasElement) {
 		if (!this.elements.includes(element)) {
@@ -46,6 +50,11 @@ class SelectedEleemnts {
 	}
 
 	clear() {
+		this.elements.forEach((element) => {
+			if (element instanceof TextBox) {
+				element.state = 'normal';
+			}
+		});
 		this.elements = [];
 		this._rotation = 0;
 	}
@@ -83,7 +92,7 @@ class SelectedEleemnts {
 		if (this.elements.length === 1) {
 			return this.elements[0].rotation;
 		}
-		
+
 		return this._rotation;
 	}
 

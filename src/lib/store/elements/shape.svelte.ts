@@ -205,77 +205,94 @@ export class PathShape extends BaseObject {
 }
 
 type PathCommand =
-	| 'M'
-	| 'm'
-	| 'L'
-	| 'l'
-	| 'H'
-	| 'h'
-	| 'V'
-	| 'v'
-	| 'C'
-	| 'c'
-	| 'S'
-	| 's'
-	| 'Q'
-	| 'q'
-	| 'T'
-	| 't'
-	| 'A'
-	| 'a'
-	| 'Z'
-	| 'z';
+    | 'M'
+    | 'm'
+    | 'L'
+    | 'l'
+    | 'H'
+    | 'h'
+    | 'V'
+    | 'v'
+    | 'C'
+    | 'c'
+    | 'S'
+    | 's'
+    | 'Q'
+    | 'q'
+    | 'T'
+    | 't'
+    | 'A'
+    | 'a'
+    | 'Z'
+    | 'z';
 
 export function scalePathData(
-	initialPathData: string,
-	width: number,
-	height: number,
-	strokeWidth: number
+    initialPathData: string,
+    width: number,
+    height: number,
+    strokeWidth: number
 ): string {
 	const pathDataRegex = /([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)/g;
 
-	function parseAndScaleValues(str: string, scaleX: number, scaleY: number): string {
-		return str
-			.trim()
-			.split(/\s*,\s*|\s+/)
-			.map((value, index) => {
-				const numValue = parseFloat(value);
-				return isNaN(numValue)
-					? ''
-					: (index % 2 === 0 ? numValue * scaleX : numValue * scaleY).toString();
-			})
-			.join(' ');
+	function parseAndScaleValues(str: string, scaleX: number, scaleY: number, command: PathCommand): string {
+			if (command === 'A' || command === 'a') {
+					const params = str.trim().split(/\s*,\s*|\s+/);
+					if (params.length === 7) {
+							// Scale rx, ry
+							params[0] = (parseFloat(params[0]) * scaleX).toString();
+							params[1] = (parseFloat(params[1]) * scaleY).toString();
+							// x-axis-rotation (params[2]) is not scaled
+							// large-arc-flag (params[3]) and sweep-flag (params[4]) are not scaled
+							// Scale x, y
+							params[5] = (parseFloat(params[5]) * scaleX).toString();
+							params[6] = (parseFloat(params[6]) * scaleY).toString();
+							return params.join(' ');
+					} else {
+							return '';
+					}
+			} else {
+					return str
+							.trim()
+							.split(/\s*,\s*|\s+/)
+							.map((value, index) => {
+									const numValue = parseFloat(value);
+									return isNaN(numValue)
+											? ''
+											: (index % 2 === 0 ? numValue * scaleX : numValue * scaleY).toString();
+							})
+							.join(' ');
+			}
 	}
 
-	let minX = Infinity,
-		minY = Infinity,
-		maxX = -Infinity,
-		maxY = -Infinity;
-	initialPathData.replace(pathDataRegex, (_, __, values: string) => {
-		const coords = parseAndScaleValues(values, 1, 1).split(' ');
-		for (let i = 0; i < coords.length; i += 2) {
-			const x = parseFloat(coords[i]);
-			const y = parseFloat(coords[i + 1]);
-			minX = Math.min(minX, x);
-			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x);
-			maxY = Math.max(maxY, y);
-		}
-		return '';
-	});
+    let minX = Infinity,
+        minY = Infinity,
+        maxX = -Infinity,
+        maxY = -Infinity;
+    initialPathData.replace(pathDataRegex, (_, __, values: string) => {
+        const coords = parseAndScaleValues(values, 1, 1, _ as PathCommand).split(' ');
+        for (let i = 0; i < coords.length; i += 2) {
+            const x = parseFloat(coords[i]);
+            const y = parseFloat(coords[i + 1]);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+        }
+        return '';
+    });
 
-	const initialWidth = maxX - minX;
-	const initialHeight = maxY - minY;
-	const scaleX = (width - strokeWidth) / initialWidth;
-	const scaleY = (height - strokeWidth) / initialHeight;
+    const initialWidth = maxX - minX;
+    const initialHeight = maxY - minY;
+    const scaleX = (width - strokeWidth) / initialWidth;
+    const scaleY = (height - strokeWidth) / initialHeight;
 
-	const newPathData = initialPathData.replace(
-		pathDataRegex,
-		(_, command: PathCommand, values: string) => {
-			const scaledValues = parseAndScaleValues(values, scaleX, scaleY);
-			return command + scaledValues;
-		}
-	);
+    const newPathData = initialPathData.replace(
+        pathDataRegex,
+        (_, command: PathCommand, values: string) => {
+            const scaledValues = parseAndScaleValues(values, scaleX, scaleY, command);
+            return command + scaledValues;
+        }
+    );
 
-	return newPathData;
+    return newPathData;
 }

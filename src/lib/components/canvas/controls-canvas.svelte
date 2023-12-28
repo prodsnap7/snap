@@ -48,10 +48,6 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
-			console.log('onmousedown');
-			selectedElements.clear();
-			activeElement.clear();
-			sidepanelStore.prev();
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
 		}
@@ -65,6 +61,8 @@
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 		} else if (event.target === event.currentTarget || event.target === outerCanvas) {
 			selectedElements.clear();
+			activeElement.clear();
+			sidepanelStore.prev();
 		}
 	}
 

@@ -26,7 +26,7 @@ export class TextBox extends BaseObject {
   rotation = $state(0);
   opacity = $state(1);
   scale = $state(1);
-  height = $derived(this.lineHeight * this.fontSize * this.scale);
+  height = $state(this.lineHeight * this.fontSize * this.scale);
   _bounds = $derived(getBounds([this]));
   
   constructor(obj: Partial<TextBox>) {

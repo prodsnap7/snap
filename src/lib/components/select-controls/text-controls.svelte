@@ -33,50 +33,65 @@
 		}
 	}
 
-	$effect(() => {
-		if (input) {
-			input.focus();
-			selectText();
-		}
-	});
+	// $effect(() => {
+	// 	if (input) {
+	// 		input.focus();
+	// 		selectText();
+	// 	}
+	// });
 
 	let clickCount = $state(0);
 
 	function onMouseDown(event: MouseEvent) {
 		clickCount += 1;
 
-		if (clickCount === 2) {
+		if (clickCount >= 2) {
 			element.state = 'editing';
 			clickCount = 0;
-			setTimeout(() => {
-				if (input) {
-					input.focus();
-					selectText();
-				}
-			}, 0);
+			// setTimeout(() => {
+			// 	if (input) {
+			// 		input.focus();
+			// 		selectText();
+			// 	}
+			// }, 0);
 		}
 	}
 
 	const oninput: FormEventHandler<HTMLDivElement> = (event) => {
-		element.content = input?.textContent ?? '';
+		if (input!.offsetHeight > element.height) {
+			element.height = input!.offsetHeight;
+		}
+
+		if (input!.offsetWidth > element.width) {
+			element.width = input!.offsetWidth;
+		}
 	};
 
-	$effect(() => {
-		if (input) {
-			input.textContent = element.content;
-		}
-	});
+	// $effect(() => {
+	// 	if (input) {
+	// 		input.textContent = element.content;
+	// 	}
+	// });
+
+	function onblur() {
+		element.content = input?.innerText ?? '';
+		element.state = 'normal';
+	}
 </script>
 
 {#if element && element.state === 'editing'}
 	<div
 		id="text-controls"
-		class="absolute top-0 left-0 origin-center"
-		style="transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);"
+		class="absolute border border-primary top-0 left-0 origin-center"
+		style="
+			min-width: {element.width}px;
+			min-height: {element.height}px;
+			transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
+		"
 	>
 		<div
 			bind:this={input}
-			class="text-renderer border border-primary overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
+			class="overflow-hidden px-1 whitespace-pre-wrap cursor-pointer outline-none user-select-none"
 			style="
 			font-size: {element.fontSize * element.scale}px;
 			font-family: {element.fontFamily};
@@ -85,15 +100,16 @@
 			color: {element.color};
 			text-decoration: {element.decoration};
 			text-align: {element.align};
-			width: {element.width}px;
-			height: {element.height}px;
 			letter-spacing: {element.letterSpacing}px;
 			line-height: {element.lineHeight * element.fontSize * element.scale}px;
 			text-transform: {element.uppercase ? 'uppercase' : 'none'};
       "
 			contenteditable="true"
 			{oninput}
-		></div>
+			{onblur}
+		>
+			{element.content}
+		</div>
 	</div>
 {:else if element}
 	<MoveHandler

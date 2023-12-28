@@ -2,7 +2,7 @@
 	import { store, type CanvasElement } from '$lib/store';
 	import GridLines from '../grid-lines/grid-lines.svelte';
 	import SelectBar from '../select-bar.svelte';
-	import SelectControls from '../select-controls.svelte';
+	import SelectControls from '../select-controls';
 	import { sidepanelStore } from '../sidepanel/state.svelte';
 	import DragOverlay from './drag-overlay.svelte';
 	import ElementBox from './element-box.svelte';
@@ -48,10 +48,6 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
-			console.log('onmousedown');
-			selectedElements.clear();
-			activeElement.clear();
-			sidepanelStore.prev();
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
 		}
@@ -65,6 +61,8 @@
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 		} else if (event.target === event.currentTarget || event.target === outerCanvas) {
 			selectedElements.clear();
+			activeElement.clear();
+			sidepanelStore.prev();
 		}
 	}
 
@@ -101,10 +99,6 @@
     height: {canvas.height}px;
   "
 	>
-		<GridLines />
-		{#if store.selectedElements.elements.length > 0}
-			<SelectBar />
-		{/if}
 		{#each elements.elements as element}
 			<ElementBox
 				{element}
@@ -112,9 +106,15 @@
 				onSelect={selectElement}
 			/>
 		{/each}
+
 		<SelectControls />
 		{#if dragging}
 			<DragOverlay bounds={dragRect} />
+		{/if}
+
+		<GridLines />
+		{#if store.selectedElements.elements.length > 0}
+			<SelectBar />
 		{/if}
 	</div>
 </div>

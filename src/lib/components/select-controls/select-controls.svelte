@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Group, Curve, store } from '$lib/store';
-	import MoveHandler from './move-handler.svelte';
-	import PointControls from './point-controls.svelte';
+	import { Group, Curve, store, TextBox } from '$lib/store';
+	import MoveHandler from '../move-handler.svelte';
+	import PointControls from '../point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
+	import TextControls from './text-controls.svelte';
 
 	const selected = $derived(store.selectedElements.elements);
 
@@ -73,6 +74,10 @@
 		});
 	}
 
+	function onRotate(rotation: number) {
+		store.selectedElements.rotation = rotation;
+	}
+
 	const bounds = $derived(store.selectedElements.bounds);
 </script>
 
@@ -82,12 +87,10 @@
 		rotation={store.selectedElements.rotation}
 		exclude={['rotating', 'resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
+		{onRotate}
 		{onResize}
-		onRotate={(r) => {
-			store.selectedElements.rotation = r;
-		}}
 	></MoveHandler>
-{:else if selected.length === 1 && selected[0] instanceof Curve}
+{:else if store.selectedElements.isCurve}
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
@@ -110,25 +113,22 @@
 			<PointControls {point} />
 		{/each}
 	</MoveHandler>
-{:else if selected.length === 1 && selected[0] instanceof Group}
+{:else if store.selectedElements.isGroup}
 	<MoveHandler
 		{bounds}
 		rotation={store.selectedElements.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
 		{onMove}
+		{onRotate}
 		{onResize}
-		onRotate={(r) => {
-			store.selectedElements.rotation = r;
-		}}
 	></MoveHandler>
-{:else if selected.length === 1}
-	<MoveHandler
-		{bounds}
-		rotation={store.selectedElements.rotation}
+{:else if store.selectedElements.isText}
+	<TextControls
+		element={store.selectedElements.elements[0] as TextBox}
+		{onRotate}
 		{onMove}
 		{onResize}
-		onRotate={(rotation) => {
-			store.selectedElements.rotation = rotation;
-		}}
 	/>
+{:else if selected.length === 1}
+	<MoveHandler {bounds} rotation={store.selectedElements.rotation} {onMove} {onResize} {onRotate} />
 {/if}

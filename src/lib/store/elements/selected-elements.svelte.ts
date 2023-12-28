@@ -1,23 +1,28 @@
-import { getBounds } from "$lib/utils/bounds-utils";
-import type { CanvasElement } from "..";
-import { Curve } from "./curve.svelte";
-import { Group } from "./group.svelte";
+import { getBounds } from '$lib/utils/bounds-utils';
+import { TextBox, type CanvasElement } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
+	isSingle = $derived(this.elements.length === 1);
+	isText = $derived(this.isSingle && this.elements[0].type === 'text');
+	isShape = $derived(this.isSingle && this.elements[0].type === 'shape');
+	isCurve = $derived(this.isSingle && this.elements[0].type === 'curve');
+	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
+	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
+
 	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);
-  private static instance: SelectedEleemnts;
+	private static instance: SelectedEleemnts;
 
-  private constructor() {}
+	private constructor() {}
 
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new SelectedEleemnts();
-    }
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new SelectedEleemnts();
+		}
 
-    return this.instance;
-  }
+		return this.instance;
+	}
 
 	addElement(element: CanvasElement) {
 		if (!this.elements.includes(element)) {
@@ -46,6 +51,11 @@ class SelectedEleemnts {
 	}
 
 	clear() {
+		this.elements.forEach((element) => {
+			if (element instanceof TextBox) {
+				element.state = 'normal';
+			}
+		});
 		this.elements = [];
 		this._rotation = 0;
 	}
@@ -58,7 +68,6 @@ class SelectedEleemnts {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;
 
-		console.log(this.bounds.height)
 		const scaleX = newGroupWidth / this.bounds.width;
 		const scaleY = newGroupHeight / this.bounds.height;
 
@@ -84,7 +93,7 @@ class SelectedEleemnts {
 		if (this.elements.length === 1) {
 			return this.elements[0].rotation;
 		}
-		
+
 		return this._rotation;
 	}
 

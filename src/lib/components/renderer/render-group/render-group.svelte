@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { type Group, Shape, Curve, PathShape } from '$lib/store';
+	import { type Group, Shape, Curve, PathShape, TextBox } from '$lib/store';
 	import RenderCurve from '../render-curve';
 	import RenderPathShape from '../render-path-shape.svelte';
 	import RenderShape from '../render-shape.svelte';
+	import RenderText from '../render-text.svelte';
 
 	type Props = {
 		group: Group;
@@ -48,6 +49,14 @@
 				style="left: {-group.bounds.x}px; top: {-group.bounds.y}px"
 			>
 				<RenderCurve {scale} curve={element} />
+			</div>
+		{:else if element instanceof TextBox}
+			<div
+				class="absolute top-0 left-0"
+				style="transform: translate({element.x - offset.x}px, {element.y -
+					offset.y}px) rotate({element.rotation}deg)"
+			>
+				<RenderText {scale} text={element} />
 			</div>
 		{/if}
 	{/each}

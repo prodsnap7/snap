@@ -7,9 +7,12 @@
 		exclude?: State[];
 		children?: any;
 		rotation: number;
+		transformOrigin?: string;
+		scale?: number;
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onRotate: (rotation: number) => void;
+		onMouseDown?: (event: MouseEvent) => void;
 	};
 
 	type State =
@@ -27,16 +30,26 @@
 
 	let frameid = $state<number | null>(null);
 	let status = $state<State>('idle');
-	let { bounds, rotation, exclude = [], onMove, onResize, children, onRotate } = $props<Props>();
+	let {
+		bounds,
+		transformOrigin = 'center center',
+		rotation,
+		exclude = [],
+		onMove,
+		onResize,
+		children,
+		onMouseDown,
+		onRotate
+	} = $props<Props>();
 
 	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
 	function onmousedown(event: MouseEvent) {
-		console.log('onmousedown', event.target);
 		event.stopPropagation();
 		if (event.target instanceof HTMLElement) {
 			if (event.target.classList.contains('move')) {
 				status = 'moving';
+				onMouseDown?.(event);
 			} else if (event.target.classList.contains('resizing-br')) {
 				status = 'resizing-br';
 			} else if (event.target.classList.contains('resizing-bl')) {
@@ -181,6 +194,7 @@
 {/snippet}
 
 <div
+	id="move-handler"
 	{onmousedown}
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
@@ -188,8 +202,14 @@
 	class={clsx('absolute border border-slate-800 cursor-move move', {
 		'border-2': status !== 'idle'
 	})}
-	style="left: 0px;
-	top: 0px; width: {width}px; height: {height}px; transform: translate({x}px, {y}px) rotate({rotation}deg);"
+	style="
+		left: 0px;
+		top: 0px;
+		width: {width}px;
+		height: {height}px;
+		transform: translate({x}px, {y}px) rotate({rotation}deg);
+		transform-origin: {transformOrigin};
+	"
 >
 	<div
 		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"
@@ -219,8 +239,8 @@
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="18"
-				height="18"
+				width="12"
+				height="12"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -256,7 +276,7 @@
 
 <style lang="postcss">
 	.corner-control {
-		@apply h-4 w-4 cursor-grab rounded-full border border-slate-400 bg-white hover:bg-slate-800;
+		@apply h-2.5 w-2.5 cursor-grab rounded-sm border border-slate-600 bg-white hover:bg-slate-800;
 	}
 	.top-left {
 		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nw-resize;
@@ -275,26 +295,26 @@
 	}
 
 	.middle-control {
-		@apply cursor-grab rounded border border-slate-400 bg-white hover:bg-slate-800;
+		@apply cursor-grab rounded border border-slate-600 bg-white hover:bg-slate-800;
 	}
 
 	.top-middle {
-		@apply left-1/2 top-0 h-2 w-6 -translate-x-1/2 -translate-y-1/2 cursor-n-resize;
+		@apply left-1/2 top-0 h-1.5 w-4 -translate-x-1/2 -translate-y-1/2 cursor-n-resize;
 	}
 
 	.bottom-middle {
-		@apply bottom-0 left-1/2 h-2 w-6 -translate-x-1/2 translate-y-1/2 cursor-s-resize;
+		@apply bottom-0 left-1/2 h-1.5 w-4 -translate-x-1/2 translate-y-1/2 cursor-s-resize;
 	}
 
 	.left-middle {
-		@apply left-0 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2 cursor-w-resize;
+		@apply left-0 top-1/2 h-4 w-1.5 -translate-x-1/2 -translate-y-1/2 cursor-w-resize;
 	}
 
 	.right-middle {
-		@apply right-0 top-1/2 h-6 w-2 -translate-y-1/2 translate-x-1/2 cursor-e-resize;
+		@apply right-0 top-1/2 h-4 w-1.5 -translate-y-1/2 translate-x-1/2 cursor-e-resize;
 	}
 
 	.rotate-control {
-		@apply -bottom-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
+		@apply -bottom-10 left-1/2 h-5 w-5 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
 	}
 </style>

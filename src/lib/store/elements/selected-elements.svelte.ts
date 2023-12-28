@@ -1,5 +1,5 @@
 import { getBounds } from '$lib/utils/bounds-utils';
-import { TextBox, type CanvasElement, Group, Shape, PathShape, Curve } from '..';
+import { TextBox, type CanvasElement } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);

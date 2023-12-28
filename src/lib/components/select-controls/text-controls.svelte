@@ -52,7 +52,6 @@
         line-height: {element.lineHeight * element.fontSize}px;
 				text-transform: {element.uppercase ? 'uppercase' : 'none'};
 				transform: scale({element.scale});
-				transform-origin: top left;
       "
 			bind:value={element.content}
 		/>

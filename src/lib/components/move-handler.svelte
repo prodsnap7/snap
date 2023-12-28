@@ -7,6 +7,7 @@
 		exclude?: State[];
 		children?: any;
 		rotation: number;
+		transformOrigin?: string;
 		scale?: number;
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
@@ -28,7 +29,16 @@
 
 	let frameid = $state<number | null>(null);
 	let status = $state<State>('idle');
-	let { bounds, rotation, exclude = [], onMove, onResize, children, onRotate } = $props<Props>();
+	let {
+		bounds,
+		transformOrigin = 'center center',
+		rotation,
+		exclude = [],
+		onMove,
+		onResize,
+		children,
+		onRotate
+	} = $props<Props>();
 
 	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -187,7 +197,7 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border border-slate-800 cursor-move move origin-top-left', {
+	class={clsx('absolute border border-slate-800 cursor-move move', {
 		'border-2': status !== 'idle'
 	})}
 	style="
@@ -196,6 +206,7 @@
 		width: {width}px;
 		height: {height}px;
 		transform: translate({x}px, {y}px) rotate({rotation}deg);
+		transform-origin: {transformOrigin};
 	"
 >
 	<div
@@ -226,8 +237,8 @@
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="18"
-				height="18"
+				width="12"
+				height="12"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -302,6 +313,6 @@
 	}
 
 	.rotate-control {
-		@apply -bottom-10 left-1/2 h-6 w-6 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
+		@apply -bottom-10 left-1/2 h-5 w-5 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
 	}
 </style>

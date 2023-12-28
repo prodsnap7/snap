@@ -12,6 +12,7 @@
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onRotate: (rotation: number) => void;
+		onMouseDown?: (event: MouseEvent) => void;
 	};
 
 	type State =
@@ -37,17 +38,18 @@
 		onMove,
 		onResize,
 		children,
+		onMouseDown,
 		onRotate
 	} = $props<Props>();
 
 	let center = $state<{ x: number; y: number }>({ x: 0, y: 0 });
 
 	function onmousedown(event: MouseEvent) {
-		console.log('onmousedown', event.target);
 		event.stopPropagation();
 		if (event.target instanceof HTMLElement) {
 			if (event.target.classList.contains('move')) {
 				status = 'moving';
+				onMouseDown?.(event);
 			} else if (event.target.classList.contains('resizing-br')) {
 				status = 'resizing-br';
 			} else if (event.target.classList.contains('resizing-bl')) {

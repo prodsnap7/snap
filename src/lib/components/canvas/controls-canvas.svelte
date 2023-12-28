@@ -101,10 +101,6 @@
     height: {canvas.height}px;
   "
 	>
-		<GridLines />
-		{#if store.selectedElements.elements.length > 0}
-			<SelectBar />
-		{/if}
 		{#each elements.elements as element}
 			<ElementBox
 				{element}
@@ -112,9 +108,15 @@
 				onSelect={selectElement}
 			/>
 		{/each}
+
 		<SelectControls />
 		{#if dragging}
 			<DragOverlay bounds={dragRect} />
+		{/if}
+
+		<GridLines />
+		{#if store.selectedElements.elements.length > 0}
+			<SelectBar />
 		{/if}
 	</div>
 </div>

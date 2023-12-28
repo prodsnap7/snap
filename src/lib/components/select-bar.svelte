@@ -38,7 +38,7 @@
       height: {store.selectedElements.bounds.height}px;
 			transform: rotate({store.selectedElements.rotation}deg);
     "
-	class="absolute"
+	class="absolute pointer-events-none"
 >
 	<div
 		style="
@@ -46,7 +46,7 @@
         top: -40px;
         transform: translateX(-50%);
       "
-		class="absolute origin-center shadow-xl"
+		class="absolute origin-center shadow-xl pointer-events-auto"
 	>
 		<div
 			class="p-1.5 px-2 gap-2 shadow-sm rounded flex items-center bg-white border border-gray-400"

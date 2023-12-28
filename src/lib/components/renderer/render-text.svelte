@@ -25,7 +25,10 @@
 		height: {text.height}px;
     letter-spacing: {text.letterSpacing}px;
     line-height: {text.lineHeight * text.fontSize}px;
-  "
+		text-transform: {text.uppercase ? 'uppercase' : 'none'};
+		transform: scale({text.scale});
+		transform-origin: top left;
+		"
 	>
 		{text.content}
 	</div>

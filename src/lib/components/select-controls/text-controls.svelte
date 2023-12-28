@@ -19,6 +19,15 @@
 		onMove: ({ x, y }: { x: number; y: number }) => void;
 	};
 	let { element, onRotate, onMove, onResize } = $props<Props>();
+
+	let input = $state<HTMLInputElement | null>(null);
+
+	$effect(() => {
+		if (input) {
+			input.focus();
+			input.select();
+		}
+	});
 </script>
 
 {#if element && element.state === 'editing'}
@@ -28,18 +37,22 @@
 		style="transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);"
 	>
 		<input
+			bind:this={input}
 			class="text-renderer border border-primary overflow-hidden whitespace-pre-wrap cursor-pointer outline-none user-select-none"
 			style="
         font-size: {element.fontSize}px;
         font-family: {element.fontFamily};
         font-weight: {element.fontWeight};
         font-style: {element.fontStyle};
-        color: blue;
+        color: {element.color};
         text-decoration: {element.decoration};
         text-align: {element.align};
         width: {element.width}px;
         letter-spacing: {element.letterSpacing}px;
         line-height: {element.lineHeight * element.fontSize}px;
+				text-transform: {element.uppercase ? 'uppercase' : 'none'};
+				transform: scale({element.scale});
+				transform-origin: top left;
       "
 			bind:value={element.content}
 		/>

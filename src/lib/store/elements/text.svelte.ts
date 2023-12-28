@@ -1,5 +1,6 @@
 import shortUUID from "short-uuid";
 import { BaseObject } from "..";
+import { getBounds } from "$lib/utils/bounds-utils";
 
 type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
@@ -25,10 +26,15 @@ export class TextBox extends BaseObject {
   rotation = $state(0);
   opacity = $state(1);
   height = $derived(this.lineHeight * this.fontSize);
+  _bounds = $derived(getBounds([this]));
   
   constructor(obj: Partial<TextBox>) {
     super(obj);
     Object.assign(this, obj);
+  }
+
+  get bounds(): { x: number; y: number; width: number; height: number } {
+    return this._bounds;
   }
 
   get colors() {

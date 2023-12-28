@@ -1,6 +1,7 @@
 // import type { MakeOneRequired } from "$lib/utils";
 import shortUUID from 'short-uuid';
 import { BaseObject, type IBaseObject } from './common.svelte';
+import { getBounds } from '$lib/utils/bounds-utils';
 
 export interface IShape extends IBaseObject {
 	stroke: string;
@@ -40,6 +41,7 @@ export class Shape extends BaseObject implements IShape {
 	strokeType = $state('solid');
 	colors = $derived([this.stroke, this.fill]);
 	_rotation = $state(0);
+	_bounds = $derived(getBounds([this]));
 
 	constructor(obj: Partial<Shape>) {
 		super(obj);
@@ -94,14 +96,8 @@ export class Shape extends BaseObject implements IShape {
 		this.height += height;
 	}
 
-	get bounds() {
-		const b = super.bounds;
-		return {
-			x: b.x,
-			y: b.y,
-			width: b.width - this.strokeWidth,
-			height: b.height - this.strokeWidth
-		};
+	get bounds(): { x: number; y: number; width: number; height: number } {
+		return this._bounds;
 	}
 }
 
@@ -123,7 +119,7 @@ export class PathShape extends BaseObject {
 	strokeLinejoin = $state('miter');
 	strokeDasharray = $state('');
 	_path = $state('');
-	// path = $derived(scalePathData(this._path, this.width, this.height, this.strokeWidth));
+	_bounds = $derived(getBounds([this]));
 	clipPathId = shortUUID.generate();
 	viewBox = $derived(
 		`${-this.strokeWidth} ${-this.strokeWidth} ${this.width + 2 * this.strokeWidth} ${
@@ -134,6 +130,10 @@ export class PathShape extends BaseObject {
 	constructor(obj: Partial<PathShape>) {
 		super(obj);
 		Object.assign(this, obj);
+	}
+
+	get bounds(): { x: number; y: number; width: number; height: number } {
+		return this._bounds;
 	}
 
 	get path() {
@@ -187,16 +187,6 @@ export class PathShape extends BaseObject {
 			strokeDasharray: this.strokeDasharray,
 			path: this._path
 		});
-	}
-
-	get bounds() {
-		const b = super.bounds;
-		return {
-			x: b.x,
-			y: b.y,
-			width: b.width - this.strokeWidth,
-			height: b.height - this.strokeWidth
-		};
 	}
 }
 

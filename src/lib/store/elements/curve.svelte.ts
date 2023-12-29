@@ -52,7 +52,7 @@ export class Curve extends BaseObject {
   type = "curve" as const;
   id = shortUUID.generate();
   markerId = shortUUID.generate();
-  stroke = $state("#a0a0a0");
+  stroke = $state("#4682b4");
   isQuadratic = $state(false);
   strokeWidth = $state(2);
   strokeDasharray = $state("");

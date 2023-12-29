@@ -86,4 +86,4 @@
 	<h2 class="font-bold">Text</h2>
 </div>
 
-<Button onclick={addTextElement} class="w-full text-md font-semibold">Add Some Text</Button>
+<Button onclick={addTextElement} variant="secondary" class="w-full text-lg">Add Some Text</Button>

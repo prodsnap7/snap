@@ -280,9 +280,7 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border border-slate-800 cursor-move move', {
-		'border-2': status !== 'idle'
-	})}
+	class={clsx('absolute border border-primary cursor-move move')}
 	style="
 		left: 0px;
 		top: 0px;
@@ -357,7 +355,7 @@
 
 <style lang="postcss">
 	.corner-control {
-		@apply h-2.5 w-2.5 cursor-grab rounded-sm border border-slate-600 bg-white hover:bg-slate-800;
+		@apply h-2.5 w-2.5 cursor-grab rounded-full border-2 border-primary bg-white hover:bg-primary;
 	}
 	.top-left {
 		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nw-resize;
@@ -376,7 +374,7 @@
 	}
 
 	.middle-control {
-		@apply cursor-grab rounded border border-slate-600 bg-white hover:bg-slate-800;
+		@apply cursor-grab rounded border-2 border-primary bg-white hover:bg-primary;
 	}
 
 	.top-middle {
@@ -396,6 +394,6 @@
 	}
 
 	.rotate-control {
-		@apply -bottom-10 left-1/2 h-5 w-5 -translate-x-1/2 cursor-rotate rounded-full border border-slate-400 bg-white text-slate-600 hover:bg-slate-800 hover:text-white;
+		@apply -bottom-10 left-1/2 h-5 w-5 -translate-x-1/2 cursor-rotate rounded-full border border-primary bg-white text-primary hover:bg-primary hover:text-white;
 	}
 </style>

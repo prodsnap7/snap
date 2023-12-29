@@ -29,7 +29,8 @@
 	{y2}
 	marker-end="url(#circle)"
 	marker-start="url(#circle)"
-	class={clsx('stroke-red-700 transition-opacity duration-400', {
+	stroke-dasharray="5, 5"
+	class={clsx('stroke-primary transition-opacity duration-800', {
 		'opacity-0': !isVisible
 	})}
 />

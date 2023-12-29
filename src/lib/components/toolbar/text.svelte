@@ -84,14 +84,69 @@
 	const fontSize = $derived(Math.ceil(element.fontSize) * element.scale);
 </script>
 
-<button
-	class="flex items-center justify-between px-1.5 py-1 w-32 rounded-sm border text-ellipsis hover:bg-secondary"
->
-	<span>
-		{element.fontFamily}
-	</span>
-	<CaretDown />
-</button>
+<Popover.Root portal="null">
+	<Popover.Trigger>
+		<Textbox size={28} />
+	</Popover.Trigger>
+
+	<Popover.Content class="w-60">
+		<div class="text-xs font-semibold my-2">Text Alignment</div>
+		<ToggleGroup.Root
+			value={element.align}
+			onValueChange={onTextAlignToggle}
+			size="sm"
+			type="single"
+			class="justify-start"
+		>
+			<ToggleGroup.Item value="left" aria-label="Align left">
+				<TextAlignLeft size={20} />
+			</ToggleGroup.Item>
+			<ToggleGroup.Item value="center" aria-label="Align center">
+				<TextAlignCenter size={20} />
+			</ToggleGroup.Item>
+			<ToggleGroup.Item value="right" aria-label="Align right">
+				<TextAlignRight size={20} />
+			</ToggleGroup.Item>
+			<ToggleGroup.Item value="justify" aria-label="Align justify">
+				<TextAlignJustify size={20} />
+			</ToggleGroup.Item>
+		</ToggleGroup.Root>
+
+		<div class="space-y-4 my-3">
+			<div class="flex items-center justify-between">
+				<label for="border width" class="text-xs font-semibold">Letter Spacing</label>
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.letterSpacing} />
+			</div>
+
+			<Slider
+				min={-30}
+				max={30}
+				step={0.1}
+				onValueChange={(val) => {
+					element.letterSpacing = val[0];
+				}}
+				value={[element.letterSpacing]}
+			/>
+		</div>
+
+		<div class="space-y-4 my-3">
+			<div class="flex items-center justify-between">
+				<label for="border width" class="text-xs font-semibold">Line Height</label>
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.lineHeight} />
+			</div>
+
+			<Slider
+				min={-50}
+				max={50}
+				step={0.1}
+				onValueChange={(val) => {
+					element.lineHeight = val[0];
+				}}
+				value={[element.lineHeight]}
+			/>
+		</div>
+	</Popover.Content>
+</Popover.Root>
 
 <Separator orientation="vertical" class="h-6" />
 
@@ -172,66 +227,11 @@
 
 <Separator orientation="vertical" class="h-6" />
 
-<Popover.Root portal="null">
-	<Popover.Trigger>
-		<Textbox size={28} />
-	</Popover.Trigger>
-
-	<Popover.Content class="w-60">
-		<div class="text-xs font-semibold my-2">Text Alignment</div>
-		<ToggleGroup.Root
-			value={element.align}
-			onValueChange={onTextAlignToggle}
-			size="sm"
-			type="single"
-			class="justify-start"
-		>
-			<ToggleGroup.Item value="left" aria-label="Align left">
-				<TextAlignLeft size={20} />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item value="center" aria-label="Align center">
-				<TextAlignCenter size={20} />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item value="right" aria-label="Align right">
-				<TextAlignRight size={20} />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item value="justify" aria-label="Align justify">
-				<TextAlignJustify size={20} />
-			</ToggleGroup.Item>
-		</ToggleGroup.Root>
-
-		<div class="space-y-4 my-3">
-			<div class="flex items-center justify-between">
-				<label for="border width" class="text-xs font-semibold">Letter Spacing</label>
-				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.letterSpacing} />
-			</div>
-
-			<Slider
-				min={-30}
-				max={30}
-				step={0.1}
-				onValueChange={(val) => {
-					element.letterSpacing = val[0];
-				}}
-				value={[element.letterSpacing]}
-			/>
-		</div>
-
-		<div class="space-y-4 my-3">
-			<div class="flex items-center justify-between">
-				<label for="border width" class="text-xs font-semibold">Line Height</label>
-				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.lineHeight} />
-			</div>
-
-			<Slider
-				min={-50}
-				max={50}
-				step={0.1}
-				onValueChange={(val) => {
-					element.lineHeight = val[0];
-				}}
-				value={[element.lineHeight]}
-			/>
-		</div>
-	</Popover.Content>
-</Popover.Root>
+<button
+	class="flex items-center justify-between px-1.5 py-1 w-32 rounded-sm border text-ellipsis hover:bg-secondary"
+>
+	<span>
+		{element.fontFamily}
+	</span>
+	<CaretDown />
+</button>

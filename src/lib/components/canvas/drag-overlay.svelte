@@ -13,6 +13,6 @@
 
 <div
 	id="drag-overlay"
-	class="absolute border border-gray-300 bg-gray-400/10"
+	class="absolute border border-primary bg-secondary/40"
 	style="left: {bounds.x}px; top: {bounds.y}px; width: {bounds.width}px; height: {bounds.height}px;"
 />

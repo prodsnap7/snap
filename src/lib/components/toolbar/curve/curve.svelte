@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { sidepanelStore } from '$lib/components/sidepanel/state.svelte';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
+	import { Input } from '$lib/components/ui/input';
 	import * as Popover from '$lib/components/ui/popover';
 	import type { Curve, MarkerType } from '$lib/store';
 	import clsx from 'clsx';
@@ -54,7 +55,7 @@
 <button
 	onclick={onStrokeClick}
 	class={clsx('w-6 h-6 rounded flex items-center justify-center border', {
-		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'stroke'
+		'border-primary': chosen === 'stroke'
 	})}
 >
 	<span style="color: {element.stroke}" class="w-6 h-6 rounded ring-4 ring-inset ring-current" />
@@ -66,8 +67,8 @@
 	<Popover.Trigger>
 		<button
 			onclick={onBorderClick}
-			class={clsx('flex rounded-full items-center justify-center', {
-				'bg-neutral-200': chosen === 'border'
+			class={clsx('flex border rounded-full items-center justify-center', {
+				'border-primary': chosen === 'border'
 			})}
 		>
 			<CircleDashed size={28} />
@@ -80,7 +81,7 @@
 					element.strokeWidth = 0;
 				}}
 				class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
-					'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': element.strokeWidth === 0
+					'border-primary': element.strokeWidth === 0
 				})}
 			>
 				<svg
@@ -101,8 +102,7 @@
 				<button
 					onclick={() => onStrokeStyleClick(dash)}
 					class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
-						'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700':
-							element.strokeDasharray === dash && element.strokeWidth
+						'border-primary': element.strokeDasharray === dash && element.strokeWidth
 					})}
 				>
 					<svg width={30} height={2}>
@@ -112,7 +112,7 @@
 							x2="30"
 							y2="0"
 							stroke-dasharray={dash}
-							stroke="black"
+							stroke="currentColor"
 							stroke-width="2"
 						/>
 					</svg>
@@ -123,7 +123,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Border Width</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
 			</div>
 
 			<Slider
@@ -144,8 +144,8 @@
 			onclick={() => {
 				chosen = 'marker';
 			}}
-			class={clsx('p-0', {
-				'bg-neutral-200': chosen === 'marker'
+			class={clsx('p-0 border', {
+				'border-primary': chosen === 'marker'
 			})}
 			variant="ghost"
 		>
@@ -159,7 +159,9 @@
 			{#each TYPES as type}
 				<Button
 					variant="ghost"
-					class="px-2 py-1.5"
+					class={clsx('px-2 py-1.5 border', {
+						'border-primary': element.startMarker === type
+					})}
 					onclick={() => {
           element.startMarker = type as MarkerType;
         }}
@@ -173,7 +175,9 @@
 		<div class="space-x-1">
 			{#each TYPES as type}
 				<Button
-					class="px-2 py-1.5"
+					class={clsx('px-2 py-1.5 border', {
+						'border-primary': element.endMarker === type
+					})}
 					variant="ghost"
 					onclick={() => {
           element.endMarker = type as MarkerType;
@@ -187,7 +191,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Size</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.markerSize} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.markerSize} />
 			</div>
 
 			<Slider

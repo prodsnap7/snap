@@ -37,7 +37,7 @@ export interface ICurve extends IBaseObject {
 export type PartialCurve = {
   type: "curve";
   points: IPoint[];
-  stroke: string;
+  stroke?: string;
   pathType?: "linear" | "quadratic" | "cubic";
   strokeWidth: number;
   strokeDasharray: string;
@@ -52,7 +52,7 @@ export class Curve extends BaseObject {
   type = "curve" as const;
   id = shortUUID.generate();
   markerId = shortUUID.generate();
-  stroke = $state("#000000");
+  stroke = $state("#a0a0a0");
   isQuadratic = $state(false);
   strokeWidth = $state(2);
   strokeDasharray = $state("");

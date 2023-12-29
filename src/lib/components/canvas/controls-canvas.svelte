@@ -84,7 +84,7 @@
 	role="button"
 	id="controls-canvas-container"
 	tabindex="0"
-	class="absolute inset-0 flex items-center justify-center"
+	class="absolute inset-0 flex items-center justify-center overflow-hidden"
 >
 	<div
 		id="controls-canvas"

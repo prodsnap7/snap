@@ -6,6 +6,7 @@
 	import { CircleDashed } from 'phosphor-svelte';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
+	import Input from '../ui/input/input.svelte';
 
 	type State = 'fill' | 'stroke' | 'border' | '';
 	let chosen = $state<State>('');
@@ -57,15 +58,15 @@
 
 <button
 	onclick={onFillClick}
-	class={clsx('w-6 h-6 rounded border border-gray-400', {
-		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'fill'
+	class={clsx('w-6 h-6 rounded border', {
+		'border-primary': chosen === 'fill'
 	})}
 	style="background-color: {element.fill}"
 ></button>
 <button
 	onclick={onStrokeClick}
 	class={clsx('w-6 h-6 rounded flex items-center justify-center border', {
-		'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': chosen === 'stroke'
+		'border-primary': chosen === 'stroke'
 	})}
 >
 	<span style="color: {element.stroke}" class="w-6 h-6 rounded ring-4 ring-inset ring-current" />
@@ -77,8 +78,8 @@
 	<Popover.Trigger>
 		<button
 			onclick={onBorderClick}
-			class={clsx('flex rounded-full items-center justify-center', {
-				'ring-4 ring-slate-200': chosen === 'border'
+			class={clsx('flex rounded-full border items-center justify-center', {
+				'border-primary': chosen === 'border'
 			})}
 		>
 			<CircleDashed size={28} />
@@ -92,7 +93,7 @@
 					element.strokeWidth = 0;
 				}}
 				class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
-					'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700': element.strokeWidth === 0
+					'border-primary': element.strokeWidth === 0
 				})}
 			>
 				<svg
@@ -113,8 +114,7 @@
 				<button
 					onclick={() => onStrokeStyleClick(style)}
 					class={clsx('rounded border w-12 h-8 flex items-center justify-center', {
-						'ring-2 ring-offset-2 ring-offset-gray-100 ring-slate-700':
-							element.strokeType === style && element.strokeWidth
+						'border-primary': element.strokeType === style && element.strokeWidth
 					})}
 				>
 					<svg width={30} height={2}>
@@ -124,7 +124,7 @@
 							x2="30"
 							y2="0"
 							stroke-dasharray={dash}
-							stroke="black"
+							stroke="currentColor"
 							stroke-width="2"
 						/>
 					</svg>
@@ -135,7 +135,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Border Width</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
 			</div>
 
 			<Slider
@@ -149,7 +149,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Border Radius</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.radius} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.radius} />
 			</div>
 
 			<Slider

@@ -6,6 +6,7 @@
 	import { CircleDashed } from 'phosphor-svelte';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
+	import Input from '../ui/input/input.svelte';
 
 	type State = 'fill' | 'stroke' | 'border' | '';
 	let chosen = $state<State>('');
@@ -125,7 +126,7 @@
 							x2="30"
 							y2="0"
 							stroke-dasharray={dash}
-							stroke="black"
+							stroke="currentColor"
 							stroke-width="2"
 						/>
 					</svg>
@@ -136,7 +137,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Border Width</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.strokeWidth} />
 			</div>
 
 			<Slider
@@ -150,7 +151,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Border Radius</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.radius} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.radius} />
 			</div>
 
 			<Slider

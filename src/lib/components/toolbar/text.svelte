@@ -23,6 +23,8 @@
 	import { Toggle } from '$lib/components/ui/toggle';
 	import Slider from '../ui/slider/slider.svelte';
 	import * as ToggleGroup from '../ui/toggle-group';
+	import Input from '../ui/input/input.svelte';
+	import Button from '../ui/button/button.svelte';
 
 	type Props = {
 		element: TextBox;
@@ -102,7 +104,7 @@
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Font Size</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" value={fontSize} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" value={fontSize} />
 			</div>
 
 			<Slider
@@ -119,10 +121,10 @@
 
 <Separator orientation="vertical" class="h-6" />
 
-<button onclick={onColorClick} class="flex flex-col items-center">
+<Button onclick={onColorClick} variant="ghost" class="p-1 border flex flex-col items-center">
 	<TextT size={22} color={element.color} />
 	<div class="w-6 h-2 rounded-sm bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500" />
-</button>
+</Button>
 
 <div class="space-x-0">
 	<Toggle
@@ -201,7 +203,7 @@
 		<div class="space-y-4 my-3">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Letter Spacing</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.letterSpacing} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.letterSpacing} />
 			</div>
 
 			<Slider
@@ -218,7 +220,7 @@
 		<div class="space-y-4 my-3">
 			<div class="flex items-center justify-between">
 				<label for="border width" class="text-xs font-semibold">Line Height</label>
-				<input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.lineHeight} />
+				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.lineHeight} />
 			</div>
 
 			<Slider

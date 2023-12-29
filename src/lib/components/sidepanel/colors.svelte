@@ -6,6 +6,7 @@
 	import Color from 'color';
 	import Pickr from '@simonwep/pickr';
 	import { sidepanelStore } from './state.svelte';
+	import Input from '../ui/input/input.svelte';
 
 	const COLORS = [
 		'#ffffff',
@@ -89,7 +90,7 @@
 
 <div class="p-2 my-4 rounded-sm flex items-center gap-2 border border-gray-400">
 	<MagnifyingGlass color="#262626" size={24} />
-	<input
+	<Input
 		class="h-6 outline-none"
 		bind:value={searchVal}
 		{onkeypress}

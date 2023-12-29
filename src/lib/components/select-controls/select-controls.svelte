@@ -18,30 +18,7 @@
 	}
 	const points = $derived(getPoints());
 
-	function onMove({ x, y }: { x: number; y: number }) {
-		const currentEl = {
-			x: store.selectedElements.bounds.x + x,
-			y: store.selectedElements.bounds.y + y,
-			width: store.selectedElements.bounds.width,
-			height: store.selectedElements.bounds.height
-		};
-
-		const otherEls = [
-			...store.unselectedElements.map((el) => el.bounds),
-			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
-		];
-
-		const snap = snapToGrid(currentEl, otherEls, 3);
-
-		store.selectedElements.updateBounds({
-			x: snap.x - store.selectedElements.bounds.x,
-			y: snap.y - store.selectedElements.bounds.y,
-			width: 0,
-			height: 0
-		});
-	}
-
-	function onResize({
+	function updateBounds({
 		x,
 		y,
 		width,
@@ -64,7 +41,7 @@
 			{ x: 0, y: 0, width: store.canvas.width, height: store.canvas.height }
 		];
 
-		const snap = snapToGrid(currentEl, otherEls, 5);
+		const snap = snapToGrid(currentEl, otherEls, 2);
 
 		store.selectedElements.updateBounds({
 			x: snap.x - store.selectedElements.bounds.x,
@@ -72,6 +49,24 @@
 			width: snap.width - store.selectedElements.bounds.width,
 			height: snap.height - store.selectedElements.bounds.height
 		});
+	}
+
+	function onMove({ x, y }: { x: number; y: number }) {
+		updateBounds({ x, y, width: 0, height: 0 });
+	}
+
+	function onResize({
+		x,
+		y,
+		width,
+		height
+	}: {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	}) {
+		updateBounds({ x, y, width, height });
 	}
 
 	function onRotate(rotation: number) {

@@ -3,7 +3,6 @@ import { Curve, Point, type MarkerType, type PartialCurve } from '$lib/store/ele
 const CURVES: PartialCurve[] = [
 	{
 		type: 'curve',
-		stroke: '#262626',
 		strokeWidth: 1,
 		strokeDasharray: '',
 		points: [
@@ -14,7 +13,6 @@ const CURVES: PartialCurve[] = [
 	{
 		type: 'curve',
 		strokeWidth: 1,
-		stroke: 'black',
 		strokeDasharray: '',
 		startMarker: 'fill-arrow',
 		endMarker: 'outline-circle',
@@ -39,7 +37,6 @@ const CURVES: PartialCurve[] = [
 	},
 	{
 		type: 'curve',
-		stroke: '#262626',
 		strokeWidth: 1,
 		startMarker: 'fill-arrow',
 		strokeDasharray: '',
@@ -60,7 +57,6 @@ const CURVES: PartialCurve[] = [
 	},
 	{
 		type: 'curve',
-		stroke: '#262626',
 		strokeWidth: 1,
 		pathType: 'quadratic',
 		strokeDasharray: '',
@@ -81,7 +77,6 @@ const CURVES: PartialCurve[] = [
 	},
 	{
 		type: 'curve',
-		stroke: '#262626',
 		strokeWidth: 1,
 		strokeDasharray: '',
 		points: [
@@ -101,7 +96,6 @@ const CURVES: PartialCurve[] = [
 	},
 	{
 		type: 'curve',
-		stroke: '#262626',
 		strokeWidth: 1,
 		pathType: 'quadratic',
 		strokeDasharray: '',
@@ -137,7 +131,6 @@ export const StaightLines = markers.flatMap((startMarker) =>
 	markers.map((endMarker) => ({
 		strokeWidth: 1,
 		strokeDasharray: '',
-		stroke: 'black',
 		startMarker: startMarker,
 		endMarker: endMarker,
 		points: [
@@ -156,7 +149,6 @@ export const StaightLines = markers.flatMap((startMarker) =>
 export const CURVES_DATA = [
 	...StaightLines,
 	{
-		stroke: 'black',
 		startMarker: 'none' as MarkerType,
 		endMarker: 'none' as MarkerType,
 		points: [
@@ -175,7 +167,6 @@ export const CURVES_DATA = [
 		]
 	},
 	{
-		stroke: 'black',
 		startMarker: 'none' as MarkerType,
 		endMarker: 'none' as MarkerType,
 		points: [
@@ -195,7 +186,6 @@ export const CURVES_DATA = [
 	},
 	{
 		isQuadratic: true,
-		stroke: 'black',
 		startMarker: 'none' as MarkerType,
 		endMarker: 'none' as MarkerType,
 		points: [
@@ -215,7 +205,6 @@ export const CURVES_DATA = [
 	},
 	{
 		isQuadratic: true,
-		stroke: 'black',
 		startMarker: 'fill-arrow' as MarkerType,
 		endMarker: 'fill-circle' as MarkerType,
 		points: [
@@ -239,7 +228,6 @@ export const CURVES_DATA = [
 	},
 	{
 		isQuadratic: true,
-		stroke: 'black',
 		startMarker: 'fill-arrow' as MarkerType,
 		endMarker: 'outline-circle' as MarkerType,
 		points: [
@@ -263,7 +251,6 @@ export const CURVES_DATA = [
 	},
 	{
 		isQuadratic: false,
-		stroke: 'black',
 		startMarker: 'none' as MarkerType,
 		endMarker: 'none' as MarkerType,
 		points: [
@@ -287,7 +274,6 @@ export const CURVES_DATA = [
 	},
 	{
 		isQuadratic: true,
-		stroke: 'black',
 		startMarker: 'none' as MarkerType,
 		endMarker: 'none' as MarkerType,
 		points: [

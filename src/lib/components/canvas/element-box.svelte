@@ -44,7 +44,7 @@
 		role="button"
 		tabindex="0"
 		class={clsx(
-			'absolute cursor-pointer origin-top-left border border-transparent hover:border-slate-700',
+			'absolute cursor-pointer origin-center border border-transparent hover:border-slate-700',
 			{
 				'border-slate-700': store.highlightedElements.elements.includes(element)
 			}

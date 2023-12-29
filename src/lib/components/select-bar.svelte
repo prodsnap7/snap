@@ -49,7 +49,7 @@
 		class="absolute origin-center shadow-xl pointer-events-auto"
 	>
 		<div
-			class="p-1.5 px-2 gap-2 shadow-sm rounded flex items-center bg-white border border-gray-400"
+			class="p-1.5 px-2 gap-2 shadow-sm rounded flex items-center bg-secondary border border-gray-400"
 		>
 			{#if selected.length > 1}
 				<button onclick={groupSelected} class="text-xs select-none"> Group </button>

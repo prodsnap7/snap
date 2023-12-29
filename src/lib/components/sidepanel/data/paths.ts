@@ -35,7 +35,7 @@ export function createPathfromData(pathData: string): PathShape {
       y: 0,
       fill: "#efefef",
       path: pathData,
-      stroke: "#1e293b",
+      stroke: "#a0a0a0",
       strokeWidth: 2,
       strokeDasharray: "",
       strokeLinecap: "round" as const,

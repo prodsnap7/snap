@@ -99,22 +99,34 @@
 			// moveHandler(ratio, movementX, movementY);
 		}
 
+		function rotatePoint(x: number, y: number, angle: number) {
+			const radians = (Math.PI / 180) * angle;
+			const cos = Math.cos(radians);
+			const sin = Math.sin(radians);
+			return {
+				x: x * cos - y * sin,
+				y: x * sin + y * cos
+			};
+		}
+
 		function moveHandler(ratio: number, e: MouseEvent) {
-			const movementX = e.movementX;
-			const movementY = e.movementY;
 			const resizeProportionally = (
 				deltaX: number,
 				deltaY: number,
 				anchorX: number,
 				anchorY: number
 			) => {
-				const width = movementX > movementY ? deltaX : deltaX * ratio;
-				const height = movementX > movementY ? deltaY / ratio : deltaY;
+				const width = e.movementX > e.movementY ? deltaX : deltaX * ratio;
+				const height = e.movementX > e.movementY ? deltaY / ratio : deltaY;
 				onResize({ x: anchorX, y: anchorY, width, height });
 			};
 
+			const adjustedMovement = rotatePoint(e.movementX, e.movementY, -rotation);
+			const movementX = adjustedMovement.x;
+			const movementY = adjustedMovement.y;
+
 			if (status === 'moving') {
-				onMove({ x: movementX, y: movementY, width: 0, height: 0 });
+				onMove({ x: e.movementX, y: e.movementY, width: 0, height: 0 });
 			} else if (status === 'resizing-br') {
 				resizeProportionally(movementX, movementX, 0, 0);
 			} else if (status === 'resizing-tl') {
@@ -182,6 +194,75 @@
 	let y = $derived(bounds.y);
 	let width = $derived(bounds.width);
 	let height = $derived(bounds.height);
+
+	function updateCursorStyles(rotationAngle: number): void {
+		const normalizeAngle = (angle: number): number => {
+			angle = angle % 360;
+			return angle < 0 ? angle + 360 : angle;
+		};
+
+		const adjustedAngle = normalizeAngle(rotationAngle);
+
+		const cursorMap: { [key: number]: { [key: string]: string } } = {
+			0: {
+				'top-middle': 'ns-resize',
+				'bottom-middle': 'ns-resize',
+				'left-middle': 'ew-resize',
+				'right-middle': 'ew-resize',
+				'top-left': 'nwse-resize',
+				'top-right': 'nesw-resize',
+				'bottom-left': 'nesw-resize',
+				'bottom-right': 'nwse-resize'
+			},
+			90: {
+				'top-middle': 'ew-resize',
+				'bottom-middle': 'ew-resize',
+				'left-middle': 'ns-resize',
+				'right-middle': 'ns-resize',
+				'top-left': 'nesw-resize',
+				'top-right': 'nwse-resize',
+				'bottom-left': 'nwse-resize',
+				'bottom-right': 'nesw-resize'
+			},
+			180: {
+				'top-middle': 'ns-resize',
+				'bottom-middle': 'ns-resize',
+				'left-middle': 'ew-resize',
+				'right-middle': 'ew-resize',
+				'top-left': 'nwse-resize',
+				'top-right': 'nesw-resize',
+				'bottom-left': 'nesw-resize',
+				'bottom-right': 'nwse-resize'
+			},
+			270: {
+				'top-middle': 'ew-resize',
+				'bottom-middle': 'ew-resize',
+				'left-middle': 'ns-resize',
+				'right-middle': 'ns-resize',
+				'top-left': 'nesw-resize',
+				'top-right': 'nwse-resize',
+				'bottom-left': 'nwse-resize',
+				'bottom-right': 'nesw-resize'
+			}
+		};
+
+		const closestAngle = [0, 90, 180, 270].reduce((prev, curr) =>
+			Math.abs(curr - adjustedAngle) < Math.abs(prev - adjustedAngle) ? curr : prev
+		);
+
+		const cursors = cursorMap[closestAngle];
+
+		for (const handle in cursors) {
+			const element = document.querySelector(`.${handle}`) as HTMLElement;
+			if (element) {
+				element.style.cursor = cursors[handle];
+			}
+		}
+	}
+
+	$effect(() => {
+		updateCursorStyles(rotation);
+	});
 </script>
 
 {#snippet controller(classes)}

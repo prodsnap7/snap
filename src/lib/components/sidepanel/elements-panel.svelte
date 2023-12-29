@@ -5,6 +5,8 @@
 	import { curves } from './data/curves';
 	import Button from '../ui/button/button.svelte';
 	import { sidepanelStore } from './state.svelte';
+	import { createQuery } from '@tanstack/svelte-query';
+	import axios from 'axios';
 
 	let scale = 0.6;
 
@@ -23,6 +25,24 @@
 	}
 
 	const fourCurves = curves.slice(0, 5);
+
+	let photos = $state([]);
+
+	const photosQuery = createQuery({
+		queryKey: ['photos'],
+		queryFn: async () => {
+			const pexelsUrl = 'https://api.pexels.com/v1/search?query=bag&per_page=20&page=1';
+
+			// make the request to the Pexels API with the API key
+			const res = await axios.get(pexelsUrl, {
+				headers: {
+					Authorization: import.meta.env.VITE_PEXELS_API_KEY
+				}
+			});
+
+			return res.data.photos;
+		}
+	});
 </script>
 
 <div class="mb-4 flex items-center justify-between">
@@ -86,4 +106,30 @@
 	<h2 class="font-bold">Text</h2>
 </div>
 
-<Button onclick={addTextElement} variant="secondary" class="w-full text-lg">Add Some Text</Button>
+<Button onclick={addTextElement} variant="secondary" class="w-full text-md border"
+	>Add Some Text</Button
+>
+
+{#if $photosQuery.isLoading}
+	Loading...
+{:else if $photosQuery.isError}
+	{$photosQuery.error.message}
+{:else}
+	<div class="my-4 flex items-center justify-between">
+		<h2 class="font-bold">Photos</h2>
+		<Button
+			onclick={() => {
+				sidepanelStore.state = 'all-shapes';
+			}}
+			variant="ghost"
+			size="sm"
+			class="text-xs">See All</Button
+		>
+	</div>
+
+	<div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
+		{#each $photosQuery.data as photo}
+			<img src={photo.src.tiny} alt={photo.photographer} class="h-24 rounded-sm" />
+		{/each}
+	</div>
+{/if}

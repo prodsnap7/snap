@@ -19,6 +19,7 @@
 		text.fontFamily;
 		text.letterSpacing;
 		text.uppercase;
+		text.width;
 
 		text.height = textRef?.clientHeight || text.height;
 	});

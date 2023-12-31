@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { type CanvasElement, Curve, Shape, Group, PathShape, TextBox } from '$lib/store';
+	import { type CanvasElement, Curve, Shape, Group, PathShape, TextBox, Image } from '$lib/store';
 	import RenderCurve from './render-curve';
 	import RenderGroup from './render-group/render-group.svelte';
+	import RenderImage from './render-image.svelte';
 	import RenderPathShape from './render-path-shape.svelte';
 	import RenderShape from './render-shape.svelte';
 	import RenderText from './render-text.svelte';
@@ -30,6 +31,14 @@
 			offset.y}px) rotate({element.rotation}deg);"
 	>
 		<RenderShape {scale} shape={element} />
+	</div>
+{:else if element instanceof Image}
+	<div
+		class="absolute top-0 left-0 origin-center"
+		style="transform: translate({element.x - offset.x}px, {element.y -
+			offset.y}px) rotate({element.rotation}deg);"
+	>
+		<RenderImage {scale} {element} />
 	</div>
 {:else if element instanceof Curve}
 	<div class="absolute origin-center inset-0">

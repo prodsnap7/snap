@@ -1,4 +1,5 @@
-import type { Curve, TextBox, Group, IShape, PartialCurve, Shape, PartialShape, PathShape } from "..";
+import shortUUID from "short-uuid";
+import type { Curve, TextBox, Group, Image, PartialCurve, Shape, PartialShape, PathShape } from "..";
 
 export interface IBaseObject {
   x: number;
@@ -15,12 +16,13 @@ export interface IBaseMethods {
 }
 
 
-export type CanvasElement = Shape | Curve | Group | TextBox | PathShape;
+export type CanvasElement = Shape | Curve | Group | TextBox | PathShape | Image;
 export type CanvasObject = PartialShape | PartialCurve
 
 export abstract class BaseObject {
   opacity = $state(1);
   scale = $state(1);
+  id = shortUUID.generate();
 
   constructor(obj: Partial<BaseObject>) {
     if (obj.opacity) {

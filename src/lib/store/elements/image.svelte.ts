@@ -3,9 +3,11 @@ import { BaseObject } from '..';
 
 interface IClipShape {
 	get clip(): string;
+	get rect(): { x: number; y: number; width: number; height: number };
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }): void;
 }
 
-class ImageClip {
+class ImageClip implements IClipShape {
 	stroke = $state('#000000');
 	strokeWidth = $state(0);
   private shape: IClipShape;
@@ -21,6 +23,14 @@ class ImageClip {
   get clip(): string {
     return this.shape.clip;
   }
+
+	get rect() {
+		return this.shape.rect;
+	}
+
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		this.shape.updateBounds({ x, y, width, height });
+	}
 }
 
 export class RectangleShape implements IClipShape {
@@ -49,6 +59,22 @@ export class RectangleShape implements IClipShape {
       ${this.x}px ${this.y + this.height}px
     )`;
 	}
+
+	get rect() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height
+		};
+	}
+
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		this.x += x;
+		this.y += y;
+		this.width += width;
+		this.height += height;
+	}
 }
 
 export class CircleShape implements IClipShape {
@@ -59,15 +85,31 @@ export class CircleShape implements IClipShape {
 	constructor(
 		x: number,
 		y: number,
-		radius: number
+		width: number,
+		height: number,
 	) {
     this.x = x;
     this.y = y;
-    this.radius = radius;
+    this.radius = Math.max(width, height)/2;
   }
 
 	get clip(): string {
-		return `circle(${this.radius}px at ${this.x}px ${this.y}px)`;
+		return `circle(${this.radius}px at ${this.x + this.radius}px ${this.y + this.radius}px)`;
+	}
+
+	get rect() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.radius * 2,
+			height: this.radius * 2
+		};
+	}
+
+	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		this.x += x;
+		this.y += y;
+		this.radius += Math.max(width, height)/2;
 	}
 }
 
@@ -82,15 +124,16 @@ export class Image extends BaseObject {
 	public_id = $state('');
 	thumb_url = $state('');
 	alt = $state('');
-	clip: ImageClip;
+	clipPath: ImageClip = $state(new ImageClip(new RectangleShape(0, 0, 100, 100)));
 	rotation = $state(0);
   _bounds = $derived(getBounds([this]));
 
 	constructor(obj: Partial<Image>) {
 		super(obj);
 		Object.assign(this, obj);
-		this.clip = new ImageClip(
-      new RectangleShape(this.x, this.y, this.width, this.height)
+		this.clipPath = new ImageClip(
+      // new RectangleShape(this.x, this.y, this.width, this.height)
+			new CircleShape(this.x, this.y, this.width, this.height)
     );
 	}
 
@@ -100,11 +143,11 @@ export class Image extends BaseObject {
 
 	get rect() {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
-			height: this.height
-		};
+			x: this.x + this.clipPath.rect.x,
+			y: this.y + this.clipPath.rect.y,
+			width: this.clipPath.rect.width,
+			height: this.clipPath.rect.height
+		}
 	}
 
 	clone(): Image {
@@ -128,5 +171,6 @@ export class Image extends BaseObject {
 		this.y += y;
 		this.width += width;
 		this.height += height;
+		this.clipPath.updateBounds({ x: 0, y: 0, width, height });
 	}
 }

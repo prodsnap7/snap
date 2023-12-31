@@ -9,13 +9,19 @@
 	const { element, scale = 1 } = $props<Props>();
 </script>
 
-<img
-	id={element.id}
-	src={element.url}
-	alt={element.alt}
-	class="origin-center object-contain"
-	style="
-      width: {element.width * scale}px;
-      height: {element.height * scale}px;
+<div
+	style="width: {element.rect.width}px; height: {element.rect.height}px"
+	class="absolute inset-0 image-renderer"
+>
+	<img
+		id={element.id}
+		src={element.url}
+		alt={element.alt}
+		class="origin-center"
+		style="
+      width: {element.rect.width * scale}px;
+      height: {element.rect.height * scale}px;
+			clip-path: {element.clipPath.clip}
     "
-/>
+	/>
+</div>

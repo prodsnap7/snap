@@ -90,7 +90,7 @@ export class CircleShape implements IClipShape {
 	) {
     this.x = x;
     this.y = y;
-    this.radius = Math.max(width, height)/2;
+    this.radius = Math.min(width, height)/2;
   }
 
 	get clip(): string {
@@ -109,13 +109,13 @@ export class CircleShape implements IClipShape {
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		this.x += x;
 		this.y += y;
-		this.radius += Math.max(width, height)/2;
+		this.radius += Math.min(width, height)/2;
 	}
 }
 
 export class Image extends BaseObject {
 	colors = [''];
-	type = 'image';
+	type = 'image' as const;
 	x = $state(0);
 	y = $state(0);
 	width = $state(100);

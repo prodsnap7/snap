@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Canvas from '$lib/components/canvas/canvas.svelte';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
+	import CropCanvas from '$lib/components/canvas/crop-canvas.svelte';
 	import { Sidepanel } from '$lib/components/sidepanel';
 	import Toolbar from '$lib/components/toolbar/toolbar.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { store } from '$lib/store';
+	import { canvasStore, store } from '$lib/store';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -33,7 +34,11 @@
 
 			<div class="flex-1 flex items-center justify-center relative">
 				<Canvas />
-				<ControlsCanvas />
+				{#if canvasStore.state === 'cropping'}
+					<CropCanvas />
+				{:else}
+					<ControlsCanvas />
+				{/if}
 			</div>
 		</section>
 	</main>

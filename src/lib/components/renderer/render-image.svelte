@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Image } from '$lib/store';
+	import { activeElementStore, type Image, canvasStore } from '$lib/store';
 
 	type Props = {
 		element: Image;
@@ -7,21 +7,24 @@
 	};
 
 	const { element, scale = 1 } = $props<Props>();
+	const isCropping = $derived(
+		canvasStore.state === 'cropping' && activeElementStore.element === element
+	);
+
+	$inspect(element.clipPath.rect, isCropping);
 </script>
 
-<div
-	style="width: {element.rect.width}px; height: {element.rect.height}px"
-	class="absolute inset-0 image-renderer"
->
+{#if !isCropping}
 	<img
-		id={element.id}
+		id={`image-${element.id}`}
 		src={element.url}
 		alt={element.alt}
-		class="origin-center"
+		class="object-cover absolute left-0 top-0 origin-center"
 		style="
-      width: {element.rect.width * scale}px;
-      height: {element.rect.height * scale}px;
+			width: {element.width}px;
+			height: {element.height}px;
+			transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
 			clip-path: {element.clipPath.clip}
-    "
+		"
 	/>
-</div>
+{/if}

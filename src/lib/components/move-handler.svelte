@@ -280,7 +280,9 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border border-primary cursor-move move')}
+	class={clsx('absolute border hover:border-solid border-primary cursor-move move', {
+		'border-dashed': status === 'idle'
+	})}
 	style="
 		left: 0px;
 		top: 0px;
@@ -355,7 +357,7 @@
 
 <style lang="postcss">
 	.corner-control {
-		@apply h-2.5 w-2.5 cursor-grab rounded-full border-2 border-primary bg-white hover:bg-primary;
+		@apply h-3 w-3 cursor-grab rounded-full border border-primary bg-white hover:bg-primary;
 	}
 	.top-left {
 		@apply left-0 top-0 -translate-x-1/2 -translate-y-1/2 cursor-nw-resize;
@@ -374,23 +376,23 @@
 	}
 
 	.middle-control {
-		@apply cursor-grab rounded border-2 border-primary bg-white hover:bg-primary;
+		@apply cursor-grab rounded border border-primary bg-white hover:bg-primary;
 	}
 
 	.top-middle {
-		@apply left-1/2 top-0 h-1.5 w-4 -translate-x-1/2 -translate-y-1/2 cursor-n-resize;
+		@apply left-1/2 top-0 h-1.5 w-5 -translate-x-1/2 -translate-y-1/2 cursor-n-resize;
 	}
 
 	.bottom-middle {
-		@apply bottom-0 left-1/2 h-1.5 w-4 -translate-x-1/2 translate-y-1/2 cursor-s-resize;
+		@apply bottom-0 left-1/2 h-1.5 w-5 -translate-x-1/2 translate-y-1/2 cursor-s-resize;
 	}
 
 	.left-middle {
-		@apply left-0 top-1/2 h-4 w-1.5 -translate-x-1/2 -translate-y-1/2 cursor-w-resize;
+		@apply left-0 top-1/2 h-5 w-1.5 -translate-x-1/2 -translate-y-1/2 cursor-w-resize;
 	}
 
 	.right-middle {
-		@apply right-0 top-1/2 h-4 w-1.5 -translate-y-1/2 translate-x-1/2 cursor-e-resize;
+		@apply right-0 top-1/2 h-5 w-1.5 -translate-y-1/2 translate-x-1/2 cursor-e-resize;
 	}
 
 	.rotate-control {

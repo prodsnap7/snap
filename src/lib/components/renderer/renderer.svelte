@@ -33,13 +33,7 @@
 		<RenderShape {scale} shape={element} />
 	</div>
 {:else if element instanceof Image}
-	<div
-		class="absolute top-0 left-0 origin-center"
-		style="transform: translate({element.rect.x - offset.x}px, {element.rect.y -
-			offset.y}px) rotate({element.rotation}deg);"
-	>
-		<RenderImage {scale} {element} />
-	</div>
+	<RenderImage {scale} {element} />
 {:else if element instanceof Curve}
 	<div class="absolute origin-center inset-0">
 		<RenderCurve {scale} curve={element} />

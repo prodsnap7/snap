@@ -58,10 +58,27 @@
 				<MoveHandler
 					bounds={image.clipPath.rect}
 					rotation={image.rotation}
+					exclude={['rotating']}
 					onRotate={() => {}}
 					{onMove}
 					{onResize}
 				/>
+				<div
+					class="pointer-events-none absolute top-0 h-full w-px bg-white opacity-50"
+					style="transform: translate({image.width / 4}px, 0px);"
+				></div>
+				<div
+					class="pointer-events-none absolute top-0 h-full w-px bg-white opacity-50"
+					style="transform: translate({(image.width * 3) / 4}px, 0px);"
+				></div>
+				<div
+					class="pointer-events-none absolute top-0 h-px w-full bg-white opacity-50"
+					style="transform: translate(0px, {(image.height * 1) / 4}px);"
+				></div>
+				<div
+					class="pointer-events-none absolute top-0 h-px w-full bg-white opacity-50"
+					style="transform: translate(0px, {(image.height * 3) / 4}px);"
+				></div>
 			</div>
 		</div>
 		"

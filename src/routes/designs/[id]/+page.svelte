@@ -7,6 +7,11 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { canvasStore, store } from '$lib/store';
 	import type { PageData } from './$types';
+	import Logo from '$lib/components/logo-mini.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Menubar from '$lib/components/ui/menubar';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { ArrowUUpLeft, ArrowUUpRight } from 'phosphor-svelte';
 
 	export let data: PageData;
 	store.init(data.design);
@@ -14,7 +19,51 @@
 
 <div class="w-screen h-screen flex flex-col">
 	<header class="sticky top-0 z-50 w-full border-b bg-background/95 shadow-sm backdrop-blur">
-		<div class="container flex h-14 items-center">
+		<div class="px-4 flex h-14 gap-8 items-center text-primary">
+			<Logo />
+
+			<Button variant="ghost" class="text-sm">Home</Button>
+
+			<Menubar.Root class="p-0 shadow-none rounded-none border-none">
+				<Menubar.Menu>
+					<Menubar.Trigger>
+						<Button variant="ghost" class="text-sm">File</Button>
+					</Menubar.Trigger>
+					<Menubar.Content>
+						<Menubar.Item>
+							New Tab <Menubar.Shortcut>⌘T</Menubar.Shortcut>
+						</Menubar.Item>
+						<Menubar.Item>
+							New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
+						</Menubar.Item>
+						<Menubar.Item>New Incognito Window</Menubar.Item>
+						<Menubar.Separator />
+						<Menubar.Sub>
+							<Menubar.SubTrigger>Share</Menubar.SubTrigger>
+							<Menubar.SubContent>
+								<Menubar.Item>Email link</Menubar.Item>
+								<Menubar.Item>Messages</Menubar.Item>
+								<Menubar.Item>Notes</Menubar.Item>
+							</Menubar.SubContent>
+						</Menubar.Sub>
+						<Menubar.Separator />
+						<Menubar.Item>
+							Print... <Menubar.Shortcut>⌘P</Menubar.Shortcut>
+						</Menubar.Item>
+					</Menubar.Content>
+				</Menubar.Menu>
+			</Menubar.Root>
+
+			<div class="flex items-center gap-2 w-28">
+				<Separator class="h-6" orientation="vertical" />
+				<Button variant="ghost">
+					<ArrowUUpLeft size={20} />
+				</Button>
+				<Button variant="ghost">
+					<ArrowUUpRight size={20} />
+				</Button>
+				<Separator class="h-6" orientation="vertical" />
+			</div>
 			<div class="mr-4 md:flex">
 				<Input class="px-1 text-sm h-8" value={store.name} />
 			</div>

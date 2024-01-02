@@ -11,7 +11,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Menubar from '$lib/components/ui/menubar';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { ArrowUUpLeft, ArrowUUpRight } from 'phosphor-svelte';
+	import { ArrowUUpLeft, ArrowUUpRight, Folder } from 'phosphor-svelte';
 
 	export let data: PageData;
 	store.init(data.design);
@@ -31,12 +31,15 @@
 					</Menubar.Trigger>
 					<Menubar.Content>
 						<Menubar.Item>
-							New Tab <Menubar.Shortcut>⌘T</Menubar.Shortcut>
+							Save <Menubar.Shortcut>⌘S</Menubar.Shortcut>
 						</Menubar.Item>
 						<Menubar.Item>
-							New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
+							Save to Folder
+							<Menubar.Shortcut>
+								<Folder size={16} />
+							</Menubar.Shortcut>
 						</Menubar.Item>
-						<Menubar.Item>New Incognito Window</Menubar.Item>
+						<Menubar.Item>New Design</Menubar.Item>
 						<Menubar.Separator />
 						<Menubar.Sub>
 							<Menubar.SubTrigger>Share</Menubar.SubTrigger>

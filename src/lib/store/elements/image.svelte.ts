@@ -2,6 +2,8 @@ import { getBounds } from '$lib/utils/bounds-utils';
 import { BaseObject } from '..';
 
 interface IClipShape {
+	get type(): 'circle' | 'rectangle';
+	set type(type: 'circle' | 'rectangle');
 	get clip(): string;
 	get rect(): { x: number; y: number; width: number; height: number };
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }): void;
@@ -10,7 +12,7 @@ interface IClipShape {
 class ImageClip implements IClipShape {
 	stroke = $state('#000000');
 	strokeWidth = $state(0);
-  private shape: IClipShape;
+  private shape: IClipShape = $state(new RectangleShape(0, 0, 100, 100));
 
 	constructor(shape: IClipShape) {
     this.shape = shape;
@@ -24,8 +26,24 @@ class ImageClip implements IClipShape {
     return this.shape.clip;
   }
 
+	setType(type: 'circle' | 'rectangle') {
+		if (type === this.shape.type) return;
+
+		if (type === 'circle') {
+			const { x, y, width, height } = this.shape.rect;
+			this.shape = new CircleShape(x, y, width, height);
+		} else {
+			const { x, y, width, height } = this.shape.rect;
+			this.shape = new RectangleShape(x, y, width, height);
+		}
+	}
+
 	get rect() {
 		return this.shape.rect;
+	}
+
+	get type() {
+		return this.shape.type;
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
@@ -34,6 +52,7 @@ class ImageClip implements IClipShape {
 }
 
 export class RectangleShape implements IClipShape {
+	type = 'rectangle' as const;
   x = $state(0);
 	y = $state(0);
 	width = $state(100);
@@ -79,6 +98,7 @@ export class RectangleShape implements IClipShape {
 
 export class CircleShape implements IClipShape {
   x = $state(0);
+	type = 'circle' as const;
   y = $state(0);
   radius = $state(100);
 

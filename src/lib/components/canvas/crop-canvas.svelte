@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { canvasStore, activeElementStore } from '$lib/store';
+	import { Circle, Rectangle } from 'phosphor-svelte';
 	import MoveHandler from '../move-handler.svelte';
+	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
 	let image = $derived(activeElementStore.element);
 
@@ -39,6 +41,35 @@
 				style="left: {image.x}px; top: {image.y}px; width: {image.width}px; height: {image.height}px;"
 				class="absolute border border-primary transform origin-center"
 			>
+				<div
+					style="
+					left: 50%;
+					top: -60px;
+					transform: translateX(-50%);
+				"
+					class="absolute origin-center shadow-xl pointer-events-auto"
+				>
+					<div
+						class="p-1.5 px-2 gap-2 shadow-sm rounded z-10 flex items-center bg-background border border-primary"
+					>
+						<ToggleGroup.Root
+							value={image.clipPath.type}
+							onValueChange={(val) => {
+								if (image && val && image.type === 'image') {
+									image.clipPath.setType(val as 'circle' | 'rectangle');
+								}
+							}}
+							type="single"
+						>
+							<ToggleGroup.Item value="circle">
+								<Circle size={15} />
+							</ToggleGroup.Item>
+							<ToggleGroup.Item value="rectangle">
+								<Rectangle size={15} />
+							</ToggleGroup.Item>
+						</ToggleGroup.Root>
+					</div>
+				</div>
 				<img
 					id={`image-${image.id}`}
 					src={image.url}

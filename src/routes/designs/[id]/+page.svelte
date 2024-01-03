@@ -77,7 +77,7 @@
 					<div class="mb-4 text-sm font-semibold">Custom Size</div>
 					<div class="flex text-xs items-center gap-2">
 						<div
-							class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:ring focus-within:ring-primary"
+							class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:border-primary"
 						>
 							<span class="text-sm text-muted-foreground">W</span>
 							<input
@@ -85,7 +85,7 @@
 							/>
 						</div>
 						<div
-							class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:ring focus-within:ring-primary"
+							class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:border-primary"
 						>
 							<span class="text-sm text-muted-foreground">H</span>
 							<input

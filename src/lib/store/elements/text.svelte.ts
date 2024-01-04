@@ -105,4 +105,16 @@ export class TextBox extends BaseObject {
 		this.width += width * dampingFactor;
 		this.height += height * dampingFactor;
 	}
+
+	move({ x, y }: { x: number; y: number }) {
+		this.x += x;
+		this.y += y;
+	}
+
+	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		// this.height = height;
+	}
 }

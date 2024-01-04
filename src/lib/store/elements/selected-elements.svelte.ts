@@ -70,7 +70,8 @@ class SelectedEleemnts {
 	}
 
 	set x(value: number) {
-		this.updateBounds({ x: value, y: 0, width: 0, height: 0 });
+		this.setBounds({ x: value, y: 0, width: 0, height: 0 });
+
 	}
 
 	get y() {
@@ -78,7 +79,7 @@ class SelectedEleemnts {
 	}
 
 	set y(value: number) {
-		this.updateBounds({ x: 0, y: value, width: 0, height: 0 });
+		this.setBounds({ x: 0, y: value, width: 0, height: 0 });
 	}
 
 	get width() {
@@ -86,7 +87,7 @@ class SelectedEleemnts {
 	}
 
 	set width(value: number) {
-		this.updateBounds({ x: 0, y: 0, width: value, height: 0 });
+		this.setBounds({ x: 0, y: 0, width: value, height: 0 });
 	}
 
 	get height() {
@@ -94,7 +95,7 @@ class SelectedEleemnts {
 	}
 
 	set height(value: number) {
-		this.updateBounds({ x: 0, y: 0, width: 0, height: value });
+		this.setBounds({ x: 0, y: 0, width: 0, height: value });
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
@@ -120,6 +121,18 @@ class SelectedEleemnts {
 			// Update element bounds
 			element.updateBounds({ x: newX, y: newY, width: elementNewWidth, height: elementNewHeight });
 		});
+	}
+
+	move({ x, y }: { x: number; y: number }) {
+		this.elements.forEach((element) => {
+			element.move({ x, y });
+		});
+	}
+
+	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
+		if (this.elements.length === 1) {
+			this.elements[0].setBounds({ x, y, width, height });
+		}
 	}
 
 	get rotation() {

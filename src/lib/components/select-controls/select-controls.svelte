@@ -43,16 +43,18 @@
 
 		const snap = snapToGrid(currentEl, otherEls, 2);
 
-		store.selectedElements.updateBounds({
+		return {
 			x: snap.x - store.selectedElements.bounds.x,
 			y: snap.y - store.selectedElements.bounds.y,
 			width: snap.width - store.selectedElements.bounds.width,
 			height: snap.height - store.selectedElements.bounds.height
-		});
+		};
 	}
 
 	function onMove({ x, y }: { x: number; y: number }) {
-		updateBounds({ x, y, width: 0, height: 0 });
+		const bounds = updateBounds({ x, y, width: 0, height: 0 });
+
+		store.selectedElements.move(bounds);
 	}
 
 	function onResize({
@@ -66,7 +68,9 @@
 		width: number;
 		height: number;
 	}) {
-		updateBounds({ x, y, width, height });
+		const bounds = updateBounds({ x, y, width, height });
+
+		store.selectedElements.updateBounds(bounds);
 	}
 
 	function onRotate(rotation: number) {

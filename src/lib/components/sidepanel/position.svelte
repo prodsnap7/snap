@@ -86,6 +86,7 @@
 					<Label class="text-xs" for="width">Width</Label>
 					<input
 						class="number-input"
+						type="number"
 						id="width"
 						placeholder="200px"
 						bind:value={selectedElementsStore.width}
@@ -95,6 +96,7 @@
 					<Label class="text-xs" for="height">Height</Label>
 					<input
 						class="number-input"
+						type="number"
 						id="height"
 						placeholder="200px"
 						bind:value={selectedElementsStore.height}
@@ -111,6 +113,7 @@
 					<input
 						id="x"
 						class="number-input"
+						type="number"
 						placeholder="200px"
 						bind:value={selectedElementsStore.x}
 					/>
@@ -119,6 +122,7 @@
 					<Label class="text-xs" for="y">Y</Label>
 					<input
 						class="number-input"
+						type="number"
 						id="y"
 						placeholder="200px"
 						bind:value={selectedElementsStore.y}
@@ -129,6 +133,7 @@
 					<input
 						bind:value={selectedElementsStore.rotation}
 						class="number-input"
+						type="number"
 						id="rotate"
 						placeholder="200px"
 					/>

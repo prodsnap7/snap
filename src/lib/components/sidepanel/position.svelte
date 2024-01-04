@@ -88,7 +88,7 @@
 						class="number-input"
 						id="width"
 						placeholder="200px"
-						value={selectedElementsStore.bounds.width.toFixed(0)}
+						bind:value={selectedElementsStore.width}
 					/>
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -97,7 +97,7 @@
 						class="number-input"
 						id="height"
 						placeholder="200px"
-						value={selectedElementsStore.bounds.height.toFixed(0)}
+						bind:value={selectedElementsStore.height}
 					/>
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -112,7 +112,7 @@
 						id="x"
 						class="number-input"
 						placeholder="200px"
-						value={selectedElementsStore.x.toFixed(0)}
+						bind:value={selectedElementsStore.x}
 					/>
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -121,13 +121,13 @@
 						class="number-input"
 						id="y"
 						placeholder="200px"
-						value={selectedElementsStore.bounds.y.toFixed(0)}
+						bind:value={selectedElementsStore.y}
 					/>
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label class="text-xs" for="rotate">Rotate</Label>
 					<input
-						value={selectedElementsStore.rotation.toFixed(0)}
+						bind:value={selectedElementsStore.rotation}
 						class="number-input"
 						id="rotate"
 						placeholder="200px"

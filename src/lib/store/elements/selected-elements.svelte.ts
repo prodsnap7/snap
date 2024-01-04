@@ -66,11 +66,35 @@ class SelectedEleemnts {
 	}
 
 	get x() {
-		return this.bounds.x;
+		return +this.bounds.x.toFixed(0);
 	}
 
 	set x(value: number) {
 		this.updateBounds({ x: value, y: 0, width: 0, height: 0 });
+	}
+
+	get y() {
+		return +this.bounds.y.toFixed(0);
+	}
+
+	set y(value: number) {
+		this.updateBounds({ x: 0, y: value, width: 0, height: 0 });
+	}
+
+	get width() {
+		return +this.bounds.width.toFixed(0);
+	}
+
+	set width(value: number) {
+		this.updateBounds({ x: 0, y: 0, width: value, height: 0 });
+	}
+
+	get height() {
+		return +this.bounds.height.toFixed(0);
+	}
+
+	set height(value: number) {
+		this.updateBounds({ x: 0, y: 0, width: 0, height: value });
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {

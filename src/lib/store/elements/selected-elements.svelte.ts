@@ -65,6 +65,14 @@ class SelectedEleemnts {
 		return this._bounds;
 	}
 
+	get x() {
+		return this.bounds.x;
+	}
+
+	set x(value: number) {
+		this.updateBounds({ x: value, y: 0, width: 0, height: 0 });
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;

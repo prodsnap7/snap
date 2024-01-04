@@ -10,7 +10,7 @@
 </script>
 
 {#if activeElementStore.element}
-	<div class="flex items-center gap-2 justify-between" id="toolbar">
+	<div class="flex items-center gap-2 justify-between h-full px-2" id="toolbar">
 		{#if activeElementStore.element instanceof PathShape}
 			<PathShapeToolbar element={activeElementStore.element} />
 		{:else if activeElementStore.element instanceof Shape}

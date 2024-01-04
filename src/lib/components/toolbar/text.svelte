@@ -136,9 +136,9 @@
 			</div>
 
 			<Slider
-				min={-50}
-				max={50}
-				step={0.1}
+				min={-10}
+				max={10}
+				step={0.01}
 				onValueChange={(val) => {
 					element.lineHeight = val[0];
 				}}

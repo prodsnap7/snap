@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { store, type CanvasElement, TextBox } from '$lib/store';
+	import { store, type CanvasElement, TextBox, Image } from '$lib/store';
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
@@ -22,6 +22,27 @@
 		});
 
 		addElement(text);
+	}
+
+	function addImageElement(image: {
+		alt: string;
+		id: number;
+		src: {
+			tiny: string;
+			original: string;
+		};
+		width: number;
+		height: number;
+	}) {
+		const img = new Image({
+			url: image.src.original,
+			width: image.width / 10,
+			height: image.height / 10,
+			public_id: `${image.id}`,
+			alt: image.alt
+		});
+
+		addElement(img);
 	}
 
 	const fourCurves = curves.slice(0, 5);
@@ -129,7 +150,15 @@
 
 	<div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
 		{#each $photosQuery.data as photo}
-			<img src={photo.src.tiny} alt={photo.photographer} class="h-24 rounded-sm" />
+			<img
+				onclick={() => addImageElement(photo)}
+				tabindex="0"
+				role="button"
+				onkeydown={() => addImageElement(photo)}
+				src={photo.src.tiny}
+				alt={photo.photographer}
+				class="h-24 rounded-sm"
+			/>
 		{/each}
 	</div>
 {/if}

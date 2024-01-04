@@ -34,7 +34,7 @@
 		"@simonwep/pickr": "^1.9.0",
 		"@tanstack/svelte-query": "^5.14.1",
 		"axios": "^1.6.3",
-		"bits-ui": "^0.11.8",
+		"bits-ui": "^0.13.0",
 		"clsx": "^2.0.0",
 		"color": "^4.2.3",
 		"lucide-svelte": "^0.294.0",

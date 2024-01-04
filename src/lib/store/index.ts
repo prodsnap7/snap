@@ -5,4 +5,5 @@ export * from "./elements/group.svelte";
 export * from "./elements/common.svelte";
 export * from "./elements/curve.svelte";
 export * from "./elements/text.svelte"
+export * from "./elements/image.svelte"
 export * from "./index.svelte"

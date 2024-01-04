@@ -117,6 +117,15 @@
 		{onRotate}
 		{onResize}
 	></MoveHandler>
+{:else if store.selectedElements.isImage}
+	<MoveHandler
+		{bounds}
+		rotation={store.selectedElements.rotation}
+		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+		{onMove}
+		{onRotate}
+		{onResize}
+	></MoveHandler>
 {:else if store.selectedElements.isText}
 	<TextControls
 		element={store.selectedElements.elements[0] as TextBox}

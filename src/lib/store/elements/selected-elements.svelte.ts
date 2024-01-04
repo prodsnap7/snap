@@ -7,6 +7,7 @@ class SelectedEleemnts {
 	isText = $derived(this.isSingle && this.elements[0].type === 'text');
 	isShape = $derived(this.isSingle && this.elements[0].type === 'shape');
 	isCurve = $derived(this.isSingle && this.elements[0].type === 'curve');
+	isImage = $derived(this.isSingle && this.elements[0].type === 'image');
 	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
 	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
 

@@ -1,5 +1,5 @@
 import { getBounds } from '$lib/utils/bounds-utils';
-import { TextBox, type CanvasElement, canvasStore } from '..';
+import { TextBox, type CanvasElement, canvasStore, elementStore } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
@@ -64,6 +64,30 @@ class SelectedEleemnts {
 			return elementMiddle === selectionMiddle;
 		})
 	);
+
+	bringToFront() {
+		if (this.elements.length === 1) {
+			elementStore.bringToFront(this.elements[0]);
+		}
+	}
+
+	bringForward() {
+		if (this.elements.length === 1) {
+			elementStore.bringForward(this.elements[0]);
+		}
+	}
+
+	sendBackward() {
+		if (this.elements.length === 1) {
+			elementStore.sendBackward(this.elements[0]);
+		}
+	}
+
+	sendToBack() {
+		if (this.elements.length === 1) {
+			elementStore.sendToBack(this.elements[0]);
+		}
+	}
 
 	resizeProportionally = $state(false);
 

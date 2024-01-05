@@ -19,6 +19,19 @@
 	import Button from '../ui/button/button.svelte';
 	import { selectedElementsStore } from '$lib/store/elements/selected-elements.svelte';
 	import clsx from 'clsx';
+	import { elementStore } from '$lib/store';
+
+	const frontDisabled = $derived(
+		!selectedElementsStore.isSingle ||
+			(selectedElementsStore.isSingle &&
+				elementStore.isElementAtFront(selectedElementsStore.elements[0]))
+	);
+
+	const backDisabled = $derived(
+		!selectedElementsStore.isSingle ||
+			(selectedElementsStore.isSingle &&
+				elementStore.isElementAtBack(selectedElementsStore.elements[0]))
+	);
 </script>
 
 <div id="position-sidepanel">
@@ -30,19 +43,39 @@
 
 		<Tabs.Content value="arrange">
 			<div class="icon-button-grid">
-				<button>
+				<button
+					disabled={!selectedElementsStore.isSingle}
+					onclick={() => {
+						selectedElementsStore.bringForward();
+					}}
+				>
 					<ArrowFatLineUp size={18} />
 					Forward
 				</button>
-				<button>
+				<button
+					disabled={!selectedElementsStore.isSingle}
+					onclick={() => {
+						selectedElementsStore.sendBackward();
+					}}
+				>
 					<ArrowFatLineDown size={18} />
 					Backward
 				</button>
-				<button>
+				<button
+					disabled={frontDisabled}
+					onclick={() => {
+						selectedElementsStore.bringToFront();
+					}}
+				>
 					<ArrowFatLinesUp size={18} />
 					Front
 				</button>
-				<button>
+				<button
+					disabled={backDisabled}
+					onclick={() => {
+						selectedElementsStore.sendToBack();
+					}}
+				>
 					<ArrowFatLinesDown size={18} />
 					Back
 				</button>

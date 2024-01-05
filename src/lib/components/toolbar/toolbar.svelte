@@ -7,10 +7,18 @@
 	import PathShapeToolbar from './path-shape.svelte';
 	import TextToolbar from './text.svelte';
 	import ImageToolbar from './image.svelte';
+	import Button from '../ui/button/button.svelte';
+	import Separator from '../ui/separator/separator.svelte';
+	import { sidepanelStore } from '../sidepanel/state.svelte';
+	import clsx from 'clsx';
+
+	function onPositionClick() {
+		sidepanelStore.state = 'position';
+	}
 </script>
 
 {#if activeElementStore.element}
-	<div class="flex items-center gap-2 justify-between" id="toolbar">
+	<div class="flex items-center gap-2 justify-between h-full px-2" id="toolbar">
 		{#if activeElementStore.element instanceof PathShape}
 			<PathShapeToolbar element={activeElementStore.element} />
 		{:else if activeElementStore.element instanceof Shape}
@@ -24,6 +32,14 @@
 		{/if}
 		<div class="flex-1" />
 
+		<Button
+			onclick={onPositionClick}
+			class={clsx('px-1', { 'bg-muted': sidepanelStore.state === 'position' })}
+			size="sm"
+			variant="ghost">Position</Button
+		>
+
+		<Separator orientation="vertical" class="h-8" />
 		<Popover.Root portal="null">
 			<Popover.Trigger>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

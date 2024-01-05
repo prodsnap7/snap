@@ -193,4 +193,9 @@ export class Image extends BaseObject {
 		this.height += height;
 		this.clipPath.updateBounds({ x: 0, y: 0, width, height });
 	}
+
+	move({ x, y }: { x: number; y: number }) {
+		this.x += x;
+		this.y += y;
+	}
 }

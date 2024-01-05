@@ -8,8 +8,9 @@
 	};
 
 	const { curve } = $props<Props>();
-	const width = $derived(curve.bounds.width);
-	const height = $derived(curve.bounds.height);
+	// const width = $derived(curve.width);
+	// const height = $derived(curve.height);
+	// const x = $derived(curve.x);
 
 	$inspect(curve.startMarker);
 </script>
@@ -22,8 +23,8 @@
     overflow: visible;
     display: block;
     position: absolute;
-    width: {width}px;
-    height: {height}px;
+    width: {curve.width}px;
+    height: {curve.height}px;
   "
 >
 	<defs>

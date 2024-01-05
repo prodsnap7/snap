@@ -7,6 +7,40 @@ export const elementStore = new (class {
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
 
+	isElementAtFront(element: CanvasElement) {
+		return this.elements[this.elements.length - 1] === element;
+	}
+
+	isElementAtBack(element: CanvasElement) {
+		return this.elements[0] === element;
+	}
+
+	bringToFront(element: CanvasElement) {
+		this.elements = this.elements.filter((e) => e !== element);
+		this.elements.push(element);
+	}
+
+	bringForward(element: CanvasElement) {
+		const index = this.elements.indexOf(element);
+		if (index < this.elements.length - 1) {
+			this.elements = this.elements.filter((e) => e !== element);
+			this.elements.splice(index + 1, 0, element);
+		}
+	}
+
+	sendBackward(element: CanvasElement) {
+		const index = this.elements.indexOf(element);
+		if (index > 0) {
+			this.elements = this.elements.filter((e) => e !== element);
+			this.elements.splice(index - 1, 0, element);
+		}
+	}
+
+	sendToBack(element: CanvasElement) {
+		this.elements = this.elements.filter((e) => e !== element);
+		this.elements.unshift(element);
+	}
+
 	addFromObject(element: CanvasObject) {
 		if (element.type === 'shape') {
 			const shape = Shape.fromObject(element);

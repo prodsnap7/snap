@@ -58,6 +58,12 @@ export class Group extends BaseObject {
 		this._rotation = value;
 	}
 
+	move({ x, y }: { x: number; y: number }) {
+		this.elements.forEach((element) => {
+			element.move({ x, y });
+		});
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;

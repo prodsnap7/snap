@@ -115,7 +115,7 @@
 
 				<Popover.Root>
 					<Popover.Trigger>
-						<Button class="font-semibold">
+						<Button size="sm" class="font-semibold">
 							<Download class="mr-2" size={20} />
 							Download
 						</Button>
@@ -140,7 +140,7 @@
 							</div>
 						</div>
 
-						<Button class="w-full mt-4">
+						<Button size="sm" class="w-full mt-4">
 							<Download class="mr-2" size={20} />
 							Download
 						</Button>

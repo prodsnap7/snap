@@ -22,6 +22,7 @@
 	let dragRect = $state({ x: 0, y: 0, width: 0, height: 0 });
 	let dragPos = { x: 0, y: 0 };
 	let outerCanvas = $state<HTMLDivElement | null>(null);
+	let currentTarget = false;
 	const outerCanvasRect = { x: 0, y: 0 };
 
 	$effect(() => {
@@ -48,6 +49,7 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
+			currentTarget = true;
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
 		}
@@ -59,7 +61,7 @@
 			store.highlightedElements.clear();
 			dragging = false;
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
-		} else if (event.target === event.currentTarget || event.target === outerCanvas) {
+		} else if (currentTarget) {
 			selectedElements.clear();
 			activeElement.clear();
 			sidepanelStore.prev();

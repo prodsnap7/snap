@@ -304,6 +304,6 @@
 	}
 
 	.input-grid input {
-		@apply w-full rounded-sm border p-2 text-xs;
+		@apply w-full rounded-sm border bg-background p-2 text-xs text-foreground;
 	}
 </style>

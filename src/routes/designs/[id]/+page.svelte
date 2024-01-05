@@ -6,7 +6,6 @@
 	import Toolbar from '$lib/components/toolbar/toolbar.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { canvasStore, store } from '$lib/store';
-	import type { PageData } from './$types';
 	import Logo from '$lib/components/logo-mini.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Menubar from '$lib/components/ui/menubar';
@@ -18,14 +17,14 @@
 		ArrowUUpRight,
 		Check,
 		Download,
+		CloudArrowUp,
 		FilePng,
 		Folder,
-		X
+		CloudCheck
 	} from 'phosphor-svelte';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
 
-	export let data: PageData;
-	store.init(data.design);
+	store.initFromLocalStorage();
 </script>
 
 <div class="w-screen h-screen flex flex-col">
@@ -111,6 +110,23 @@
 
 			<div class="flex-1" />
 			<div class="mr-2 flex items-center gap-2">
+				<Button
+					onclick={() => {
+						store.saveToLocalStorage();
+					}}
+					variant="outline"
+					size="sm"
+					class="py-[1px]"
+				>
+					{#if store.saving}
+						<CloudArrowUp class="animate-spin fill-primary" size={26} />
+					{:else}
+						<CloudCheck class="fill-primary" size={26} />
+					{/if}
+				</Button>
+
+				<Separator class="h-6" orientation="vertical" />
+
 				<Input class="px-1 text-sm h-8" bind:value={store.name} />
 
 				<Popover.Root>

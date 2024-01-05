@@ -36,6 +36,7 @@ export abstract class BaseObject {
   abstract get rotation(): number;
   abstract set rotation(value: number);
   abstract get rect(): { x: number; y: number; width: number; height: number; };
+  abstract toObject(): any;
 
   get bounds() {
     const { x, y, width, height } = this.rect;
@@ -47,6 +48,12 @@ export abstract class BaseObject {
       width: maxX - minX,
       height: maxY - minY
     }
+  }
+
+
+  toJson() {
+    console.log('toJson', this.toObject());
+    return JSON.stringify(this.toObject());
   }
 }
 

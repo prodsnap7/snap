@@ -26,6 +26,7 @@ export const store = new (class {
 	name = $state('New Design');
 	fonts = $state<Record<string, string[]>>({});
 	gridLines = $derived(getGridLines());
+	saving = $state(false);
 
 	init(obj: StoreObj) {
 		this.name = obj.name;
@@ -33,9 +34,30 @@ export const store = new (class {
 		this.elements.addFromJSON(obj.elements);
 	}
 
+	initFromLocalStorage() {
+		const elements = localStorage.getItem('elements');
+		if (elements) {
+			this.elements.addFromJSON(elements);
+		}
+	}
+
 	deleteSelected() {
 		this.elements.removeElements(this.selectedElements.elements);
 		this.selectedElements.clear();
+	}
+
+	saveToLocalStorage() {
+		this.saving = true;
+		// loop through the elements and convert each one to a plain object
+		const elements = this.elements.elements.map((element) => element.toJson());
+
+		// save the elements to local storage
+		localStorage.setItem('elements', JSON.stringify(elements));
+
+		// delay by 2 seconds to show the saving indicator
+		setTimeout(() => {
+			this.saving = false;
+		}, 2000);
 	}
 
 	groupSelected() {

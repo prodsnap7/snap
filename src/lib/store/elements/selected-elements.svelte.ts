@@ -11,6 +11,8 @@ class SelectedEleemnts {
 	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
 	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
 
+	resizeProportionally = $state(false);
+
 	private _bounds = $derived(getBounds(this.elements));
 	private _rotation = $state(0);
 	private static instance: SelectedEleemnts;
@@ -70,8 +72,14 @@ class SelectedEleemnts {
 	}
 
 	set x(value: number) {
-		this.setBounds({ x: value, y: 0, width: 0, height: 0 });
-
+		if (this.elements.length === 1) {
+			this.elements[0].updateBounds({
+				x: value - this.elements[0].rect.x,
+				y: 0,
+				width: 0,
+				height: 0
+			});
+		}
 	}
 
 	get y() {
@@ -79,7 +87,14 @@ class SelectedEleemnts {
 	}
 
 	set y(value: number) {
-		this.setBounds({ x: 0, y: value, width: 0, height: 0 });
+		if (this.elements.length === 1) {
+			this.elements[0].updateBounds({
+				x: 0,
+				y: value - this.elements[0].rect.y,
+				width: 0,
+				height: 0
+			});
+		}
 	}
 
 	get width() {
@@ -87,7 +102,23 @@ class SelectedEleemnts {
 	}
 
 	set width(value: number) {
-		this.setBounds({ x: 0, y: 0, width: value, height: 0 });
+		if (this.elements.length === 1) {
+			if (this.resizeProportionally) {
+				this.elements[0].updateBounds({
+					x: 0,
+					y: 0,
+					width: value - this.elements[0].rect.width,
+					height: value - this.elements[0].rect.height
+				});
+			} else {
+				this.elements[0].updateBounds({
+					x: 0,
+					y: 0,
+					width: value - this.elements[0].rect.width,
+					height: 0
+				});
+			}
+		}
 	}
 
 	get height() {
@@ -95,7 +126,23 @@ class SelectedEleemnts {
 	}
 
 	set height(value: number) {
-		this.setBounds({ x: 0, y: 0, width: 0, height: value });
+		if (this.elements.length === 1) {
+			if (this.resizeProportionally) {
+				this.elements[0].updateBounds({
+					x: 0,
+					y: 0,
+					width: value - this.elements[0].rect.width,
+					height: value - this.elements[0].rect.height
+				});
+			} else {
+				this.elements[0].updateBounds({
+					x: 0,
+					y: 0,
+					width: 0,
+					height: value - this.elements[0].rect.height
+				});
+			}
+		}
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
@@ -127,12 +174,6 @@ class SelectedEleemnts {
 		this.elements.forEach((element) => {
 			element.move({ x, y });
 		});
-	}
-
-	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-		if (this.elements.length === 1) {
-			this.elements[0].setBounds({ x, y, width, height });
-		}
 	}
 
 	get rotation() {

@@ -89,10 +89,6 @@ export class Group extends BaseObject {
 		});
 	}
 
-	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-		this.updateBounds({ x, y, width, height });
-	}
-
 	clone(): Group {
 		return new Group({
 			type: 'group',

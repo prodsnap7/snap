@@ -97,13 +97,6 @@ export class Shape extends BaseObject implements IShape {
 		this.height += height;
 	}
 
-	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
-
 	move({ x, y }: { x: number; y: number }) {
 		this.x += x;
 		this.y += y;
@@ -185,13 +178,6 @@ export class PathShape extends BaseObject {
 		this.y += y;
 		this.width += width;
 		this.height += height;
-	}
-
-	setBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
 	}
 
 	clone(): PathShape {

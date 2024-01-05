@@ -17,6 +17,7 @@
 	import Separator from '../ui/separator/separator.svelte';
 	import Button from '../ui/button/button.svelte';
 	import { selectedElementsStore } from '$lib/store/elements/selected-elements.svelte';
+	import clsx from 'clsx';
 </script>
 
 <div id="position-sidepanel">
@@ -104,7 +105,15 @@
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label class="text-xs" for="height">Ratio</Label>
-					<Button variant="outline" size="sm">
+					<Button
+						class={clsx({ 'bg-muted': selectedElementsStore.resizeProportionally })}
+						onclick={() => {
+							selectedElementsStore.resizeProportionally =
+								!selectedElementsStore.resizeProportionally;
+						}}
+						variant="outline"
+						size="sm"
+					>
 						<Lock size={18} />
 					</Button>
 				</div>

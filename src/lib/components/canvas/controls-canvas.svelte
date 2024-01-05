@@ -49,6 +49,7 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
+			console.log('current target');
 			currentTarget = true;
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
@@ -58,19 +59,23 @@
 	function onmouseup(event: MouseEvent) {
 		if (dragging) {
 			store.selectedElements.setElements(store.highlightedElements.elements);
+			store.activeElement.setElement(store.highlightedElements.elements[0]);
 			store.highlightedElements.clear();
 			dragging = false;
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 		} else if (currentTarget) {
+			console.log('clearing');
 			selectedElements.clear();
 			activeElement.clear();
 			sidepanelStore.prev();
+			currentTarget = false;
 		}
 	}
 
 	function onmousemove(e: MouseEvent) {
 		if (!dragging) return;
 
+		currentTarget = false;
 		const width = Math.abs(e.clientX - dragPos.x);
 		const height = Math.abs(e.clientY - dragPos.y);
 		const left = Math.min(e.clientX, dragPos.x) - outerCanvasRect.x;

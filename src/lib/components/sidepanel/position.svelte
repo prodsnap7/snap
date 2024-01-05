@@ -60,7 +60,11 @@
 					<AlignLeft size={18} />
 					Left
 				</button>
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.verticallyCenterElements();
+					}}
+				>
 					<AlignCenterVertical size={18} />
 					Middle
 				</button>

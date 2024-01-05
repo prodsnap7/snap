@@ -191,6 +191,24 @@ class SelectedEleemnts {
 			this._rotation = value;
 		}
 	}
+
+	verticallyCenterElements(): void {
+    // Find the height of the tallest element
+    const maxHeight = Math.max(...this.elements.map(element => element.bounds.height));
+
+    // Vertically center each element
+    this.elements.forEach(element => {
+        const currentBounds = element.bounds;
+        const verticalAdjustment = (maxHeight - currentBounds.height) / 2;
+
+        element.updateBounds({
+            x: 0,
+            y: currentBounds.y + verticalAdjustment,
+            width: 0,
+            height: 0
+        });
+    });
+}
 }
 
 export const selectedElementsStore = SelectedEleemnts.getInstance();

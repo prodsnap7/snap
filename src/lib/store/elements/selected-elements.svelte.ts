@@ -1,5 +1,5 @@
 import { getBounds } from '$lib/utils/bounds-utils';
-import { TextBox, type CanvasElement } from '..';
+import { TextBox, type CanvasElement, canvasStore } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
@@ -10,6 +10,18 @@ class SelectedEleemnts {
 	isImage = $derived(this.isSingle && this.elements[0].type === 'image');
 	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
 	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
+
+	areElementsTopCanvas = $derived(this.bounds.y === 0);
+	areElementsLeftCanvas = $derived(this.bounds.x === 0);
+	areElementsRightCanvas = $derived(this.bounds.width + this.bounds.x === canvasStore.width);
+	areElementsBottomCanvas = $derived(this.bounds.height + this.bounds.y === canvasStore.height);
+	areElementsVerticallyCenteredCanvas = $derived(
+		this.bounds.y + this.bounds.height / 2 === canvasStore.height / 2
+	);
+
+	areElementsHorizontallyCenteredCanvas = $derived(
+		this.bounds.x + this.bounds.width / 2 === canvasStore.width / 2
+	);
 
 	areElementsTopAligned = $derived(
 		this.elements.every(
@@ -298,6 +310,56 @@ class SelectedEleemnts {
 		const maxWidth = this.bounds.width;
 		this.elements.forEach((element) => {
 			const horizontalAdjustment = maxWidth - (element.bounds.x + element.bounds.width);
+			element.updateBounds({ x: horizontalAdjustment, y: 0, width: 0, height: 0 });
+		});
+	}
+
+	topAlignCanvas(): void {
+		const minY = -this.bounds.y;
+
+		this.elements.forEach((element) => {
+			element.updateBounds({ y: minY, x: 0, width: 0, height: 0 });
+		});
+	}
+
+	leftAlignCanvas(): void {
+		const minX = -this.bounds.x;
+
+		this.elements.forEach((element) => {
+			element.updateBounds({ x: minX, y: 0, width: 0, height: 0 });
+		});
+	}
+
+	bottomAlignCanvas(): void {
+		const verticalAdjustment = canvasStore.height - this.bounds.height - this.bounds.y;
+		this.elements.forEach((element) => {
+			element.updateBounds({ y: verticalAdjustment, x: 0, width: 0, height: 0 });
+		});
+	}
+
+	rightAlignCanvas(): void {
+		const horizontalAdjustment = canvasStore.width - this.bounds.width - this.bounds.x;
+		this.elements.forEach((element) => {
+			element.updateBounds({ x: horizontalAdjustment, y: 0, width: 0, height: 0 });
+		});
+	}
+
+	centerVerticallyCanvas(): void {
+		const selectionMiddle = this.findVerticalMiddle();
+		const canvasMiddle = canvasStore.height / 2;
+		const verticalAdjustment = canvasMiddle - selectionMiddle;
+
+		this.elements.forEach((element) => {
+			element.updateBounds({ y: verticalAdjustment, x: 0, width: 0, height: 0 });
+		});
+	}
+
+	centerHorizontallyCanvas(): void {
+		const selectionMiddle = this.findHorizontalMiddle();
+		const canvasMiddle = canvasStore.width / 2;
+		const horizontalAdjustment = canvasMiddle - selectionMiddle;
+
+		this.elements.forEach((element) => {
 			element.updateBounds({ x: horizontalAdjustment, y: 0, width: 0, height: 0 });
 		});
 	}

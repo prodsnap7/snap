@@ -132,6 +132,88 @@
 
 			<Separator class="my-4" />
 
+			<div class="text-xs text-muted-foreground">Align to canvas</div>
+
+			<div class="icon-button-grid">
+				<button
+					onclick={() => {
+						selectedElementsStore.topAlignCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsTopCanvas}
+				>
+					<AlignTop size={18} />
+					Top
+					{#if selectedElementsStore.areElementsTopCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+				<button
+					onclick={() => {
+						selectedElementsStore.leftAlignCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsLeftCanvas}
+				>
+					<AlignLeft size={18} />
+					Left
+
+					{#if selectedElementsStore.areElementsLeftCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+				<button
+					onclick={() => {
+						selectedElementsStore.centerVerticallyCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsVerticallyCenteredCanvas}
+				>
+					<AlignCenterVertical size={18} />
+					Middle
+
+					{#if selectedElementsStore.areElementsVerticallyCenteredCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+				<button
+					onclick={() => {
+						selectedElementsStore.centerHorizontallyCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsHorizontallyCenteredCanvas}
+				>
+					<AlignCenterHorizontal size={18} />
+					Center
+
+					{#if selectedElementsStore.areElementsHorizontallyCenteredCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+				<button
+					onclick={() => {
+						selectedElementsStore.bottomAlignCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsBottomCanvas}
+				>
+					<AlignBottom size={18} />
+					Bottom
+					{#if selectedElementsStore.areElementsBottomCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+				<button
+					onclick={() => {
+						selectedElementsStore.rightAlignCanvas();
+					}}
+					disabled={selectedElementsStore.areElementsRightCanvas}
+				>
+					<AlignRight size={18} />
+					Right
+					{#if selectedElementsStore.areElementsRightCanvas}
+						<Check size={18} class="fill-primary" />
+					{/if}
+				</button>
+			</div>
+
+			<Separator class="my-4" />
+
 			<div class="text-xs text-muted-foreground">Position & Dimension</div>
 
 			<div class="grid grid-cols-3 mt-4 gap-x-2 gap-y-4 input-grid">

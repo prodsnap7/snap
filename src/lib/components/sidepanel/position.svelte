@@ -11,6 +11,7 @@
 		ArrowFatLineUp,
 		ArrowFatLinesDown,
 		ArrowFatLinesUp,
+		Check,
 		Lock
 	} from 'phosphor-svelte';
 	import { Label } from '$lib/components/ui/label';
@@ -49,36 +50,83 @@
 
 			<Separator class="my-4" />
 
-			<div class="text-xs text-muted-foreground">Align to page</div>
+			<div class="text-xs text-muted-foreground">Align to selection</div>
 
 			<div class="icon-button-grid">
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.topAlignElements();
+					}}
+					disabled={selectedElementsStore.areElementsTopAligned}
+				>
 					<AlignTop size={18} />
 					Top
+					{#if selectedElementsStore.areElementsTopAligned}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.leftAlignElements();
+					}}
+					disabled={selectedElementsStore.areElementsLeftAligned}
+				>
 					<AlignLeft size={18} />
 					Left
+
+					{#if selectedElementsStore.areElementsLeftAligned}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
 				<button
 					onclick={() => {
 						selectedElementsStore.verticallyCenterElements();
 					}}
+					disabled={selectedElementsStore.areElementsVerticallyCentered}
 				>
 					<AlignCenterVertical size={18} />
 					Middle
+
+					{#if selectedElementsStore.areElementsVerticallyCentered}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.horizontallyCenterElements();
+					}}
+					disabled={selectedElementsStore.areElementsHorizontallyCentered}
+				>
 					<AlignCenterHorizontal size={18} />
 					Center
+
+					{#if selectedElementsStore.areElementsHorizontallyCentered}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.bottomAlignElements();
+					}}
+					disabled={selectedElementsStore.areElementsBottomAligned}
+				>
 					<AlignBottom size={18} />
 					Bottom
+					{#if selectedElementsStore.areElementsBottomAligned}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
-				<button>
+				<button
+					onclick={() => {
+						selectedElementsStore.rightAlignElements();
+					}}
+					disabled={selectedElementsStore.areElementsRightAligned}
+				>
 					<AlignRight size={18} />
 					Right
+					{#if selectedElementsStore.areElementsRightAligned}
+						<Check size={18} class="fill-primary" />
+					{/if}
 				</button>
 			</div>
 
@@ -163,6 +211,10 @@
 
 	.icon-button-grid > button {
 		@apply flex items-center gap-2 text-sm;
+	}
+
+	.icon-button-grid > button:disabled {
+		@apply cursor-not-allowed text-muted-foreground;
 	}
 
 	.input-grid label {

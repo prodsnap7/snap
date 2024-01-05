@@ -11,6 +11,48 @@ class SelectedEleemnts {
 	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
 	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
 
+	areElementsTopAligned = $derived(
+		this.elements.every(
+			(element) => element.bounds.y === Math.min(...this.elements.map((el) => el.bounds.y))
+		)
+	);
+
+	areElementsHorizontallyCentered = $derived(
+		this.elements.every((element) => {
+			const selectionMiddle = this.findHorizontalMiddle();
+			const elementMiddle = element.bounds.x + element.bounds.width / 2;
+			return elementMiddle === selectionMiddle;
+		})
+	);
+
+	areElementsLeftAligned = $derived(
+		this.elements.every(
+			(element) => element.bounds.x === Math.min(...this.elements.map((el) => el.bounds.x))
+		)
+	);
+
+	areElementsBottomAligned = $derived(
+		this.elements.every((element) => {
+			const maxHeight = this.bounds.height + this.bounds.y;
+			return element.bounds.y + element.bounds.height === maxHeight;
+		})
+	);
+
+	areElementsRightAligned = $derived(
+		this.elements.every((element) => {
+			const maxWidth = this.bounds.width + this.bounds.x;
+			return element.bounds.x + element.bounds.width === maxWidth;
+		})
+	);
+
+	areElementsVerticallyCentered = $derived(
+		this.elements.every((element) => {
+			const selectionMiddle = this.findVerticalMiddle();
+			const elementMiddle = element.bounds.y + element.bounds.height / 2;
+			return elementMiddle === selectionMiddle;
+		})
+	);
+
 	resizeProportionally = $state(false);
 
 	private _bounds = $derived(getBounds(this.elements));
@@ -193,22 +235,72 @@ class SelectedEleemnts {
 	}
 
 	verticallyCenterElements(): void {
-    // Find the height of the tallest element
-    const maxHeight = Math.max(...this.elements.map(element => element.bounds.height));
+		// Find the vertical middle of the entire selection
+		const selectionMiddle = this.findVerticalMiddle();
 
-    // Vertically center each element
-    this.elements.forEach(element => {
-        const currentBounds = element.bounds;
-        const verticalAdjustment = (maxHeight - currentBounds.height) / 2;
+		// Vertically center each element
+		this.elements.forEach((element) => {
+			const elementMiddle = element.bounds.y + element.bounds.height / 2;
+			const verticalAdjustment = selectionMiddle - elementMiddle;
 
-        element.updateBounds({
-            x: 0,
-            y: currentBounds.y + verticalAdjustment,
-            width: 0,
-            height: 0
-        });
-    });
-}
+			element.updateBounds({
+				x: 0,
+				y: verticalAdjustment,
+				width: 0,
+				height: 0
+			});
+		});
+	}
+	private findHorizontalMiddle(): number {
+		return this.bounds.x + this.bounds.width / 2;
+	}
+
+	private findVerticalMiddle(): number {
+		return this.bounds.y + this.bounds.height / 2;
+	}
+
+	horizontallyCenterElements(): void {
+		const selectionMiddle = this.findHorizontalMiddle();
+
+		this.elements.forEach((element) => {
+			const elementMiddle = element.bounds.x + element.bounds.width / 2;
+			const horizontalAdjustment = selectionMiddle - elementMiddle;
+
+			element.updateBounds({ x: horizontalAdjustment, y: 0, width: 0, height: 0 });
+		});
+	}
+
+	topAlignElements(): void {
+		const minY = Math.min(...this.elements.map((element) => element.bounds.y));
+
+		this.elements.forEach((element) => {
+			element.updateBounds({ y: minY - element.bounds.y, x: 0, width: 0, height: 0 });
+		});
+	}
+
+	leftAlignElements(): void {
+		const minX = Math.min(...this.elements.map((element) => element.bounds.x));
+
+		this.elements.forEach((element) => {
+			element.updateBounds({ x: minX - element.bounds.x, y: 0, width: 0, height: 0 });
+		});
+	}
+
+	bottomAlignElements(): void {
+		const maxHeight = this.bounds.height;
+		this.elements.forEach((element) => {
+			const verticalAdjustment = maxHeight - (element.bounds.y + element.bounds.height);
+			element.updateBounds({ y: verticalAdjustment, x: 0, width: 0, height: 0 });
+		});
+	}
+
+	rightAlignElements(): void {
+		const maxWidth = this.bounds.width;
+		this.elements.forEach((element) => {
+			const horizontalAdjustment = maxWidth - (element.bounds.x + element.bounds.width);
+			element.updateBounds({ x: horizontalAdjustment, y: 0, width: 0, height: 0 });
+		});
+	}
 }
 
 export const selectedElementsStore = SelectedEleemnts.getInstance();

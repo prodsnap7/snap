@@ -39,6 +39,11 @@ export const store = new (class {
 		if (elements) {
 			this.elements.addFromJSON(elements);
 		}
+
+		const canvas = localStorage.getItem('canvas');
+		if (canvas) {
+			this.canvas.setFromJSON(canvas);
+		}
 	}
 
 	deleteSelected() {
@@ -53,6 +58,8 @@ export const store = new (class {
 
 		// save the elements to local storage
 		localStorage.setItem('elements', JSON.stringify(elements));
+
+		this.canvas.saveToLocalStorage();
 
 		// delay by 2 seconds to show the saving indicator
 		setTimeout(() => {

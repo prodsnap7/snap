@@ -2,7 +2,7 @@ import { canvasStore } from './canvas.svelte';
 import { Group } from './elements/group.svelte';
 import {
 	activeElementStore,
-	elementStore,
+	elementsStore,
 	highlightedElementsStore,
 } from './elements/elements.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
@@ -16,7 +16,7 @@ type StoreObj = {
 
 class Store {
 	private static instance: Store;
-	elements = $state(elementStore);
+	elements = $state(elementsStore);
 	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
 	unselectedElements = $derived(

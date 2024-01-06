@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { canvasStore, elementStore } from '$lib/store';
+	import { canvasStore, elementsStore } from '$lib/store';
 	import Renderer from '../renderer/renderer.svelte';
 </script>
 
@@ -13,7 +13,7 @@
     background-color: {canvasStore.background};
     "
 >
-	{#each elementStore.elements as element}
+	{#each elementsStore.elements as element}
 		<Renderer {element} />
 	{/each}
 </div>

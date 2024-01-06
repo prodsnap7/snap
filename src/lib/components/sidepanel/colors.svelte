@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { elementStore, store } from '$lib/store';
+	import { elementsStore, store } from '$lib/store';
 	import { Check, MagnifyingGlass, PlusCircle } from 'phosphor-svelte';
 	import { createMutation } from '@tanstack/svelte-query';
 	import '@simonwep/pickr/dist/themes/nano.min.css';
@@ -109,7 +109,7 @@
 	>
 		<PlusCircle color="#efefef" size={24} />
 	</div>
-	{#each elementStore.colors as color}
+	{#each elementsStore.colors as color}
 		<button
 			onclick={() => onColorClick(color)}
 			class="w-10 h-10 rounded border border-gray-300 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-100 hover:ring-slate-700"

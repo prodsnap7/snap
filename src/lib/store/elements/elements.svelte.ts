@@ -4,9 +4,20 @@ import { Curve } from './curve.svelte';
 import type { CanvasElement, CanvasObject } from './common.svelte';
 import { Image, TextBox } from '..';
 
-export const elementStore = new (class {
+class ElementStore {
+	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
+
+	private constructor() {}
+
+	static getInstance() {
+		if (!ElementStore.instance) {
+			ElementStore.instance = new ElementStore();
+		}
+
+		return ElementStore.instance;
+	}
 
 	isElementAtFront(element: CanvasElement) {
 		return this.elements[this.elements.length - 1] === element;
@@ -107,7 +118,9 @@ export const elementStore = new (class {
 		const clone = element.clone();
 		this.addElement(clone);
 	}
-})();
+}
+
+export const elementsStore = ElementStore.getInstance();
 
 function colors(elements: CanvasElement[]): string[] {
 	const colorsWithDuplicates = elements.map((element) => element.colors).flat();

@@ -83,6 +83,8 @@
 						>
 							<span class="text-sm text-muted-foreground">W</span>
 							<input
+								type="number"
+								bind:value={canvasStore.width}
 								class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
 							/>
 						</div>
@@ -91,6 +93,8 @@
 						>
 							<span class="text-sm text-muted-foreground">H</span>
 							<input
+								type="number"
+								bind:value={canvasStore.height}
 								class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
 							/>
 						</div>

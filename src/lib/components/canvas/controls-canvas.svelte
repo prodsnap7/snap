@@ -115,6 +115,7 @@
 		style="
     width: {canvas.width}px;
     height: {canvas.height}px;
+    transform: scale({canvasStore.scale});
   "
 	>
 		{#each elements.elements as element}

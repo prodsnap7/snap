@@ -22,6 +22,13 @@ export class Point implements IPoint {
 			y: this.y
 		});
 	}
+
+	toObject() {
+		return {
+			x: this.x,
+			y: this.y
+		};
+	}
 }
 
 export interface ICurve extends IBaseObject {
@@ -199,6 +206,20 @@ export class Curve extends BaseObject {
 			},
 			scale
 		);
+	}
+
+	toObject() {
+		return {
+			type: this.type,
+			stroke: this.stroke,
+			strokeWidth: this.strokeWidth,
+			startMarker: this.startMarker,
+			endMarker: this.endMarker,
+			markerSize: this.markerSize,
+			strokeDasharray: this.strokeDasharray,
+			points: this.points.map((p) => p.toObject()),
+			pathType: this.pathType as 'linear' | 'quadratic' | 'cubic'
+		};
 	}
 
 	static fromObject(obj: Partial<Curve>) {

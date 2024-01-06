@@ -1,5 +1,6 @@
 import shortUUID from 'short-uuid';
 import { BaseObject, type CanvasElement } from './common.svelte';
+import { Image, Shape, TextBox, Curve, PathShape } from '..';
 import { getBounds } from '$lib/utils/bounds-utils';
 
 export class Group extends BaseObject {
@@ -12,7 +13,18 @@ export class Group extends BaseObject {
 
 	constructor(obj: Partial<Group>) {
 		super(obj);
-		Object.assign(this, obj);
+		console.log('Group constructor', obj);
+		if (obj.elements) {
+			this.elements = obj.elements;
+		}
+		if (obj.opacity) {
+			this.opacity = obj.opacity;
+		}
+
+		if (obj.rotation) {
+			this._rotation = obj.rotation;
+		}
+		console.log('Group constructor', this);	
 	}
 
 	get bounds(): { x: number; y: number; width: number; height: number } {
@@ -96,12 +108,45 @@ export class Group extends BaseObject {
 		});
 	}
 
+	toObject(): any {
+		const elements = this.elements.map((e) => e.toObject());
+		console.log('Group toObject', elements);
+		return {
+			type: 'group',
+			elements: this.elements.map((e) => e.toObject())
+		};
+	}
+
 	ungroup(): CanvasElement[] {
 		return this.elements.map((element) => {
 			const el = element.clone();
 			el.rotation += this.rotation;
 
 			return el;
+		});
+	}
+
+	static fromObject(obj: any): Group {
+		return new Group({
+			type: 'group',
+			rotation: obj.rotation,
+			elements: obj.elements.map((e: any) => {
+				switch (e.type) {
+					case 'image':
+						return new Image(e);
+					case 'shape':
+						return new Shape(e);
+					case 'text':
+						return new TextBox(e);
+					case 'curve':
+						return new Curve(e);
+					case 'path-shape':
+						return new PathShape(e);
+					
+					default:
+						throw new Error(`Unknown element type: ${e.type}`);
+				}
+			})
 		});
 	}
 }

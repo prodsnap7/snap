@@ -1,5 +1,5 @@
 import { getBounds } from '$lib/utils/bounds-utils';
-import { TextBox, type CanvasElement, canvasStore, elementStore } from '..';
+import { TextBox, type CanvasElement, canvasStore, elementsStore } from '..';
 
 class SelectedEleemnts {
 	elements = $state<CanvasElement[]>([]);
@@ -67,25 +67,25 @@ class SelectedEleemnts {
 
 	bringToFront() {
 		if (this.elements.length === 1) {
-			elementStore.bringToFront(this.elements[0]);
+			elementsStore.bringToFront(this.elements[0]);
 		}
 	}
 
 	bringForward() {
 		if (this.elements.length === 1) {
-			elementStore.bringForward(this.elements[0]);
+			elementsStore.bringForward(this.elements[0]);
 		}
 	}
 
 	sendBackward() {
 		if (this.elements.length === 1) {
-			elementStore.sendBackward(this.elements[0]);
+			elementsStore.sendBackward(this.elements[0]);
 		}
 	}
 
 	sendToBack() {
 		if (this.elements.length === 1) {
-			elementStore.sendToBack(this.elements[0]);
+			elementsStore.sendToBack(this.elements[0]);
 		}
 	}
 

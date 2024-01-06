@@ -152,8 +152,8 @@ export class Image extends BaseObject {
 		super(obj);
 		Object.assign(this, obj);
 		this.clipPath = new ImageClip(
-      // new RectangleShape(this.x, this.y, this.width, this.height)
-			new CircleShape(this.x, this.y, this.width, this.height)
+      new RectangleShape(this.x, this.y, this.width, this.height)
+			// new CircleShape(this.x, this.y, this.width, this.height)
     );
 	}
 
@@ -184,6 +184,22 @@ export class Image extends BaseObject {
       thumb_url: this.thumb_url,
       alt: this.alt,
     });
+	}
+
+	toObject() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			type: this.type,
+			rotation: this.rotation,
+			opacity: this.opacity,
+			url: this.url,
+			public_id: this.public_id,
+			thumb_url: this.thumb_url,
+			alt: this.alt,
+		};
 	}
 
   updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {

@@ -90,6 +90,23 @@ export class Shape extends BaseObject implements IShape {
 		});
 	}
 
+	toObject() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			type: this.type,
+			rotation: this.rotation,
+			opacity: this.opacity,
+			stroke: this.stroke,
+			fill: this.fill,
+			strokeWidth: this.strokeWidth,
+			radius: this.radius,
+			strokeType: this.strokeType
+		}
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		this.x += x;
 		this.y += y;
@@ -199,6 +216,27 @@ export class PathShape extends BaseObject {
 			strokeDasharray: this.strokeDasharray,
 			path: this._path
 		});
+	}
+
+	toObject() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			type: this.type,
+			rotation: this.rotation,
+			opacity: this.opacity,
+			stroke: this.stroke,
+			fill: this.fill,
+			strokeWidth: this.strokeWidth,
+			radius: this.radius,
+			strokeType: this.strokeType,
+			strokeLinecap: this.strokeLinecap,
+			strokeLinejoin: this.strokeLinejoin,
+			strokeDasharray: this.strokeDasharray,
+			path: this._path
+		}	
 	}
 }
 

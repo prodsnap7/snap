@@ -42,4 +42,16 @@ export const canvasStore = new class implements TCanvas {
     this.setFromObject(obj);
   }
 
+
+  saveToLocalStorage() {
+    const canvas = {
+      width: this.width,
+      height: this.height,
+      background: this.background,
+      scale: this.scale,
+      state: this.state
+    };
+
+    localStorage.setItem('canvas', JSON.stringify(canvas));
+  }
 }

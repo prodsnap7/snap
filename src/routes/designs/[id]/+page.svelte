@@ -6,7 +6,6 @@
 	import Toolbar from '$lib/components/toolbar/toolbar.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { canvasStore, store } from '$lib/store';
-	import type { PageData } from './$types';
 	import Logo from '$lib/components/logo-mini.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Menubar from '$lib/components/ui/menubar';
@@ -18,14 +17,16 @@
 		ArrowUUpRight,
 		Check,
 		Download,
+		CloudArrowUp,
 		FilePng,
 		Folder,
-		X
+		CloudCheck,
+		MoonStars,
+		SunDim
 	} from 'phosphor-svelte';
+	import { toggleMode, mode } from 'mode-watcher';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
-
-	export let data: PageData;
-	store.init(data.design);
+	import clsx from 'clsx';
 </script>
 
 <div class="w-screen h-screen flex flex-col">
@@ -100,10 +101,24 @@
 
 			<div class="flex items-center gap-2 w-28">
 				<Separator class="h-6" orientation="vertical" />
-				<Button variant="ghost">
+				<Button
+					onclick={() => {
+						store.undo();
+					}}
+					variant="ghost"
+					disabled={!store.canUndo}
+					class="disabled:opacity-50 disabled:cursor-no-drop"
+				>
 					<ArrowUUpLeft size={20} />
 				</Button>
-				<Button variant="ghost">
+				<Button
+					onclick={() => {
+						store.redo();
+					}}
+					class="disabled:opacity-50 disabled:cursor-no-drop"
+					variant="ghost"
+					disabled={!store.canRedo}
+				>
 					<ArrowUUpRight size={20} />
 				</Button>
 				<Separator class="h-6" orientation="vertical" />
@@ -111,6 +126,26 @@
 
 			<div class="flex-1" />
 			<div class="mr-2 flex items-center gap-2">
+				<Button
+					onclick={() => {
+						store.saveToLocalStorage();
+					}}
+					variant="outline"
+					size="sm"
+					class={clsx('py-[1px]', {
+						'bg-primary/10': !store.saving,
+						'bg-gradient-to-r from-sky-500 to-blue-500 text-white': store.saving
+					})}
+				>
+					{#if store.saving}
+						<CloudArrowUp class="animate-pulse fill-current" size={26} />
+					{:else}
+						<CloudCheck class="fill-primary" size={26} />
+					{/if}
+				</Button>
+
+				<Separator class="h-6" orientation="vertical" />
+
 				<Input class="px-1 text-sm h-8" bind:value={store.name} />
 
 				<Popover.Root>
@@ -151,6 +186,17 @@
 					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
 					<Avatar.Fallback>CN</Avatar.Fallback>
 				</Avatar.Root>
+
+				<button class="ml-2" onclick={toggleMode}>
+					{#if $mode === 'dark'}
+						<SunDim size={26} />
+						<span class="sr-only">Switch to light mode</span>
+					{:else}
+						<MoonStars size={26} />
+
+						<span class="sr-only">Switch to dark mode</span>
+					{/if}
+				</button>
 			</div>
 		</div>
 	</header>

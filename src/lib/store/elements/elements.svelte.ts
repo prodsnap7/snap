@@ -1,11 +1,61 @@
-import { Shape } from './shape.svelte';
+import { PathShape, Shape } from './shape.svelte';
 import { Group } from './group.svelte';
 import { Curve } from './curve.svelte';
 import type { CanvasElement, CanvasObject } from './common.svelte';
+import { Image, TextBox } from '..';
 
-export const elementStore = new (class {
+class ElementStore {
+	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
+	history = $state<string[]>([]);
+	historyIndex = $state<number>(-1);
+
+	canRedo = $derived(this.historyIndex < this.history.length - 1);
+	canUndo = $derived(this.historyIndex > 0);
+
+	private constructor() {}
+
+	static getInstance() {
+		if (!ElementStore.instance) {
+			ElementStore.instance = new ElementStore();
+		}
+
+		return ElementStore.instance;
+	}
+
+	saveToLocalStorage() {
+		const elementsJson = this.elements.map((element) => element.toJson());
+		const json = JSON.stringify(elementsJson);
+
+		const current = localStorage.getItem('elements');
+
+		if (current !== json) {
+			localStorage.setItem('elements', json);
+			// add to history
+			this.historyIndex++;
+			this.history = this.history.slice(0, this.historyIndex);
+			this.history.push(json);
+		}
+	}
+
+	undo() {
+		if (this.historyIndex > 0) {
+			this.historyIndex--;
+			const json = this.history[this.historyIndex];
+			this.elements = [];
+			this.addFromJSON(json);
+		}
+	}
+
+	redo() {
+		if (this.historyIndex < this.history.length - 1) {
+			this.historyIndex++;
+			const json = this.history[this.historyIndex];
+			this.elements = [];
+			this.addFromJSON(json);
+		}
+	}
 
 	isElementAtFront(element: CanvasElement) {
 		return this.elements[this.elements.length - 1] === element;
@@ -43,11 +93,24 @@ export const elementStore = new (class {
 
 	addFromObject(element: CanvasObject) {
 		if (element.type === 'shape') {
-			const shape = Shape.fromObject(element);
+			const shape = new Shape(element);
 			this.addElement(shape);
 		} else if (element.type === 'curve') {
-			const curve = Curve.fromObject(element);
+			const curve = new Curve(element);
 			this.addElement(curve);
+		} else if (element.type === 'group') {
+			console.log('adding group', element);
+			const group = Group.fromObject(element);
+			this.addElement(group);
+		} else if (element.type === 'image') {
+			const image = new Image(element);
+			this.addElement(image);
+		} else if (element.type === 'path-shape') {
+			const pathShape = new PathShape(element);
+			this.addElement(pathShape);
+		} else if (element.type === 'text') {
+			const text = new TextBox(element);
+			this.addElement(text);
 		}
 	}
 
@@ -58,9 +121,12 @@ export const elementStore = new (class {
 	}
 
 	addFromJSON(json: string) {
+		console.log('addFromJSON', json);
 		const obj = JSON.parse(json);
+		console.log('addFromJSON', obj);
 		if (Array.isArray(obj)) {
-			this.addFromObjectArray(obj);
+			const objs = obj.map((o) => JSON.parse(o));
+			this.addFromObjectArray(objs);
 		} else {
 			this.addFromObject(obj);
 		}
@@ -90,14 +156,15 @@ export const elementStore = new (class {
 		const clone = element.clone();
 		this.addElement(clone);
 	}
-})();
+}
+
+export const elementsStore = ElementStore.getInstance();
 
 function colors(elements: CanvasElement[]): string[] {
 	const colorsWithDuplicates = elements.map((element) => element.colors).flat();
 	const uniqueColors = [...new Set(colorsWithDuplicates)];
 	return uniqueColors;
 }
-
 
 export const highlightedElementsStore = new (class {
 	elements = $state<CanvasElement[]>([]);

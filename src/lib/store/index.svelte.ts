@@ -2,7 +2,7 @@ import { canvasStore } from './canvas.svelte';
 import { Group } from './elements/group.svelte';
 import {
 	activeElementStore,
-	elementStore,
+	elementsStore,
 	highlightedElementsStore,
 } from './elements/elements.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
@@ -14,8 +14,9 @@ type StoreObj = {
 	elements: string;
 };
 
-export const store = new (class {
-	elements = $state(elementStore);
+class Store {
+	private static instance: Store;
+	elements = $state(elementsStore);
 	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
 	unselectedElements = $derived(
@@ -26,6 +27,22 @@ export const store = new (class {
 	name = $state('New Design');
 	fonts = $state<Record<string, string[]>>({});
 	gridLines = $derived(getGridLines());
+	saving = $state(false);
+
+	canUndo = $derived(this.elements.canUndo);
+	canRedo = $derived(this.elements.canRedo);
+
+	private constructor() {
+		this.initFromLocalStorage();
+	}
+
+	static getInstance() {
+		if (!Store.instance) {
+			Store.instance = new Store();
+		}
+
+		return Store.instance;
+	}
 
 	init(obj: StoreObj) {
 		this.name = obj.name;
@@ -33,8 +50,42 @@ export const store = new (class {
 		this.elements.addFromJSON(obj.elements);
 	}
 
+	initFromLocalStorage() {
+		const elements = localStorage.getItem('elements');
+		if (elements) {
+			this.elements.addFromJSON(elements);
+		}
+
+		const canvas = localStorage.getItem('canvas');
+		if (canvas) {
+			this.canvas.setFromJSON(canvas);
+		}
+	}
+
 	deleteSelected() {
 		this.elements.removeElements(this.selectedElements.elements);
+		this.selectedElements.clear();
+	}
+
+	saveToLocalStorage() {
+		this.saving = true;
+		// loop through the elements and convert each one to a plain object
+		this.elements.saveToLocalStorage();
+		this.canvas.saveToLocalStorage();
+
+		// delay by 2 seconds to show the saving indicator
+		setTimeout(() => {
+			this.saving = false;
+		}, 2000);
+	}
+
+	undo() {
+		this.elements.undo();
+		this.selectedElements.clear();
+	}
+
+	redo() {
+		this.elements.redo();
 		this.selectedElements.clear();
 	}
 
@@ -55,7 +106,9 @@ export const store = new (class {
 		this.elements.addElement(group);
 		this.selectedElements.setElements([group]);
 	}
-})();
+};
+
+export const store = Store.getInstance();
 
 function getGrid() {
 	const grid = store.unselectedElements.map((el) => {

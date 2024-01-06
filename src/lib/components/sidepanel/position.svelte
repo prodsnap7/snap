@@ -19,18 +19,18 @@
 	import Button from '../ui/button/button.svelte';
 	import { selectedElementsStore } from '$lib/store/elements/selected-elements.svelte';
 	import clsx from 'clsx';
-	import { elementStore } from '$lib/store';
+	import { elementsStore } from '$lib/store';
 
 	const frontDisabled = $derived(
 		!selectedElementsStore.isSingle ||
 			(selectedElementsStore.isSingle &&
-				elementStore.isElementAtFront(selectedElementsStore.elements[0]))
+				elementsStore.isElementAtFront(selectedElementsStore.elements[0]))
 	);
 
 	const backDisabled = $derived(
 		!selectedElementsStore.isSingle ||
 			(selectedElementsStore.isSingle &&
-				elementStore.isElementAtBack(selectedElementsStore.elements[0]))
+				elementsStore.isElementAtBack(selectedElementsStore.elements[0]))
 	);
 </script>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { store, type CanvasElement } from '$lib/store';
+	import { store, type CanvasElement, canvasStore } from '$lib/store';
+	import clsx from 'clsx';
 	import GridLines from '../grid-lines/grid-lines.svelte';
 	import SelectBar from '../select-bar.svelte';
 	import SelectControls from '../select-controls';
@@ -53,6 +54,9 @@
 			currentTarget = true;
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
+			canvasStore.state = 'selected';
+		} else {
+			canvasStore.state = 'normal';
 		}
 	}
 
@@ -70,6 +74,8 @@
 			sidepanelStore.prev();
 			currentTarget = false;
 		}
+
+		store.saveToLocalStorage();
 	}
 
 	function onmousemove(e: MouseEvent) {
@@ -91,7 +97,7 @@
 	role="button"
 	id="controls-canvas-container"
 	tabindex="0"
-	class="absolute inset-0 flex items-center justify-center overflow-hidden"
+	class="absolute inset-0 flex items-center justify-center overflow-hidden cursor-pointer"
 >
 	<div
 		id="controls-canvas"
@@ -100,7 +106,12 @@
 		{onmouseup}
 		role="button"
 		tabindex="0"
-		class="absolute border border-transparent cursor-default"
+		class={clsx('absolute border', {
+			'cursor-pointer': !dragging,
+			'cursor-cell': dragging,
+			'border-primary': canvasStore.state === 'selected',
+			'border-secondary': canvasStore.state !== 'selected'
+		})}
 		style="
     width: {canvas.width}px;
     height: {canvas.height}px;

@@ -86,6 +86,31 @@ export class TextBox extends BaseObject {
 		});
 	}
 
+	toObject() {
+		return {
+			x: this.x,
+			y: this.y,
+			type: this.type,
+			width: this.width,
+			height: this.height,
+			scale: this.scale,
+			content: this.content,
+			fontSize: this.fontSize,
+			fontFamily: this.fontFamily,
+			fontStyle: this.fontStyle,
+			fontWeight: this.fontWeight,
+			align: this.align,
+			color: this.color,
+			decoration: this.decoration,
+			uppercase: this.uppercase,
+			letterSpacing: this.letterSpacing,
+			lineHeight: this.lineHeight,
+			listType: this.listType,
+			rotation: this.rotation,
+			opacity: this.opacity
+		};
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		this.x += x;
 		this.y += y;

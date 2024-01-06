@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Curve, activeElementStore, Shape, PathShape, TextBox, Image } from '$lib/store';
+	import {
+		Curve,
+		activeElementStore,
+		Shape,
+		PathShape,
+		TextBox,
+		Image,
+		canvasStore
+	} from '$lib/store';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
 	import CurveToolbar from './curve';
@@ -12,13 +20,24 @@
 	import { sidepanelStore } from '../sidepanel/state.svelte';
 	import clsx from 'clsx';
 
+	let chosen = $state('');
+
 	function onPositionClick() {
 		sidepanelStore.state = 'position';
 	}
+
+	function onFillClick() {
+		chosen = 'fill';
+		sidepanelStore.state = 'colors';
+		sidepanelStore.val = canvasStore.background;
+		sidepanelStore.cb = (val: string) => {
+			canvasStore.background = val;
+		};
+	}
 </script>
 
-{#if activeElementStore.element}
-	<div class="flex items-center gap-2 justify-between h-full px-2" id="toolbar">
+<div class="flex items-center gap-2 justify-between h-full px-2" id="toolbar">
+	{#if activeElementStore.element}
 		{#if activeElementStore.element instanceof PathShape}
 			<PathShapeToolbar element={activeElementStore.element} />
 		{:else if activeElementStore.element instanceof Shape}
@@ -85,5 +104,13 @@
 				</div>
 			</Popover.Content>
 		</Popover.Root>
-	</div>
-{/if}
+	{:else if canvasStore.state === 'selected'}
+		<button
+			onclick={onFillClick}
+			class={clsx('w-6 h-6 rounded border', {
+				'border-primary': chosen === 'fill'
+			})}
+			style="background-color: {canvasStore.background}"
+		></button>
+	{/if}
+</div>

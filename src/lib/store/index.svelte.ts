@@ -29,8 +29,8 @@ class Store {
 	gridLines = $derived(getGridLines());
 	saving = $state(false);
 
-	canUndo = $derived(this.elements.canUndo);
-	canRedo = $derived(this.elements.canRedo);
+	canUndo = $derived(this.elements.canUndo || this.canvas.canUndo);
+	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
 
 	private constructor() {
 		this.initFromLocalStorage();
@@ -81,11 +81,13 @@ class Store {
 
 	undo() {
 		this.elements.undo();
+		this.canvas.undo();
 		this.selectedElements.clear();
 	}
 
 	redo() {
 		this.elements.redo();
+		this.canvas.redo();
 		this.selectedElements.clear();
 	}
 

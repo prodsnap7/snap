@@ -20,9 +20,13 @@
 		CloudArrowUp,
 		FilePng,
 		Folder,
-		CloudCheck
+		CloudCheck,
+		MoonStars,
+		SunDim
 	} from 'phosphor-svelte';
+	import { toggleMode, mode } from 'mode-watcher';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
+	import clsx from 'clsx';
 
 	store.initFromLocalStorage();
 </script>
@@ -116,10 +120,13 @@
 					}}
 					variant="outline"
 					size="sm"
-					class="py-[1px]"
+					class={clsx('py-[1px]', {
+						'bg-primary/10': !store.saving,
+						'bg-gradient-to-r from-sky-500 to-blue-500 text-white': store.saving
+					})}
 				>
 					{#if store.saving}
-						<CloudArrowUp class="animate-spin fill-primary" size={26} />
+						<CloudArrowUp class="animate-pulse fill-current" size={26} />
 					{:else}
 						<CloudCheck class="fill-primary" size={26} />
 					{/if}
@@ -167,6 +174,17 @@
 					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
 					<Avatar.Fallback>CN</Avatar.Fallback>
 				</Avatar.Root>
+
+				<button class="ml-2" onclick={toggleMode}>
+					{#if $mode === 'dark'}
+						<SunDim size={26} />
+						<span class="sr-only">Switch to light mode</span>
+					{:else}
+						<MoonStars size={26} />
+
+						<span class="sr-only">Switch to dark mode</span>
+					{/if}
+				</button>
 			</div>
 		</div>
 	</header>

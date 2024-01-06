@@ -55,6 +55,8 @@
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
 			canvasStore.state = 'selected';
+		} else {
+			canvasStore.state = 'normal';
 		}
 	}
 
@@ -102,9 +104,11 @@
 		{onmouseup}
 		role="button"
 		tabindex="0"
-		class={clsx('absolute border border-transparent', {
+		class={clsx('absolute border', {
 			'cursor-pointer': !dragging,
-			'cursor-cell': dragging
+			'cursor-cell': dragging,
+			'border-primary': canvasStore.state === 'selected',
+			'border-secondary': canvasStore.state !== 'selected'
 		})}
 		style="
     width: {canvas.width}px;

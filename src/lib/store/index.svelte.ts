@@ -14,7 +14,8 @@ type StoreObj = {
 	elements: string;
 };
 
-export const store = new (class {
+class Store {
+	private static instance: Store;
 	elements = $state(elementStore);
 	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
@@ -27,6 +28,18 @@ export const store = new (class {
 	fonts = $state<Record<string, string[]>>({});
 	gridLines = $derived(getGridLines());
 	saving = $state(false);
+
+	private constructor() {
+		this.initFromLocalStorage();
+	}
+
+	static getInstance() {
+		if (!Store.instance) {
+			Store.instance = new Store();
+		}
+
+		return Store.instance;
+	}
 
 	init(obj: StoreObj) {
 		this.name = obj.name;
@@ -84,7 +97,9 @@ export const store = new (class {
 		this.elements.addElement(group);
 		this.selectedElements.setElements([group]);
 	}
-})();
+};
+
+export const store = Store.getInstance();
 
 function getGrid() {
 	const grid = store.unselectedElements.map((el) => {

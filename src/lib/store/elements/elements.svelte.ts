@@ -8,6 +8,11 @@ class ElementStore {
 	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
+	history = $state<string[]>([]);
+	historyIndex = $state<number>(-1);
+
+	canRedo = $derived(this.historyIndex < this.history.length - 1);
+	canUndo = $derived(this.historyIndex > 0);
 
 	private constructor() {}
 
@@ -17,6 +22,39 @@ class ElementStore {
 		}
 
 		return ElementStore.instance;
+	}
+
+	saveToLocalStorage() {
+		const elementsJson = this.elements.map((element) => element.toJson());
+		const json = JSON.stringify(elementsJson);
+
+		const current = localStorage.getItem('elements');
+
+		if (current !== json) {
+			localStorage.setItem('elements', json);
+			// add to history
+			this.historyIndex++;
+			this.history = this.history.slice(0, this.historyIndex);
+			this.history.push(json);
+		}
+	}
+
+	undo() {
+		if (this.historyIndex > 0) {
+			this.historyIndex--;
+			const json = this.history[this.historyIndex];
+			this.elements = [];
+			this.addFromJSON(json);
+		}
+	}
+
+	redo() {
+		if (this.historyIndex < this.history.length - 1) {
+			this.historyIndex++;
+			const json = this.history[this.historyIndex];
+			this.elements = [];
+			this.addFromJSON(json);
+		}
 	}
 
 	isElementAtFront(element: CanvasElement) {
@@ -62,7 +100,7 @@ class ElementStore {
 			this.addElement(curve);
 		} else if (element.type === 'group') {
 			console.log('adding group', element);
-			const group = Group.fromObject(element)
+			const group = Group.fromObject(element);
 			this.addElement(group);
 		} else if (element.type === 'image') {
 			const image = new Image(element);
@@ -127,7 +165,6 @@ function colors(elements: CanvasElement[]): string[] {
 	const uniqueColors = [...new Set(colorsWithDuplicates)];
 	return uniqueColors;
 }
-
 
 export const highlightedElementsStore = new (class {
 	elements = $state<CanvasElement[]>([]);

@@ -29,6 +29,9 @@ class Store {
 	gridLines = $derived(getGridLines());
 	saving = $state(false);
 
+	canUndo = $derived(this.elements.canUndo);
+	canRedo = $derived(this.elements.canRedo);
+
 	private constructor() {
 		this.initFromLocalStorage();
 	}
@@ -67,17 +70,23 @@ class Store {
 	saveToLocalStorage() {
 		this.saving = true;
 		// loop through the elements and convert each one to a plain object
-		const elements = this.elements.elements.map((element) => element.toJson());
-
-		// save the elements to local storage
-		localStorage.setItem('elements', JSON.stringify(elements));
-
+		this.elements.saveToLocalStorage();
 		this.canvas.saveToLocalStorage();
 
 		// delay by 2 seconds to show the saving indicator
 		setTimeout(() => {
 			this.saving = false;
 		}, 2000);
+	}
+
+	undo() {
+		this.elements.undo();
+		this.selectedElements.clear();
+	}
+
+	redo() {
+		this.elements.redo();
+		this.selectedElements.clear();
 	}
 
 	groupSelected() {

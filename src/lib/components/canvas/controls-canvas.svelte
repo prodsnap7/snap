@@ -74,6 +74,8 @@
 			sidepanelStore.prev();
 			currentTarget = false;
 		}
+
+		store.saveToLocalStorage();
 	}
 
 	function onmousemove(e: MouseEvent) {

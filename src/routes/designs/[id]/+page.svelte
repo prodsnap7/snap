@@ -101,10 +101,24 @@
 
 			<div class="flex items-center gap-2 w-28">
 				<Separator class="h-6" orientation="vertical" />
-				<Button variant="ghost">
+				<Button
+					onclick={() => {
+						store.undo();
+					}}
+					variant="ghost"
+					disabled={!store.canUndo}
+					class="disabled:opacity-50 disabled:cursor-no-drop"
+				>
 					<ArrowUUpLeft size={20} />
 				</Button>
-				<Button variant="ghost">
+				<Button
+					onclick={() => {
+						store.redo();
+					}}
+					class="disabled:opacity-50 disabled:cursor-no-drop"
+					variant="ghost"
+					disabled={!store.canRedo}
+				>
 					<ArrowUUpRight size={20} />
 				</Button>
 				<Separator class="h-6" orientation="vertical" />

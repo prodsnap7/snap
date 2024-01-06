@@ -23,8 +23,22 @@
 	let dragRect = $state({ x: 0, y: 0, width: 0, height: 0 });
 	let dragPos = { x: 0, y: 0 };
 	let outerCanvas = $state<HTMLDivElement | null>(null);
+	let outerCanvasContainer = $state<HTMLDivElement | null>(null);
 	let currentTarget = false;
 	const outerCanvasRect = { x: 0, y: 0 };
+
+	$effect(() => {
+		if (outerCanvas && outerCanvasContainer) {
+			const rect = outerCanvas.getBoundingClientRect();
+			const containerRect = outerCanvasContainer.getBoundingClientRect();
+			const widthRatio = rect.width / containerRect.width;
+			const heightRatio = rect.height / containerRect.height;
+
+			if (widthRatio > 0.9 || heightRatio > 0.9) {
+				canvasStore.scale = 0.9;
+			}
+		}
+	});
 
 	$effect(() => {
 		if (outerCanvas) {
@@ -94,6 +108,7 @@
 <div
 	{onmouseup}
 	{onmousemove}
+	bind:this={outerCanvasContainer}
 	role="button"
 	id="controls-canvas-container"
 	tabindex="0"
@@ -115,6 +130,7 @@
 		style="
     width: {canvas.width}px;
     height: {canvas.height}px;
+    transform: scale({canvasStore.scale});
   "
 	>
 		{#each elements.elements as element}

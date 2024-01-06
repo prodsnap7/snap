@@ -88,9 +88,11 @@
 	}
 </script>
 
-<div class="p-2 my-4 rounded-sm flex items-center gap-2 border border-gray-400">
+<div
+	class="p-2 my-4 rounded-sm flex items-center focus-within:border-primary gap-2 border border-gray-400"
+>
 	<MagnifyingGlass color="#262626" size={24} />
-	<Input
+	<input
 		class="h-6 outline-none"
 		bind:value={searchVal}
 		{onkeypress}

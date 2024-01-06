@@ -26,6 +26,7 @@
 	} from 'phosphor-svelte';
 	import { toggleMode, mode } from 'mode-watcher';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
+
 	import clsx from 'clsx';
 </script>
 
@@ -82,6 +83,8 @@
 						>
 							<span class="text-sm text-muted-foreground">W</span>
 							<input
+								type="number"
+								bind:value={canvasStore.width}
 								class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
 							/>
 						</div>
@@ -90,6 +93,8 @@
 						>
 							<span class="text-sm text-muted-foreground">H</span>
 							<input
+								type="number"
+								bind:value={canvasStore.height}
 								class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
 							/>
 						</div>
@@ -121,7 +126,39 @@
 				>
 					<ArrowUUpRight size={20} />
 				</Button>
+
 				<Separator class="h-6" orientation="vertical" />
+
+				<Popover.Root>
+					<Popover.Trigger>
+						<Button variant="ghost" class="text-sm">
+							{canvasStore.scale * 100}%
+						</Button>
+					</Popover.Trigger>
+
+					<Popover.Content>
+						<div class="space-y-4 px-2">
+							<div class="flex items-center justify-between">
+								<label for="border width" class="text-xs font-semibold">Zoom</label>
+								<Input
+									class="w-12 h-6 border rounded p-2 text-xs"
+									value={canvasStore.scale * 100}
+								/>
+							</div>
+
+							<Slider
+								min={0.2}
+								max={1}
+								step={0.01}
+								onValueChange={(val) => {
+									// Round the scale value to avoid floating point precision issues
+									canvasStore.scale = val[0];
+								}}
+								value={[canvasStore.scale]}
+							/>
+						</div>
+					</Popover.Content>
+				</Popover.Root>
 			</div>
 
 			<div class="flex-1" />

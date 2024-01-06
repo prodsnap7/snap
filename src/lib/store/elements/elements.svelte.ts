@@ -9,7 +9,7 @@ class ElementStore {
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
 	history = $state<string[]>([]);
-	historyIndex = $state<number>(-1);
+	historyIndex = $state<number>(0);
 
 	canRedo = $derived(this.historyIndex < this.history.length - 1);
 	canUndo = $derived(this.historyIndex > 0);

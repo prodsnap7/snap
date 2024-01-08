@@ -10,7 +10,9 @@ import {
 class AuthStore {
 	private static instance: AuthStore;
 	private auth: Auth;
-	private user: User | null;
+	private user: User | null = $state(null);
+
+  userLoggedIn = $derived(Boolean(this.user));
 
 	private constructor() {
 		const { auth } = initFirebase();
@@ -18,9 +20,9 @@ class AuthStore {
 		this.user = auth.currentUser;
 		onAuthStateChanged(this.auth, (user) => {
 			if (user) {
-				console.log('User is signed in');
+				this.user = user;
 			} else {
-				console.log('User is signed out');
+				this.user = null;
 			}
 		});
 	}
@@ -34,6 +36,7 @@ class AuthStore {
 	}
 
 	public async signIn(email: string, password: string) {
+		console.log('signing in');
 		return signInWithEmailAndPassword(this.auth, email, password);
 	}
 

@@ -42,7 +42,7 @@
 	$effect(() => {
 		if (auth.userLoggedIn) {
 			console.log('user logged in');
-			goto('/designs/1');
+			goto('/designs');
 		} else {
 			console.log('user not logged in');
 			loading = false;

@@ -4,16 +4,23 @@
 </script>
 
 <div
-	id="canvas"
-	class="relative rounded-xs border shadow-xs overflow-hidden"
-	style="
+	role="button"
+	id="canvas-container"
+	tabindex="0"
+	class="absolute inset-0 flex items-center justify-center overflow-hidden cursor-pointer"
+>
+	<div
+		id="canvas"
+		class="relative rounded-xs border shadow-xs overflow-hidden"
+		style="
     width: {canvasStore.width}px;
     height: {canvasStore.height}px;
     transform: scale({canvasStore.scale});
     background-color: {canvasStore.background};
     "
->
-	{#each elementsStore.elements as element}
-		<Renderer {element} />
-	{/each}
+	>
+		{#each elementsStore.elements as element}
+			<Renderer {element} />
+		{/each}
+	</div>
 </div>

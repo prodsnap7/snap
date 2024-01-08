@@ -3,13 +3,31 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Logo from '$lib/components/logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Check, File, Folder, X } from 'phosphor-svelte';
+	import { Check, File, Folder, Spinner, X } from 'phosphor-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Popover from '$lib/components/ui/popover';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { createMutation } from '@tanstack/svelte-query';
+	import { createNewDesign } from '$lib/api/designs';
+	import { goto } from '$app/navigation';
+	import Loader from '$lib/components/ui/loader.svelte';
 
 	let width = $state(2000);
 	let height = $state(2000);
+
+	const createDesignMutation = createMutation({
+		mutationFn: createNewDesign,
+		onSuccess: (id) => {
+			goto(`/designs/${id}`);
+		}
+	});
+
+	const handleCreateDesign = async () => {
+		$createDesignMutation.mutate({
+			width: width,
+			height: height
+		});
+	};
 </script>
 
 <div class="h-screen">
@@ -17,7 +35,7 @@
 		<Logo />
 		<div class="flex-1"></div>
 
-		<Popover.Root>
+		<Popover.Root portal={null}>
 			<Popover.Trigger>
 				<Button>
 					<File size={20} class="mr-2" />
@@ -50,8 +68,12 @@
 					</div>
 
 					<div class="p-1.5 h-8 border pointer-events-none text-center">px</div>
-					<Button size="sm">
-						<Check size={20} />
+					<Button onclick={handleCreateDesign} size="sm">
+						{#if $createDesignMutation.isPending}
+							<Loader />
+						{:else}
+							<Check size={20} />
+						{/if}
 					</Button>
 				</div>
 

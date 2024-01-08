@@ -34,7 +34,7 @@
 	"dependencies": {
 		"@simonwep/pickr": "^1.9.0",
 		"@tanstack/svelte-query": "^5.14.1",
-		"axios": "^1.6.3",
+		"axios": "^1.6.5",
 		"bits-ui": "^0.13.5",
 		"clsx": "^2.0.0",
 		"color": "^4.2.3",

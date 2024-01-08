@@ -1,6 +1,6 @@
 import  memoize from 'lodash/memoize';
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, getIdToken } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsdPXi7m3etlD0Siq1yRdNQKmuGXoZr00",
@@ -20,3 +20,19 @@ export const initFirebase = memoize(() => {
 
   return { auth }
  })
+
+ export const getUserToken = async () => {
+  return new Promise((resolve) => {
+    const { auth } = initFirebase();
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const token = await getIdToken(user);
+        resolve(token)
+      } else {
+        console.log("User not logged in")
+        resolve(null)
+      }
+      unsub();
+    });
+  })
+}

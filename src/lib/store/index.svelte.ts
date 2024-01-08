@@ -6,11 +6,11 @@ import {
 	highlightedElementsStore,
 } from './elements/elements.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
-import type { CanvasElement } from '.';
+import type { CanvasElement, TCanvas } from '.';
 
 type StoreObj = {
-	name: string;
-	canvas: string;
+	name?: string;
+	canvas: Partial<TCanvas>;
 	elements: string;
 };
 
@@ -45,8 +45,8 @@ class Store {
 	}
 
 	init(obj: StoreObj) {
-		this.name = obj.name;
-		this.canvas.setFromJSON(obj.canvas);
+		this.name = obj.name || 'New Design';
+		this.canvas.setFromObject(obj.canvas);
 		this.elements.addFromJSON(obj.elements);
 	}
 

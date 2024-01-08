@@ -26,8 +26,12 @@
 	} from 'phosphor-svelte';
 	import { toggleMode, mode } from 'mode-watcher';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
-
+	// import page data
 	import clsx from 'clsx';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	store.init(data.design);
 </script>
 
 <div class="w-screen h-screen flex flex-col">

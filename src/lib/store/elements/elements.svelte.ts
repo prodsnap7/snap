@@ -125,7 +125,7 @@ class ElementStore {
 		const obj = JSON.parse(json);
 		console.log('addFromJSON', obj);
 		if (Array.isArray(obj)) {
-			const objs = obj.map((o) => JSON.parse(o));
+			const objs = obj.map((o) => typeof o === 'string' ? JSON.parse(o) : o);
 			this.addFromObjectArray(objs);
 		} else {
 			this.addFromObject(obj);

@@ -33,7 +33,7 @@ class Store {
 	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
 
 	private constructor() {
-		this.initFromLocalStorage();
+		// this.initFromLocalStorage();
 	}
 
 	static getInstance() {

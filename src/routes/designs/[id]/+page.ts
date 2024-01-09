@@ -8,8 +8,6 @@ const loadData = async (id: string) => {
 
   let { canvas, name } = await getDesignById(id);
 
-  console.log("canvas", canvas)
-
   let elements = "[]"
   if (canvas) {
     elements = canvas.elements || "[]";

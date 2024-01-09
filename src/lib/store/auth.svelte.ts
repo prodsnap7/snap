@@ -36,7 +36,6 @@ class AuthStore {
 	}
 
 	public async signIn(email: string, password: string) {
-		console.log('signing in');
 		return signInWithEmailAndPassword(this.auth, email, password);
 	}
 

@@ -64,7 +64,6 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
-			console.log('current target');
 			currentTarget = true;
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
@@ -82,7 +81,6 @@
 			dragging = false;
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 		} else if (currentTarget) {
-			console.log('clearing');
 			selectedElements.clear();
 			activeElement.clear();
 			sidepanelStore.prev();

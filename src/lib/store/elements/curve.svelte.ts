@@ -123,15 +123,8 @@ export class Curve extends BaseObject {
 	}
 
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-		console.log('Update bounds', { x, y, width, height });
-		// this.points.forEach((p) => {
-		// 	p.x += x;
-		// 	p.y += y;
-		// });
-
 
     if (width === 0 && height === 0) {
-      console.log('No width or height');
       this.move({ x, y });
     }
 

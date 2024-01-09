@@ -13,7 +13,6 @@ export class Group extends BaseObject {
 
 	constructor(obj: Partial<Group>) {
 		super(obj);
-		console.log('Group constructor', obj);
 		if (obj.elements) {
 			this.elements = obj.elements;
 		}
@@ -24,7 +23,6 @@ export class Group extends BaseObject {
 		if (obj.rotation) {
 			this._rotation = obj.rotation;
 		}
-		console.log('Group constructor', this);	
 	}
 
 	get bounds(): { x: number; y: number; width: number; height: number } {
@@ -110,7 +108,6 @@ export class Group extends BaseObject {
 
 	toObject(): any {
 		const elements = this.elements.map((e) => e.toObject());
-		console.log('Group toObject', elements);
 		return {
 			type: 'group',
 			elements: this.elements.map((e) => e.toObject())

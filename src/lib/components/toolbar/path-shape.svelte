@@ -23,7 +23,6 @@
 	}
 
 	function onStrokeStyleClick(dash: string) {
-		console.log('Dash: ', dash, element.strokeDasharray);
 		element.strokeDasharray = dash;
 		if (!element.strokeWidth) {
 			element.strokeWidth = 1;
@@ -90,7 +89,6 @@
 		<div class="flex items-center gap-3">
 			<button
 				onclick={() => {
-					console.log('onStrokeStyleClick', 'none');
 					element.strokeWidth = 0;
 				}}
 				class={clsx('rounded border w-12 h-8 flex items-center justify-center', {

@@ -10,7 +10,6 @@ export const getDesignsByUser = async () => {
 
 export const createNewDesign = async ({ width, height }: { width: number; height: number }) => {
 
-  console.log("createNewDesign")
   const designData = {
     name: "Untitled",
     canvasWidth: width,

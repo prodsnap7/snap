@@ -52,7 +52,6 @@ export abstract class BaseObject {
 
 
   toJson() {
-    console.log('toJson', this.toObject());
     return JSON.stringify(this.toObject());
   }
 }

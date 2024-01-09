@@ -12,6 +12,7 @@ type StoreObj = {
 	name?: string;
 	canvas: Partial<TCanvas>;
 	elements: string;
+	id?: string;
 };
 
 class Store {
@@ -28,12 +29,14 @@ class Store {
 	fonts = $state<Record<string, string[]>>({});
 	gridLines = $derived(getGridLines());
 	saving = $state(false);
+	id = $state('');
+	timestamp = $state(Date.now());
 
 	canUndo = $derived(this.elements.canUndo || this.canvas.canUndo);
 	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
 
 	private constructor() {
-		// this.initFromLocalStorage();
+		this.initFromLocalStorage();
 	}
 
 	static getInstance() {
@@ -46,17 +49,18 @@ class Store {
 
 	init(obj: StoreObj) {
 		this.name = obj.name || 'New Design';
+		this.id = obj.id || '';
 		this.canvas.setFromObject(obj.canvas);
 		this.elements.addFromJSON(obj.elements);
 	}
 
 	initFromLocalStorage() {
-		const elements = localStorage.getItem('elements');
+		const elements = localStorage.getItem(`elements-${this.id}`);
 		if (elements) {
 			this.elements.addFromJSON(elements);
 		}
 
-		const canvas = localStorage.getItem('canvas');
+		const canvas = localStorage.getItem(`canvas-${this.id}`);
 		if (canvas) {
 			this.canvas.setFromJSON(canvas);
 		}
@@ -70,8 +74,8 @@ class Store {
 	saveToLocalStorage() {
 		this.saving = true;
 		// loop through the elements and convert each one to a plain object
-		this.elements.saveToLocalStorage();
-		this.canvas.saveToLocalStorage();
+		this.elements.saveToLocalStorage(this.id);
+		this.canvas.saveToLocalStorage(this.id);
 
 		// delay by 2 seconds to show the saving indicator
 		setTimeout(() => {

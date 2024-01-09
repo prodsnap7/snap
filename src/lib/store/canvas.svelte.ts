@@ -47,7 +47,8 @@ export const canvasStore = new class implements TCanvas {
   }
 
 
-  saveToLocalStorage() {
+  saveToLocalStorage(id: string) {
+    const key = `canvas-${id}`;
     const canvas = {
       width: this.width,
       height: this.height,
@@ -57,10 +58,10 @@ export const canvasStore = new class implements TCanvas {
     };
 
     const json = JSON.stringify(canvas);
-    const current = localStorage.getItem('canvas');
+    const current = localStorage.getItem(key);
 
     if (current !== json) {
-      localStorage.setItem('canvas', json);
+      localStorage.setItem(key, json);
       // add to history
       this.historyIndex++;
       this.history = this.history.slice(0, this.historyIndex);

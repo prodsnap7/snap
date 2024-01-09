@@ -24,14 +24,15 @@ class ElementStore {
 		return ElementStore.instance;
 	}
 
-	saveToLocalStorage() {
+	saveToLocalStorage(id: string) {
+		const key = `elements-${id}`;
 		const elementsJson = this.elements.map((element) => element.toJson());
 		const json = JSON.stringify(elementsJson);
 
-		const current = localStorage.getItem('elements');
+		const current = localStorage.getItem(key);
 
 		if (current !== json) {
-			localStorage.setItem('elements', json);
+			localStorage.setItem(key, json);
 			// add to history
 			this.historyIndex++;
 			this.history = this.history.slice(0, this.historyIndex);

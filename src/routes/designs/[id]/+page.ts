@@ -6,7 +6,7 @@ import type { PageLoad } from "./$types";
 
 const loadData = async (id: string) => {
 
-  let { canvas, name } = await getDesignById(id);
+  let { canvas, name} = await getDesignById(id);
 
   let elements = "[]"
   if (canvas) {
@@ -24,6 +24,7 @@ const loadData = async (id: string) => {
   return {
     elements,
     canvas,
+    id,
     name: name || "Untitled",
   }
 

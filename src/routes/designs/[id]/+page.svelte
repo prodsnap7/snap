@@ -248,12 +248,12 @@
 		</div>
 
 		<!-- Main content section -->
-		<section class="flex flex-col w-full bg-primary/5">
+		<section class="flex flex-col w-full bg-primary/5 overflow-hidden">
 			<div class="h-14 w-full p-2 bg-background border-b shadow-xs">
 				<Toolbar />
 			</div>
 
-			<div class="flex-1 flex items-center justify-center relative">
+			<div class="flex-1 overflow-auto relative">
 				<Canvas />
 				{#if canvasStore.state === 'cropping'}
 					<CropCanvas />

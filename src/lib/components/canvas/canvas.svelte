@@ -7,15 +7,14 @@
 	role="button"
 	id="canvas-container"
 	tabindex="0"
-	class="absolute inset-0 flex items-center justify-center overflow-hidden cursor-pointer"
+	class="cursor-pointer absolute left-0 top-0 p-10"
 >
 	<div
 		id="canvas"
-		class="relative rounded-xs border shadow-xs overflow-hidden"
+		class="relative rounded-xs border-2 shadow-xs overflow-hidden"
 		style="
     width: {canvasStore.width}px;
     height: {canvasStore.height}px;
-    transform: scale({canvasStore.scale});
     background-color: {canvasStore.background};
     "
 	>

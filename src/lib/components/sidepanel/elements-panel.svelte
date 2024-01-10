@@ -78,7 +78,7 @@
 	>
 </div>
 
-<div class="flex flex-nowrap no-scrollbar overflow-x-auto overflow-hidden items-center gap-3">
+<div class="flex flex-nowrap scrollbar-x overflow-x-auto overflow-hidden items-center gap-3">
 	{#each shapes as shape}
 		<div
 			tabindex="0"
@@ -105,7 +105,7 @@
 	>
 </div>
 
-<div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
+<div class="flex flex-nowrap scrollbar-x overflow-hidden overflow-x-auto items-center gap-3">
 	{#each fourCurves as curve}
 		<div
 			id="curve-renderer-elements-panel"
@@ -148,7 +148,7 @@
 		>
 	</div>
 
-	<div class="flex flex-nowrap no-scrollbar overflow-hidden overflow-x-auto items-center gap-3">
+	<div class="flex flex-nowrap scrollbar-x overflow-hidden overflow-x-auto items-center gap-3">
 		{#each $photosQuery.data as photo}
 			<img
 				onclick={() => addImageElement(photo)}

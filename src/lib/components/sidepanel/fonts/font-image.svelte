@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Loader from '$lib/components/ui/loader.svelte';
-	import { size } from 'lodash';
 	import { CaretDown, CaretRight } from 'phosphor-svelte';
+	import { mode } from 'mode-watcher';
+	import clsx from 'clsx';
 
 	type Props = {
 		font: any;
@@ -23,7 +24,7 @@
 
 <div class="">
 	<span
-		class="cursor-pointer hover:bg-gray-100 flex w-full justify-between pt-2 rounded overflow-hidden items-center"
+		class="cursor-pointer pt-1.5 hover:bg-muted flex w-full justify-between rounded overflow-hidden items-center"
 	>
 		{#if font.variants.length > 1}
 			<button onclick={() => (opened = !opened)}>
@@ -37,7 +38,14 @@
 			<span class="w-6 h-6 shrink-0 opacity-0"></span>
 		{/if}
 		<div class="flex-1">
-			<img class="w-auto h-6" src={font.variants[0].imageUrl} alt={font.fontFamily} />
+			<img
+				class={clsx('w-auto h-6', {
+					invert: $mode === 'dark',
+					'invert-0': $mode === 'light'
+				})}
+				src={font.variants[0].imageUrl}
+				alt={font.fontFamily}
+			/>
 		</div>
 		{#if currentFontLoading}
 			<Loader />

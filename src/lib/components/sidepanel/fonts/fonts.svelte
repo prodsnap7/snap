@@ -3,12 +3,13 @@
 	import { createInfiniteQuery, createQuery } from '@tanstack/svelte-query';
 	import Loader from '../../ui/loader.svelte';
 	import FontImage from './font-image.svelte';
+	import { onDestroy, onMount } from 'svelte';
 
-	let height = $state(window.innerHeight);
-	let loading = $state(false);
-	let loaderRef = $state<HTMLElement | null>(null);
+	let height = window.innerHeight;
+	let loading = false;
+	let loaderRef: HTMLElement | null = null;
 
-	$effect(() => {
+	onMount(() => {
 		const handleResize = () => {
 			height = window.innerHeight;
 		};
@@ -24,30 +25,37 @@
 		getNextPageParam: (lastPage) => lastPage.data.nextPage
 	});
 
-	$effect(() => {
-		if (!$fontsQuery.hasNextPage || !loaderRef) return;
+	let observer: IntersectionObserver | null = null;
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries.some((entry) => entry.isIntersecting)) {
-					$fontsQuery.fetchNextPage();
-				}
-			},
-			{ threshold: 1 }
-		);
+	$: {
+		if ($fontsQuery.hasNextPage && loaderRef) {
+			observer = new IntersectionObserver(
+				(entries) => {
+					if (entries.some((entry) => entry.isIntersecting)) {
+						$fontsQuery.fetchNextPage();
+					}
+				},
+				{ threshold: 1 }
+			);
 
-		observer.observe(loaderRef);
+			observer.observe(loaderRef);
+		}
+	}
 
-		return () => observer.unobserve(loaderRef!);
+	// Cleanup the observer on component destruction
+	onDestroy(() => {
+		if (loaderRef && observer) {
+			observer.unobserve(loaderRef);
+		}
 	});
 
 	async function onFontClick() {}
 </script>
 
-<div id="fonts-panel" style="height: {height}px" class="flex flex-col space-y-1 relative w-full">
+<div id="fonts-panel" style="height: {height}px" class="flex flex-col relative w-full">
 	<label for="Fonts" class="font-bold ml-2">All Fonts</label>
 	{#if $fontsQuery.isFetching}
-		<div class="absolute inset-0 blur-md">
+		<div class="absolute flex items-center justify-center inset-0 bg-black/10">
 			<Loader />
 		</div>
 	{:else if $fontsQuery.data}
@@ -57,4 +65,10 @@
 			{/each}
 		{/each}
 	{/if}
+
+	<div bind:this={loaderRef} class="flex justify-center items-center h-10">
+		{#if !$fontsQuery.hasNextPage}
+			<span class="text-xs text-gray-500">No more fonts</span>
+		{/if}
+	</div>
 </div>

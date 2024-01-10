@@ -1,6 +1,8 @@
 import  memoize from 'lodash/memoize';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, getIdToken } from "firebase/auth";
+import { browser } from '$app/environment';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsdPXi7m3etlD0Siq1yRdNQKmuGXoZr00",
@@ -35,3 +37,12 @@ export const initFirebase = memoize(() => {
     });
   })
 }
+
+export const checkAuth = (callback: (x: boolean) => void) => {
+  if (browser) {
+    const auth = getAuth();
+    onAuthStateChanged(auth, user => {
+      callback(!!user);
+    });
+  }
+};

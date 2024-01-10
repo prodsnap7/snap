@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { initFirebase } from '$lib/firebase';
 import {
 	signOut,
@@ -45,6 +46,14 @@ class AuthStore {
 
 	public getUser() {
 		return this.user;
+	}
+
+	public checkAuth(callback: (x: boolean) => void) {
+		if (browser) {
+			onAuthStateChanged(this.auth, (user) => {
+				callback(!!user);
+			});
+		}
 	}
 }
 

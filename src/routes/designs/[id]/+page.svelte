@@ -29,9 +29,16 @@
 	// import page data
 	import clsx from 'clsx';
 	import type { PageData } from './$types';
+	import { auth } from '$lib/store/auth.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	store.init(data.design);
+
+	async function signout() {
+		await auth.signOut();
+		goto('/login');
+	}
 </script>
 
 <div class="w-screen h-screen flex flex-col">
@@ -223,10 +230,18 @@
 					</Popover.Content>
 				</Popover.Root>
 
-				<Avatar.Root>
-					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-					<Avatar.Fallback>CN</Avatar.Fallback>
-				</Avatar.Root>
+				<Popover.Root portal="null">
+					<Popover.Trigger>
+						<Avatar.Root>
+							<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+							<Avatar.Fallback>CN</Avatar.Fallback>
+						</Avatar.Root>
+					</Popover.Trigger>
+
+					<Popover.Content>
+						<Button variant="ghost" onclick={signout} class="text-sm">Sign Out</Button>
+					</Popover.Content>
+				</Popover.Root>
 
 				<button class="ml-2" onclick={toggleMode}>
 					{#if $mode === 'dark'}

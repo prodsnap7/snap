@@ -60,7 +60,7 @@
 		if (store.activeElement.element instanceof TextBox) {
 			store.activeElement.element.fontFamily = variant.family;
 			store.activeElement.element.fontStyle = variant.style;
-			store.activeElement.element.fontWeight = variant.weight;
+			store.activeElement.element.fontWeight = `${variant.weight}`;
 			store.activeElement.element.fontUrl = variant.url;
 			loading = true;
 			store.activeElement.element.loading = true;
@@ -81,7 +81,7 @@
 	{:else if $fontsQuery.data}
 		{#each $fontsQuery.data.pages as group}
 			{#each group.data.fonts as font}
-				<FontImage {font} {onFontClick} />
+				<FontImage {font} {onFontClick} text={store.activeElement.element as TextBox} />
 			{/each}
 		{/each}
 	{/if}

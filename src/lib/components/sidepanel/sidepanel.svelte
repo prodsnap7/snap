@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 	import clsx from 'clsx';
+	import { store, TextBox } from '$lib/store';
 	import ElementsPanel from './elements-panel.svelte';
 	import Colors from './colors.svelte';
 	import { sidepanelStore } from './state.svelte';
@@ -92,7 +93,7 @@
 			<div in:fade>
 				<Position />
 			</div>
-		{:else if sidepanelStore.state === 'fonts'}
+		{:else if sidepanelStore.state === 'fonts' && store.activeElement.element instanceof TextBox}
 			<div in:fade>
 				<Fonts />
 			</div>

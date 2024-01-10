@@ -36,7 +36,7 @@
 		"@simonwep/pickr": "^1.9.0",
 		"@tanstack/svelte-query": "^5.14.1",
 		"axios": "^1.6.5",
-		"bits-ui": "^0.13.5",
+		"bits-ui": "^0.14.0",
 		"clsx": "^2.0.0",
 		"color": "^4.2.3",
 		"firebase": "^10.7.1",

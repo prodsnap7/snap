@@ -23,6 +23,7 @@ export class TextBox extends BaseObject {
 	y = $state(0);
 	width = $state(240);
 	content = $state('');
+	loading = $state(false);
 	id = shortUUID.generate();
 	state = $state<'normal' | 'editing'>('normal');
 	fontSize = $state(32);

@@ -63,9 +63,11 @@
 			store.activeElement.element.fontWeight = variant.weight;
 			store.activeElement.element.fontUrl = variant.url;
 			loading = true;
+			store.activeElement.element.loading = true;
 			const observer = new FontFaceObserver(variant.family);
 			await observer.load();
 			loading = false;
+			store.activeElement.element.loading = false;
 		}
 	}
 </script>

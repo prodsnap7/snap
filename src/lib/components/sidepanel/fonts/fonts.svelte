@@ -4,6 +4,7 @@
 	import Loader from '../../ui/loader.svelte';
 	import FontImage from './font-image.svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import { TextBox, store, type FontStyle, type FontWeight } from '$lib/store';
 
 	let height = window.innerHeight;
 	let loading = false;
@@ -49,7 +50,20 @@
 		}
 	});
 
-	async function onFontClick() {}
+	async function onFontClick(variant: {
+		family: string;
+		style: FontStyle;
+		weight: FontWeight;
+		url: string;
+	}) {
+		if (store.activeElement.element instanceof TextBox) {
+			console.log('variant', variant);
+			store.activeElement.element.fontFamily = variant.family;
+			store.activeElement.element.fontStyle = variant.style;
+			store.activeElement.element.fontWeight = variant.weight;
+			store.activeElement.element.fontUrl = variant.url;
+		}
+	}
 </script>
 
 <div id="fonts-panel" style="height: {height}px" class="flex flex-col relative w-full">

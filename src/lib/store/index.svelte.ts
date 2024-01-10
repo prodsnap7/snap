@@ -1,10 +1,10 @@
 import { canvasStore } from './canvas.svelte';
 import { Group } from './elements/group.svelte';
 import {
-	activeElementStore,
 	elementsStore,
 	highlightedElementsStore
 } from './elements/elements.svelte';
+import { activeElementStore } from './elements/active-element.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
 import type { CanvasElement, TCanvas } from '.';
 import { updateDesign } from '$lib/api/designs';

@@ -23,7 +23,8 @@
 </script>
 
 <div class="">
-	<span
+	<button
+		onclick={() => handleFontClick(font.variants[0])}
 		class="cursor-pointer pt-1.5 hover:bg-muted flex w-full justify-between rounded overflow-hidden items-center"
 	>
 		{#if font.variants.length > 1}
@@ -50,5 +51,5 @@
 		{#if currentFontLoading}
 			<Loader />
 		{/if}
-	</span>
+	</button>
 </div>

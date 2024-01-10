@@ -2,7 +2,7 @@ import shortUUID from 'short-uuid';
 import { BaseObject } from '..';
 import { getBounds } from '$lib/utils/bounds-utils';
 
-type FontWeight =
+export type FontWeight =
 	| 'normal'
 	| 'bold'
 	| '100'
@@ -14,6 +14,8 @@ type FontWeight =
 	| '700'
 	| '800'
 	| '900';
+
+export type FontStyle = 'normal' | 'italic';
 
 export class TextBox extends BaseObject {
 	type = 'text' as const;
@@ -27,6 +29,7 @@ export class TextBox extends BaseObject {
 	fontFamily = $state('Lato');
 	fontStyle = $state<'normal' | 'italic'>('normal');
 	fontWeight = $state<FontWeight>('normal');
+	fontUrl = $state('');
 	align = $state<'left' | 'center' | 'right' | 'justify'>('left');
 	color = $state('#000000');
 	decoration = $state<'none' | 'underline' | 'line-through'>('none');

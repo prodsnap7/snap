@@ -31,9 +31,10 @@
 	import type { PageData } from './$types';
 	import { auth } from '$lib/store/auth.svelte';
 	import { goto } from '$app/navigation';
+	import FontLoader from '$lib/components/font-loader.svelte';
 
 	export let data: PageData;
-	store.init(data.design);
+	store.init(data.design!);
 
 	async function signout() {
 		await auth.signOut();
@@ -41,6 +42,7 @@
 	}
 </script>
 
+<FontLoader fontUrls={store.elements.fonts} />
 <div class="w-screen h-screen flex flex-col">
 	<header class="sticky top-0 z-50 w-full border-b bg-background/95 shadow-sm backdrop-blur">
 		<div class="px-4 flex h-14 gap-8 items-center text-primary">

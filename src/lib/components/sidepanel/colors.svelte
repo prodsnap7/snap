@@ -66,7 +66,6 @@
 	const colorMutation = createMutation({
 		mutationFn: async ({ val }: { val: string }) => {
 			const color = Color(val.replace(/\s+/g, '')).rgb().string();
-			console.log('val', val);
 			const res = await fetch(`https://www.thecolorapi.com/scheme?rgb=${color}&count=12`);
 			const data = await res.json();
 			searchResults = data.colors.map((color: any) => color.hex.value);
@@ -75,7 +74,6 @@
 
 	function onkeypress(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
-			console.log('searchVal', searchVal);
 			$colorMutation.mutate({ val: searchVal });
 		}
 	}

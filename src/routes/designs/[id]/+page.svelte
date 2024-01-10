@@ -26,8 +26,12 @@
 	} from 'phosphor-svelte';
 	import { toggleMode, mode } from 'mode-watcher';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
-
+	// import page data
 	import clsx from 'clsx';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	store.init(data.design);
 </script>
 
 <div class="w-screen h-screen flex flex-col">
@@ -244,12 +248,12 @@
 		</div>
 
 		<!-- Main content section -->
-		<section class="flex flex-col w-full bg-primary/5">
+		<section class="flex flex-col w-full bg-primary/5 overflow-hidden">
 			<div class="h-14 w-full p-2 bg-background border-b shadow-xs">
 				<Toolbar />
 			</div>
 
-			<div class="flex-1 flex items-center justify-center relative">
+			<div class="flex-1 overflow-auto relative">
 				<Canvas />
 				{#if canvasStore.state === 'cropping'}
 					<CropCanvas />

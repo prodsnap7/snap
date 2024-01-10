@@ -24,14 +24,15 @@ class ElementStore {
 		return ElementStore.instance;
 	}
 
-	saveToLocalStorage() {
+	saveToLocalStorage(id: string) {
+		const key = `elements-${id}`;
 		const elementsJson = this.elements.map((element) => element.toJson());
 		const json = JSON.stringify(elementsJson);
 
-		const current = localStorage.getItem('elements');
+		const current = localStorage.getItem(key);
 
 		if (current !== json) {
-			localStorage.setItem('elements', json);
+			localStorage.setItem(key, json);
 			// add to history
 			this.historyIndex++;
 			this.history = this.history.slice(0, this.historyIndex);
@@ -99,7 +100,6 @@ class ElementStore {
 			const curve = new Curve(element);
 			this.addElement(curve);
 		} else if (element.type === 'group') {
-			console.log('adding group', element);
 			const group = Group.fromObject(element);
 			this.addElement(group);
 		} else if (element.type === 'image') {
@@ -121,11 +121,9 @@ class ElementStore {
 	}
 
 	addFromJSON(json: string) {
-		console.log('addFromJSON', json);
 		const obj = JSON.parse(json);
-		console.log('addFromJSON', obj);
 		if (Array.isArray(obj)) {
-			const objs = obj.map((o) => JSON.parse(o));
+			const objs = obj.map((o) => typeof o === 'string' ? JSON.parse(o) : o);
 			this.addFromObjectArray(objs);
 		} else {
 			this.addFromObject(obj);
@@ -170,7 +168,6 @@ export const highlightedElementsStore = new (class {
 	elements = $state<CanvasElement[]>([]);
 
 	addElement(element: CanvasElement) {
-		console.log('adding element highlight', element);
 		this.elements.push(element);
 	}
 
@@ -181,7 +178,6 @@ export const highlightedElementsStore = new (class {
 	}
 
 	removeElement(element: CanvasElement) {
-		console.log('removing element highlight', element);
 		this.elements = this.elements.filter((e) => e !== element);
 	}
 

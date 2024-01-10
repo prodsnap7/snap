@@ -3,15 +3,17 @@ import { Group } from './elements/group.svelte';
 import {
 	activeElementStore,
 	elementsStore,
-	highlightedElementsStore,
+	highlightedElementsStore
 } from './elements/elements.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
-import type { CanvasElement } from '.';
+import type { CanvasElement, TCanvas } from '.';
+import { updateDesign } from '$lib/api/designs';
 
 type StoreObj = {
-	name: string;
-	canvas: string;
+	name?: string;
+	canvas: Partial<TCanvas>;
 	elements: string;
+	id?: string;
 };
 
 class Store {
@@ -28,6 +30,8 @@ class Store {
 	fonts = $state<Record<string, string[]>>({});
 	gridLines = $derived(getGridLines());
 	saving = $state(false);
+	id = $state('');
+	timestamp = $state(Date.now());
 
 	canUndo = $derived(this.elements.canUndo || this.canvas.canUndo);
 	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
@@ -45,18 +49,19 @@ class Store {
 	}
 
 	init(obj: StoreObj) {
-		this.name = obj.name;
-		this.canvas.setFromJSON(obj.canvas);
+		this.name = obj.name || 'New Design';
+		this.id = obj.id || '';
+		this.canvas.setFromObject(obj.canvas);
 		this.elements.addFromJSON(obj.elements);
 	}
 
 	initFromLocalStorage() {
-		const elements = localStorage.getItem('elements');
+		const elements = localStorage.getItem(`elements-${this.id}`);
 		if (elements) {
 			this.elements.addFromJSON(elements);
 		}
 
-		const canvas = localStorage.getItem('canvas');
+		const canvas = localStorage.getItem(`canvas-${this.id}`);
 		if (canvas) {
 			this.canvas.setFromJSON(canvas);
 		}
@@ -70,13 +75,35 @@ class Store {
 	saveToLocalStorage() {
 		this.saving = true;
 		// loop through the elements and convert each one to a plain object
-		this.elements.saveToLocalStorage();
-		this.canvas.saveToLocalStorage();
+		this.elements.saveToLocalStorage(this.id);
+		this.canvas.saveToLocalStorage(this.id);
 
 		// delay by 2 seconds to show the saving indicator
 		setTimeout(() => {
 			this.saving = false;
 		}, 2000);
+	}
+
+	async save() {
+		this.saving = true;
+		const data = {
+			id: this.id,
+			name: this.name,
+			canvas: {
+				width: this.canvas.width,
+				height: this.canvas.height,
+				background: this.canvas.background,
+				elements: JSON.stringify(this.elements.elements.map((element) => element.toJson())),
+			}
+		};
+
+		try {
+			await updateDesign({ id: this.id, data });
+		} catch (e) {
+			console.error(e);
+		}
+
+		this.saving = false;
 	}
 
 	undo() {
@@ -108,7 +135,7 @@ class Store {
 		this.elements.addElement(group);
 		this.selectedElements.setElements([group]);
 	}
-};
+}
 
 export const store = Store.getInstance();
 
@@ -116,11 +143,11 @@ function getGrid() {
 	const grid = store.unselectedElements.map((el) => {
 		const { x, y, width, height } = el.bounds;
 		return {
-		left: x,
-		top: y,
-		right: x + width,
-		bottom: y + height
-		}
+			left: x,
+			top: y,
+			right: x + width,
+			bottom: y + height
+		};
 	});
 
 	return grid;
@@ -130,7 +157,7 @@ export function getGridLines() {
 	const grid = getGrid();
 	const selectedElements = store.selectedElements.elements;
 	const canvas = store.canvas;
-  $inspect(selectedElements);
+	$inspect(selectedElements);
 	const lines = selectedElements.reduce(
 		(acc, el) => {
 			const { x, y, width, height } = el.bounds;

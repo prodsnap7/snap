@@ -1,7 +1,6 @@
 import type { CanvasElement } from "$lib/store";
 
 export function getBounds(elements: CanvasElement[]) {
-  console.log(elements);
   if (elements.length === 0) {
     return { x: 0, y: 0, width: 0, height: 0 };
   }

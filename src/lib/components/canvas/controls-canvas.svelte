@@ -64,7 +64,6 @@
 
 	function onmousedown(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
-			console.log('current target');
 			currentTarget = true;
 			dragPos = { x: event.clientX, y: event.clientY };
 			dragging = true;
@@ -82,14 +81,13 @@
 			dragging = false;
 			dragRect = { x: 0, y: 0, width: 0, height: 0 };
 		} else if (currentTarget) {
-			console.log('clearing');
 			selectedElements.clear();
 			activeElement.clear();
 			sidepanelStore.prev();
 			currentTarget = false;
 		}
 
-		store.saveToLocalStorage();
+		store.save();
 	}
 
 	function onmousemove(e: MouseEvent) {
@@ -112,7 +110,7 @@
 	role="button"
 	id="controls-canvas-container"
 	tabindex="0"
-	class="absolute inset-0 flex items-center justify-center overflow-hidden cursor-pointer"
+	class="cursor-pointer absolute left-0 top-0 p-10"
 >
 	<div
 		id="controls-canvas"
@@ -121,7 +119,7 @@
 		{onmouseup}
 		role="button"
 		tabindex="0"
-		class={clsx('absolute border', {
+		class={clsx('relative border rounded-xs', {
 			'cursor-pointer': !dragging,
 			'cursor-cell': dragging,
 			'border-primary': canvasStore.state === 'selected',
@@ -130,7 +128,6 @@
 		style="
     width: {canvas.width}px;
     height: {canvas.height}px;
-    transform: scale({canvasStore.scale});
   "
 	>
 		{#each elements.elements as element}

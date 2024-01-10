@@ -89,7 +89,6 @@
 		<div class="flex items-center gap-3">
 			<button
 				onclick={() => {
-					console.log('onStrokeStyleClick', 'none');
 					element.strokeWidth = 0;
 				}}
 				class={clsx('rounded border w-12 h-8 flex items-center justify-center', {

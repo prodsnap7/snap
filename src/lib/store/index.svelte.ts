@@ -3,10 +3,11 @@ import { Group } from './elements/group.svelte';
 import {
 	activeElementStore,
 	elementsStore,
-	highlightedElementsStore,
+	highlightedElementsStore
 } from './elements/elements.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
 import type { CanvasElement, TCanvas } from '.';
+import { updateDesign } from '$lib/api/designs';
 
 type StoreObj = {
 	name?: string;
@@ -83,6 +84,28 @@ class Store {
 		}, 2000);
 	}
 
+	async save() {
+		this.saving = true;
+		const data = {
+			id: this.id,
+			name: this.name,
+			canvas: {
+				width: this.canvas.width,
+				height: this.canvas.height,
+				background: this.canvas.background,
+				elements: JSON.stringify(this.elements.elements.map((element) => element.toJson())),
+			}
+		};
+
+		try {
+			await updateDesign({ id: this.id, data });
+		} catch (e) {
+			console.error(e);
+		}
+
+		this.saving = false;
+	}
+
 	undo() {
 		this.elements.undo();
 		this.canvas.undo();
@@ -112,7 +135,7 @@ class Store {
 		this.elements.addElement(group);
 		this.selectedElements.setElements([group]);
 	}
-};
+}
 
 export const store = Store.getInstance();
 
@@ -120,11 +143,11 @@ function getGrid() {
 	const grid = store.unselectedElements.map((el) => {
 		const { x, y, width, height } = el.bounds;
 		return {
-		left: x,
-		top: y,
-		right: x + width,
-		bottom: y + height
-		}
+			left: x,
+			top: y,
+			right: x + width,
+			bottom: y + height
+		};
 	});
 
 	return grid;
@@ -134,7 +157,7 @@ export function getGridLines() {
 	const grid = getGrid();
 	const selectedElements = store.selectedElements.elements;
 	const canvas = store.canvas;
-  $inspect(selectedElements);
+	$inspect(selectedElements);
 	const lines = selectedElements.reduce(
 		(acc, el) => {
 			const { x, y, width, height } = el.bounds;

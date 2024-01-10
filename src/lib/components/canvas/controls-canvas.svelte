@@ -87,7 +87,7 @@
 			currentTarget = false;
 		}
 
-		store.saveToLocalStorage();
+		store.save();
 	}
 
 	function onmousemove(e: MouseEvent) {

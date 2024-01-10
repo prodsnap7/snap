@@ -2,7 +2,7 @@ import shortUUID from 'short-uuid';
 import { BaseObject } from '..';
 import { getBounds } from '$lib/utils/bounds-utils';
 
-type FontWeight =
+export type FontWeight =
 	| 'normal'
 	| 'bold'
 	| '100'
@@ -15,18 +15,22 @@ type FontWeight =
 	| '800'
 	| '900';
 
+export type FontStyle = 'normal' | 'italic';
+
 export class TextBox extends BaseObject {
 	type = 'text' as const;
 	x = $state(0);
 	y = $state(0);
 	width = $state(240);
 	content = $state('');
+	loading = $state(false);
 	id = shortUUID.generate();
 	state = $state<'normal' | 'editing'>('normal');
 	fontSize = $state(32);
 	fontFamily = $state('Lato');
 	fontStyle = $state<'normal' | 'italic'>('normal');
 	fontWeight = $state<FontWeight>('normal');
+	fontUrl = $state('');
 	align = $state<'left' | 'center' | 'right' | 'justify'>('left');
 	color = $state('#000000');
 	decoration = $state<'none' | 'underline' | 'line-through'>('none');
@@ -99,6 +103,7 @@ export class TextBox extends BaseObject {
 			fontFamily: this.fontFamily,
 			fontStyle: this.fontStyle,
 			fontWeight: this.fontWeight,
+			fontUrl: this.fontUrl,
 			align: this.align,
 			color: this.color,
 			decoration: this.decoration,
@@ -115,7 +120,7 @@ export class TextBox extends BaseObject {
 		this.x += x;
 		this.y += y;
 
-		const dampingFactor = 0.5; // Adjust this value to control sensitivity
+		const dampingFactor = 1; // Adjust this value to control sensitivity
 
 		if (height !== 0 && width !== 0) {
 			// Calculate the ratio differently for positive and negative height

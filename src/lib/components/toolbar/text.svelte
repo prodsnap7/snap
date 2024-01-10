@@ -81,6 +81,14 @@
 		element.align = val as 'left' | 'center' | 'right' | 'justify';
 	}
 
+	function onFontFamilyClick() {
+		sidepanelStore.state = 'fonts';
+		sidepanelStore.val = element.fontFamily;
+		sidepanelStore.cb = (val: string) => {
+			element.fontFamily = val;
+		};
+	}
+
 	const fontSize = $derived(Math.ceil(element.fontSize) * element.scale);
 </script>
 
@@ -228,7 +236,8 @@
 <Separator orientation="vertical" class="h-6" />
 
 <button
-	class="flex items-center justify-between px-1.5 py-1 w-32 rounded-sm border text-ellipsis hover:bg-secondary"
+	onclick={onFontFamilyClick}
+	class="flex items-center justify-between px-1.5 py-1 w-auto gap-4 rounded-sm border text-ellipsis hover:bg-secondary"
 >
 	<span>
 		{element.fontFamily}

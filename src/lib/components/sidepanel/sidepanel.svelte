@@ -2,11 +2,13 @@
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 	import clsx from 'clsx';
+	import { store, TextBox } from '$lib/store';
 	import ElementsPanel from './elements-panel.svelte';
 	import Colors from './colors.svelte';
 	import { sidepanelStore } from './state.svelte';
 	import AllShapes from './all-shapes.svelte';
 	import Position from './position.svelte';
+	import Fonts from './fonts/fonts.svelte';
 
 	function onclick(val: string) {
 		$page.url.searchParams.set('sidepanel', val);
@@ -90,6 +92,10 @@
 		{:else if sidepanelStore.state === 'position'}
 			<div in:fade>
 				<Position />
+			</div>
+		{:else if sidepanelStore.state === 'fonts' && store.activeElement.element instanceof TextBox}
+			<div in:fade>
+				<Fonts />
 			</div>
 		{/if}
 	</div>

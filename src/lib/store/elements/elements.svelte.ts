@@ -8,6 +8,7 @@ class ElementStore {
 	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
+	fonts = $derived(this.getfonts());
 	history = $state<string[]>([]);
 	historyIndex = $state<number>(0);
 
@@ -154,6 +155,12 @@ class ElementStore {
 		const clone = element.clone();
 		this.addElement(clone);
 	}
+
+	getfonts() {
+		const textEls = this.elements.filter((element) => element.type === 'text') as TextBox[];
+		const fontUrls = textEls.map((element) => element.fontUrl);
+		return [...new Set(fontUrls)];
+	}
 }
 
 export const elementsStore = ElementStore.getInstance();
@@ -193,17 +200,5 @@ export const highlightedElementsStore = new (class {
 
 	clear() {
 		this.elements = [];
-	}
-})();
-
-export const activeElementStore = new (class {
-	element = $state<CanvasElement | null>(null);
-
-	setElement(element: CanvasElement) {
-		this.element = element;
-	}
-
-	clear() {
-		this.element = null;
 	}
 })();

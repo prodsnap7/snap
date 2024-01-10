@@ -115,7 +115,7 @@ export class TextBox extends BaseObject {
 		this.x += x;
 		this.y += y;
 
-		const dampingFactor = 0.5; // Adjust this value to control sensitivity
+		const dampingFactor = 1; // Adjust this value to control sensitivity
 
 		if (height !== 0 && width !== 0) {
 			// Calculate the ratio differently for positive and negative height

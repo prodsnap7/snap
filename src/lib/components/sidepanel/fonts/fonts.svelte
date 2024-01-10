@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fetchAllFonts } from '$lib/api/fonts';
-	import { createInfiniteQuery, createQuery } from '@tanstack/svelte-query';
+	import { createInfiniteQuery } from '@tanstack/svelte-query';
+	import FontFaceObserver from 'fontfaceobserver';
 	import Loader from '../../ui/loader.svelte';
 	import FontImage from './font-image.svelte';
 	import { onDestroy, onMount } from 'svelte';
@@ -57,11 +58,14 @@
 		url: string;
 	}) {
 		if (store.activeElement.element instanceof TextBox) {
-			console.log('variant', variant);
 			store.activeElement.element.fontFamily = variant.family;
 			store.activeElement.element.fontStyle = variant.style;
 			store.activeElement.element.fontWeight = variant.weight;
 			store.activeElement.element.fontUrl = variant.url;
+			loading = true;
+			const observer = new FontFaceObserver(variant.family);
+			await observer.load();
+			loading = false;
 		}
 	}
 </script>
@@ -75,7 +79,7 @@
 	{:else if $fontsQuery.data}
 		{#each $fontsQuery.data.pages as group}
 			{#each group.data.fonts as font}
-				<FontImage {font} {loading} {onFontClick} />
+				<FontImage {font} {onFontClick} />
 			{/each}
 		{/each}
 	{/if}

@@ -8,6 +8,7 @@ class ElementStore {
 	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
+	fonts = $derived(this.getfonts());
 	history = $state<string[]>([]);
 	historyIndex = $state<number>(0);
 
@@ -155,7 +156,7 @@ class ElementStore {
 		this.addElement(clone);
 	}
 
-	get fonts() {
+	getfonts() {
 		const textEls = this.elements.filter((element) => element.type === 'text') as TextBox[];
 		const fontUrls = textEls.map((element) => element.fontUrl);
 		return [...new Set(fontUrls)];

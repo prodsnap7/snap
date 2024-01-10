@@ -6,11 +6,10 @@
 
 	type Props = {
 		font: any;
-		loading: boolean;
 		onFontClick: (font: any, style?: string) => Promise<void>;
 	};
 
-	const { font, loading, onFontClick } = $props<Props>();
+	const { font, onFontClick } = $props<Props>();
 
 	let currentFontLoading = $state(false);
 	let opened = $state(false);

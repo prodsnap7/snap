@@ -16,10 +16,19 @@
 		text.content;
 		text.fontStyle;
 		text.fontWeight;
+		text.fontUrl;
 		text.fontFamily;
 		text.letterSpacing;
 		text.uppercase;
 		text.width;
+
+		console.log(
+			'text font updated: ',
+			text.fontFamily,
+			text.fontStyle,
+			text.fontWeight,
+			Boolean(textRef)
+		);
 
 		text.height = textRef?.clientHeight || text.height;
 	});

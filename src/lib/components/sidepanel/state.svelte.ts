@@ -23,5 +23,6 @@ export const sidepanelStore = new class {
 
   prev() {
     this.state = this._prev;
+    this._prev = "";
   }
 }

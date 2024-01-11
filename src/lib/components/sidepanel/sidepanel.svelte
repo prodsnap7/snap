@@ -55,7 +55,7 @@
 			class="rounded p-1 flex flex-col items-center gap-1 hover:bg-secondary/95"
 		>
 			<span
-				class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelStore.state === 'upload' })}
+				class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelStore.state === 'uploads' })}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

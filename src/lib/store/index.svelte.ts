@@ -118,6 +118,12 @@ class Store {
 		this.selectedElements.clear();
 	}
 
+	addElement(element: CanvasElement) {
+		this.elements.addElement(element);
+		this.selectedElements.setElements([element]);
+		this.activeElement.setElement(element);
+	}
+
 	groupSelected() {
 		// get the selected elements, but if one of the selected elements is a group, then call element.ungroup()
 		// const selected = this.selectedElements.elements.map((element) => element.clone());

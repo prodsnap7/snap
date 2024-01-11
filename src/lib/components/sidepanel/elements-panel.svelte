@@ -10,18 +10,12 @@
 
 	let scale = 0.6;
 
-	function addElement(el: CanvasElement) {
-		store.elements.addElement(el);
-		store.activeElement.element = el;
-		store.selectedElements.setElements([el]);
-	}
-
 	function addTextElement() {
 		const text = new TextBox({
 			content: 'Text Goes Here'
 		});
 
-		addElement(text);
+		store.addElement(text);
 	}
 
 	function addImageElement(image: {
@@ -42,12 +36,10 @@
 			alt: image.alt
 		});
 
-		addElement(img);
+		store.addElement(img);
 	}
 
 	const fourCurves = curves.slice(0, 5);
-
-	let photos = $state([]);
 
 	const photosQuery = createQuery({
 		queryKey: ['photos'],
@@ -83,8 +75,8 @@
 		<div
 			tabindex="0"
 			role="button"
-			on:click={() => addElement(shape.clone())}
-			on:keydown={() => addElement(shape.clone())}
+			on:click={() => store.addElement(shape.clone())}
+			on:keydown={() => store.addElement(shape.clone())}
 			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
 			class="relative p-2 flex-initial shrink-0"
 		>
@@ -109,10 +101,10 @@
 	{#each fourCurves as curve}
 		<div
 			id="curve-renderer-elements-panel"
-			on:click={() => addElement(curve.clone(2.5))}
+			on:click={() => store.addElement(curve.clone(2.5))}
 			tabindex="0"
 			role="button"
-			on:keydown={() => addElement(curve.clone(2.5))}
+			on:keydown={() => store.addElement(curve.clone(2.5))}
 			style="width: {curve.width}px; height: {curve.height}px;"
 			class="relative flex-initial shrink-0 mx-2 my-4 ml-0"
 		>

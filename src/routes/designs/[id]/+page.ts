@@ -2,6 +2,7 @@ export const ssr = false;
 
 import { goto } from '$app/navigation';
 import { getDesignById } from '$lib/api/designs';
+import { auth } from '$lib/store/auth.svelte';
 import type { PageLoad } from './$types';
 
 const loadData = async (id: string) => {
@@ -32,7 +33,18 @@ const loadData = async (id: string) => {
 };
 
 export const load: PageLoad = async ({ params }) => {
+	let isAuthenticated = false;
+
+  await auth.checkAuth((isLoggedIn) => {
+    isAuthenticated = isLoggedIn;
+  });
+
+  if (!isAuthenticated) {
+    goto('/login');
+  }
+
 	const data = await loadData(params.id);
+
 	return {
 		design: data
 	};

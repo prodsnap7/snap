@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Canvas from '$lib/components/canvas/canvas.svelte';
+	import { goto } from '$app/navigation';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
 	import CropCanvas from '$lib/components/canvas/crop-canvas.svelte';
 	import { Sidepanel } from '$lib/components/sidepanel';
@@ -30,7 +31,6 @@
 	import clsx from 'clsx';
 	import type { PageData } from './$types';
 	import { auth } from '$lib/store/auth.svelte';
-	import { goto } from '$app/navigation';
 	import FontLoader from '$lib/components/font-loader.svelte';
 
 	export let data: PageData;
@@ -48,7 +48,13 @@
 		<div class="px-4 flex h-14 gap-8 items-center text-primary">
 			<Logo />
 
-			<Button variant="ghost" class="text-sm">Home</Button>
+			<Button
+				onclick={() => {
+					goto('/designs');
+				}}
+				variant="ghost"
+				class="text-sm">Home</Button
+			>
 
 			<Menubar.Root class="p-0 shadow-none rounded-none border-none">
 				<Menubar.Menu>

@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { store, type CanvasElement, TextBox, Image } from '$lib/store';
+	import { store, TextBox, Image } from '$lib/store';
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
+	import { mode } from 'mode-watcher';
 	import Button from '../ui/button/button.svelte';
 	import { sidepanelStore } from './state.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import axios from 'axios';
+	import { searchIcons } from '$lib/api/icons';
+	import Loader from '../ui/loader.svelte';
+	import clsx from 'clsx';
 
 	let scale = 0.6;
 
@@ -39,6 +43,8 @@
 		store.addElement(img);
 	}
 
+	function addIcon(icon: any) {}
+
 	const fourCurves = curves.slice(0, 5);
 
 	const photosQuery = createQuery({
@@ -56,6 +62,13 @@
 			return res.data.photos;
 		}
 	});
+
+	const iconsQuery = createQuery({
+		queryKey: ['icons', 'eco-friendly'],
+		queryFn: () => searchIcons('eco-friendly')
+	});
+
+	$: console.log($iconsQuery.data);
 </script>
 
 <div class="mb-4 flex items-center justify-between">
@@ -124,7 +137,9 @@
 >
 
 {#if $photosQuery.isLoading}
-	Loading...
+	<div class="my-4 w-full">
+		<Loader />
+	</div>
 {:else if $photosQuery.isError}
 	{$photosQuery.error.message}
 {:else}
@@ -132,7 +147,7 @@
 		<h2 class="font-bold">Photos</h2>
 		<Button
 			onclick={() => {
-				sidepanelStore.state = 'all-shapes';
+				sidepanelStore.state = 'assets';
 			}}
 			variant="ghost"
 			size="sm"
@@ -150,6 +165,43 @@
 				src={photo.src.tiny}
 				alt={photo.photographer}
 				class="h-24 rounded-sm"
+			/>
+		{/each}
+	</div>
+{/if}
+
+{#if $iconsQuery.isLoading}
+	<div class="my-4 w-full">
+		<Loader />
+	</div>
+{:else if $iconsQuery.isError}
+	{$iconsQuery.error.message}
+{:else}
+	<div class="my-4 flex items-center justify-between">
+		<h2 class="font-bold">Icons</h2>
+		<Button
+			onclick={() => {
+				sidepanelStore.state = 'assets';
+			}}
+			variant="ghost"
+			size="sm"
+			class="text-xs">See All</Button
+		>
+	</div>
+
+	<div class="flex flex-nowrap scrollbar-x overflow-hidden overflow-x-auto items-center gap-3">
+		{#each $iconsQuery.data.icons as icon}
+			<img
+				onclick={() => addIcon(icon)}
+				tabindex="0"
+				role="button"
+				onkeydown={() => addIcon(icon)}
+				src={icon.icon_url}
+				alt={icon.term}
+				class={clsx('h-12 rounded-sm', {
+					invert: $mode === 'dark',
+					'invert-0': $mode === 'light'
+				})}
 			/>
 		{/each}
 	</div>

@@ -141,6 +141,7 @@ export class Image extends BaseObject {
 	width = $state(100);
 	height = $state(100);
 	url = $state('');
+	loading = $state(false);
 	public_id = $state('');
 	thumb_url = $state('');
 	alt = $state('');

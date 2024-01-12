@@ -22,6 +22,13 @@ export const sidepanelStore = new class {
   }
 
   prev() {
-    this.state = this._prev;
+    if (this.base_states.includes(this._state)) {
+      // final state
+      return;
+    }
+    if (this._prev !== '' && this._prev !== this._state) {
+      this.state = this._prev;
+    }
+    this._prev = '';
   }
 }

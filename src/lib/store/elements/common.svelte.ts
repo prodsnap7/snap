@@ -1,5 +1,5 @@
 import shortUUID from "short-uuid";
-import type { Curve, TextBox, Group, Image, PartialCurve, Shape, PartialShape, PathShape } from "..";
+import type { Curve, TextBox, Group, Image, PartialCurve, Shape, PartialShape, PathShape, SvgElement } from "..";
 import type { MakeOneRequired } from "$lib/utils";
 
 export interface IBaseObject {
@@ -17,7 +17,7 @@ export interface IBaseMethods {
 }
 
 
-export type CanvasElement = Shape | Curve | Group | TextBox | PathShape | Image;
+export type CanvasElement = Shape | Curve | Group | TextBox | PathShape | Image | SvgElement;
 export type CanvasObject = MakeOneRequired<CanvasElement, 'type'>
 
 export abstract class BaseObject {

@@ -9,6 +9,7 @@
 	import AllShapes from './all-shapes.svelte';
 	import Position from './position.svelte';
 	import Fonts from './fonts/fonts.svelte';
+	import Uploads from './uploads.svelte';
 
 	function onclick(val: string) {
 		$page.url.searchParams.set('sidepanel', val);
@@ -50,11 +51,11 @@
 			<span class="text-xs">Elements</span>
 		</button>
 		<button
-			on:click={() => onclick('upload')}
+			on:click={() => onclick('uploads')}
 			class="rounded p-1 flex flex-col items-center gap-1 hover:bg-secondary/95"
 		>
 			<span
-				class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelStore.state === 'upload' })}
+				class={clsx('px-2 py-1.5 rounded', { 'bg-primary/20': sidepanelStore.state === 'uploads' })}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +85,10 @@
 		{:else if sidepanelStore.state === 'colors'}
 			<div in:fade>
 				<Colors />
+			</div>
+		{:else if sidepanelStore.state === 'uploads'}
+			<div in:fade>
+				<Uploads />
 			</div>
 		{:else if sidepanelStore.state === 'all-shapes'}
 			<div in:fade>

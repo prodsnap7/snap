@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import Label from '$lib/components/ui/label/label.svelte';
+
 	import Logo from '$lib/components/logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Check, File, Folder, Spinner, X } from 'phosphor-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Popover from '$lib/components/ui/popover';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { createMutation } from '@tanstack/svelte-query';
-	import { createNewDesign } from '$lib/api/designs';
+	import { createMutation, createQuery } from '@tanstack/svelte-query';
+	import { createNewDesign, getDesignsByUser } from '$lib/api/designs';
 	import { goto } from '$app/navigation';
 	import Loader from '$lib/components/ui/loader.svelte';
+	import * as Card from '$lib/components/ui/card';
 
-	let width = $state(2000);
-	let height = $state(2000);
+	let width = 2000;
+	let height = 2000;
 
 	const createDesignMutation = createMutation({
 		mutationFn: createNewDesign,
@@ -28,6 +30,11 @@
 			height: height
 		});
 	};
+
+	const designsQuery = createQuery({
+		queryKey: ['designs'],
+		queryFn: getDesignsByUser
+	});
 </script>
 
 <div class="h-screen">
@@ -117,7 +124,6 @@
 							1500 <X size={16} class="mx-1" /> 1500 px
 						</Label>
 					</div>
-
 					<div class="flex items-center space-x-2">
 						<Checkbox
 							id="2000x1500"
@@ -132,7 +138,25 @@
 							for="terms"
 							class="text-sm flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 						>
-							2000 <X size={16} class="mx-1" /> 1000 px
+							2000 <X size={16} class="mx-1" /> 1500 px
+						</Label>
+					</div>
+
+					<div class="flex items-center space-x-2">
+						<Checkbox
+							id="2000x1500"
+							checked={width === 900 && height === 700}
+							onCheckedChange={(val) => {
+								if (!val) return;
+								width = 900;
+								height = 700;
+							}}
+						/>
+						<Label
+							for="terms"
+							class="text-sm flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						>
+							900 <X size={16} class="mx-1" /> 700 px
 						</Label>
 					</div>
 				</div>
@@ -152,5 +176,34 @@
 
 	<section class="container">
 		<h2 class="text-lg font-semibold mb-4">Recent Designs</h2>
+
+		{#if $designsQuery.isLoading}
+			<Loader />
+		{:else if $designsQuery.isError}
+			<div class="text-center text-sm text-muted-foreground">Failed to load designs</div>
+		{:else if $designsQuery.data.length === 0}
+			<div class="text-center text-sm text-muted-foreground">No designs found</div>
+		{:else}
+			<div class="grid grid-cols-6 gap-2">
+				{#each $designsQuery.data as design}
+					<Card.Root
+						onclick={() => {
+							goto(`/designs/${design.id}`);
+						}}
+						class="w-full group overflow-hidden hover:border-2 hover:border-primary cursor-pointer"
+					>
+						<Card.Content class="p-0 overflow-hidden">
+							<img class="object-cover" src="https://picsum.photos/250/150" alt={design.name} />
+						</Card.Content>
+						<Card.Header class="p-2 group-hover:text-primary">
+							<Card.Title>{design.name}</Card.Title>
+							<Card.Description>
+								{design.canvas.width} x {design.canvas.height}
+							</Card.Description>
+						</Card.Header>
+					</Card.Root>
+				{/each}
+			</div>
+		{/if}
 	</section>
 </div>

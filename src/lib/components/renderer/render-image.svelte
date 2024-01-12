@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { activeElementStore, type Image, canvasStore } from '$lib/store';
+	import Loader from '../ui/loader.svelte';
 
 	type Props = {
 		element: Image;
@@ -14,7 +15,30 @@
 	$inspect(element.clipPath.rect, isCropping);
 </script>
 
-{#if !isCropping}
+{#if element.loading}
+	<img
+		id={`image-${element.id}`}
+		src={element.url}
+		alt={element.alt}
+		class="object-cover absolute left-0 top-0 origin-center"
+		style="
+			width: {element.width}px;
+			height: {element.height}px;
+			transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
+			clip-path: {element.clipPath.clip}
+		"
+	/>
+	<div
+		class="absolute bg-black/40 flex items-center justify-center left-0 top-0 origin-center"
+		style="
+		width: {element.width}px;
+		height: {element.height}px;
+		transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
+	"
+	>
+		<Loader />
+	</div>
+{:else if !isCropping}
 	<img
 		id={`image-${element.id}`}
 		src={element.url}

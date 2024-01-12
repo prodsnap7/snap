@@ -1,27 +1,25 @@
 <script lang="ts">
-	import { store, type CanvasElement, TextBox, Image } from '$lib/store';
+	import { store, TextBox, Image, SvgElement } from '$lib/store';
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
+	import { mode } from 'mode-watcher';
 	import Button from '../ui/button/button.svelte';
 	import { sidepanelStore } from './state.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import axios from 'axios';
+	import { searchIcons } from '$lib/api/icons';
+	import Loader from '../ui/loader.svelte';
+	import clsx from 'clsx';
 
 	let scale = 0.6;
-
-	function addElement(el: CanvasElement) {
-		store.elements.addElement(el);
-		store.activeElement.element = el;
-		store.selectedElements.setElements([el]);
-	}
 
 	function addTextElement() {
 		const text = new TextBox({
 			content: 'Text Goes Here'
 		});
 
-		addElement(text);
+		store.addElement(text);
 	}
 
 	function addImageElement(image: {
@@ -42,12 +40,17 @@
 			alt: image.alt
 		});
 
-		addElement(img);
+		store.addElement(img);
+	}
+
+	async function addIcon(icon: any) {
+		const res = await axios.get(icon.icon_url);
+		const svg = new SvgElement(res.data);
+
+		store.addElement(svg);
 	}
 
 	const fourCurves = curves.slice(0, 5);
-
-	let photos = $state([]);
 
 	const photosQuery = createQuery({
 		queryKey: ['photos'],
@@ -64,6 +67,13 @@
 			return res.data.photos;
 		}
 	});
+
+	const iconsQuery = createQuery({
+		queryKey: ['icons', 'eco-friendly'],
+		queryFn: () => searchIcons('eco-friendly')
+	});
+
+	$: console.log($iconsQuery.data);
 </script>
 
 <div class="mb-4 flex items-center justify-between">
@@ -83,8 +93,8 @@
 		<div
 			tabindex="0"
 			role="button"
-			on:click={() => addElement(shape.clone())}
-			on:keydown={() => addElement(shape.clone())}
+			on:click={() => store.addElement(shape.clone())}
+			on:keydown={() => store.addElement(shape.clone())}
 			style="width: {shape.width * scale}px; height: {shape.height * scale}px;"
 			class="relative p-2 flex-initial shrink-0"
 		>
@@ -109,10 +119,10 @@
 	{#each fourCurves as curve}
 		<div
 			id="curve-renderer-elements-panel"
-			on:click={() => addElement(curve.clone(2.5))}
+			on:click={() => store.addElement(curve.clone(2.5))}
 			tabindex="0"
 			role="button"
-			on:keydown={() => addElement(curve.clone(2.5))}
+			on:keydown={() => store.addElement(curve.clone(2.5))}
 			style="width: {curve.width}px; height: {curve.height}px;"
 			class="relative flex-initial shrink-0 mx-2 my-4 ml-0"
 		>
@@ -132,7 +142,9 @@
 >
 
 {#if $photosQuery.isLoading}
-	Loading...
+	<div class="my-4 w-full">
+		<Loader />
+	</div>
 {:else if $photosQuery.isError}
 	{$photosQuery.error.message}
 {:else}
@@ -140,7 +152,7 @@
 		<h2 class="font-bold">Photos</h2>
 		<Button
 			onclick={() => {
-				sidepanelStore.state = 'all-shapes';
+				sidepanelStore.state = 'assets';
 			}}
 			variant="ghost"
 			size="sm"
@@ -158,6 +170,43 @@
 				src={photo.src.tiny}
 				alt={photo.photographer}
 				class="h-24 rounded-sm"
+			/>
+		{/each}
+	</div>
+{/if}
+
+{#if $iconsQuery.isLoading}
+	<div class="my-4 w-full">
+		<Loader />
+	</div>
+{:else if $iconsQuery.isError}
+	{$iconsQuery.error.message}
+{:else}
+	<div class="my-4 flex items-center justify-between">
+		<h2 class="font-bold">Icons</h2>
+		<Button
+			onclick={() => {
+				sidepanelStore.state = 'assets';
+			}}
+			variant="ghost"
+			size="sm"
+			class="text-xs">See All</Button
+		>
+	</div>
+
+	<div class="flex flex-nowrap scrollbar-x overflow-hidden overflow-x-auto items-center gap-3">
+		{#each $iconsQuery.data.icons as icon}
+			<img
+				onclick={() => addIcon(icon)}
+				tabindex="0"
+				role="button"
+				onkeydown={() => addIcon(icon)}
+				src={icon.icon_url}
+				alt={icon.term}
+				class={clsx('h-12 rounded-sm', {
+					invert: $mode === 'dark',
+					'invert-0': $mode === 'light'
+				})}
 			/>
 		{/each}
 	</div>

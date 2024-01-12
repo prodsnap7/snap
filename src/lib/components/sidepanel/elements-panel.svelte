@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { store, TextBox, Image } from '$lib/store';
+	import { store, TextBox, Image, SvgElement } from '$lib/store';
 	import { Renderer } from '../renderer';
 	import { shapes } from './data/shapes';
 	import { curves } from './data/curves';
@@ -43,7 +43,12 @@
 		store.addElement(img);
 	}
 
-	function addIcon(icon: any) {}
+	async function addIcon(icon: any) {
+		const res = await axios.get(icon.icon_url);
+		const svg = new SvgElement(res.data);
+
+		store.addElement(svg);
+	}
 
 	const fourCurves = curves.slice(0, 5);
 

@@ -30,10 +30,10 @@
 		onSelect(event, element);
 	}
 
-	const x = $derived(element.bounds.x);
-	const y = $derived(element.bounds.y);
-	const width = $derived(element.bounds.width);
-	const height = $derived(element.bounds.height);
+	const x = $derived(element.rect.x);
+	const y = $derived(element.rect.y);
+	const width = $derived(element.rect.width);
+	const height = $derived(element.rect.height);
 </script>
 
 {#if !store.selectedElements.elements.includes(element)}
@@ -50,9 +50,9 @@
 			}
 		)}
 		style="
-    width: {width + 5}px;
-    height: {height + 5}px;
-    transform: translate({x - 2.5}px, {y - 2.5}px) rotate({element.rotation}deg);
+    width: {width}px;
+    height: {height}px;
+    transform: translate({x}px, {y}px) rotate({element.rotation}deg);
     left: 0px;
     top: 0px;
   "

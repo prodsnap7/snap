@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Group, TextBox, store } from '$lib/store';
-	import { Copy, Trash } from 'phosphor-svelte';
+	import { Group, TextBox, activeElementStore, store } from '$lib/store';
+	import { ArrowsHorizontal, ArrowsVertical, Copy, Trash } from 'phosphor-svelte';
 
 	const selected = $derived(store.selectedElements.elements);
 
@@ -27,6 +27,14 @@
 		) {
 			store.selectedElements.elements[0].state = 'editing';
 		}
+	}
+
+	function expandWidth() {
+		activeElementStore.expandWidth();
+	}
+
+	function expandHeight() {
+		activeElementStore.expandHeight();
 	}
 </script>
 
@@ -59,6 +67,13 @@
 				</button>
 			{:else if selected.length === 1 && selected[0].type === 'text'}
 				<button onclick={onEditClick} class="text-xs select-none"> Edit </button>
+			{:else if selected.length === 1 && selected[0].type === 'shape'}
+				<button onclick={expandWidth} class="text-xs select-none">
+					<ArrowsHorizontal />
+				</button>
+				<button onclick={expandHeight} class="text-xs select-none">
+					<ArrowsVertical />
+				</button>
 			{/if}
 			<button>
 				<Copy />

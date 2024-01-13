@@ -11,7 +11,7 @@
 >
 	<div
 		id="canvas"
-		class="relative rounded-xs border shadow-xs overflow-hidden"
+		class="relative rounded-xs border shadow-xs overflow-hidden box-content"
 		style="
     width: {canvasStore.width}px;
     height: {canvasStore.height}px;

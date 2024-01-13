@@ -106,6 +106,9 @@
 <div
 	{onmouseup}
 	{onmousemove}
+	onmousedown={() => {
+		currentTarget = true;
+	}}
 	bind:this={outerCanvasContainer}
 	role="button"
 	id="controls-canvas-container"
@@ -119,7 +122,7 @@
 		{onmouseup}
 		role="button"
 		tabindex="0"
-		class={clsx('relative border rounded-xs', {
+		class={clsx('relative border box-content rounded-xs', {
 			'cursor-pointer': !dragging,
 			'cursor-cell': dragging,
 			'border-primary': canvasStore.state === 'selected',

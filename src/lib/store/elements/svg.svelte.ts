@@ -9,6 +9,7 @@ export class SvgElement {
 	height = $state(200);
 	rotation = $state(0);
 	obj = $state<INode>();
+  opacity = $state(1);
 
 	constructor(data: string) {
     parse(data).then(json => {

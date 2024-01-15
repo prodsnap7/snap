@@ -4,7 +4,7 @@
 	import MoveHandler from '../move-handler.svelte';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
-	let image = $derived(activeElementStore.element);
+	let image = activeElementStore.element;
 
 	function onResize({
 		x,
@@ -18,13 +18,23 @@
 		height: number;
 	}) {
 		if (image && image.type === 'image') {
-			image.clipPath.updateBounds({ x, y, width, height });
+			image.clipX += x;
+			image.clipY += y;
+			image.clipWidth += width;
+			image.clipHeight += height;
+			image.updateClipBounds({
+				x,
+				y,
+				width,
+				height
+			});
 		}
 	}
 
 	function onMove({ x, y }: { x: number; y: number }) {
 		if (image && image.type === 'image') {
-			image.clipPath.updateBounds({ x, y, width: 0, height: 0 });
+			image.clipX += x;
+			image.clipY += y;
 		}
 	}
 </script>
@@ -43,20 +53,21 @@
 			>
 				<div
 					style="
-					left: 50%;
-					top: -60px;
-					transform: translateX(-50%);
-				"
+						left: 50%;
+						top: -60px;
+						transform: translateX(-50%);
+					"
 					class="absolute origin-center shadow-xl pointer-events-auto"
 				>
 					<div
 						class="p-1.5 px-2 gap-2 shadow-sm rounded z-10 flex items-center bg-background border border-primary"
 					>
 						<ToggleGroup.Root
-							value={image.clipPath.type}
+							value={image.clipType}
 							onValueChange={(val) => {
 								if (image && val && image.type === 'image') {
-									image.clipPath.setType(val as 'circle' | 'rectangle');
+									// image.clipPath.setType(val as 'circle' | 'rectangle');
+									image.clipType = val as 'circle' | 'rectangle';
 								}
 							}}
 							type="single"
@@ -83,11 +94,16 @@
 					alt={image.alt}
 					class="object-cover absolute left-0 top-0 origin-center"
 					style="
-            clip-path: {image.clipPath.clip}
+            clip-path: {image.clipPath}
           "
 				/>
 				<MoveHandler
-					bounds={image.clipPath.rect}
+					bounds={{
+						x: image.clipX,
+						y: image.clipY,
+						width: image.clipWidth,
+						height: image.clipHeight
+					}}
 					rotation={image.rotation}
 					exclude={['rotating']}
 					onRotate={() => {}}
@@ -112,6 +128,5 @@
 				></div>
 			</div>
 		</div>
-		"
 	</div>
 {/if}

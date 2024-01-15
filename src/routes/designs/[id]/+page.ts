@@ -32,7 +32,8 @@ const loadData = async (id: string) => {
 	}
 };
 
-export const load: PageLoad = async ({ params }) => {
+export const load: PageLoad = async ({ params, parent }) => {
+	await parent();
 	let isAuthenticated = false;
 
   await auth.checkAuth((isLoggedIn) => {

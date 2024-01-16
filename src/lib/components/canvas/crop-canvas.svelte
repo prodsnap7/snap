@@ -18,10 +18,6 @@
 		height: number;
 	}) {
 		if (image && image.type === 'image') {
-			image.clipX += x;
-			image.clipY += y;
-			image.clipWidth += width;
-			image.clipHeight += height;
 			image.updateClipBounds({
 				x,
 				y,

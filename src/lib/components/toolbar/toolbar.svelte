@@ -6,7 +6,8 @@
 		PathShape,
 		TextBox,
 		Image,
-		canvasStore
+		canvasStore,
+		elementsStore
 	} from '$lib/store';
 	import * as Popover from '../ui/popover';
 	import Slider from '../ui/slider/slider.svelte';
@@ -19,6 +20,8 @@
 	import Separator from '../ui/separator/separator.svelte';
 	import { sidepanelStore } from '../sidepanel/state.svelte';
 	import clsx from 'clsx';
+	import { Trash } from 'phosphor-svelte';
+	import { selectedElementsStore } from '$lib/store/elements/selected-elements.svelte';
 
 	let chosen = $state('');
 
@@ -33,6 +36,14 @@
 		sidepanelStore.cb = (val: string) => {
 			canvasStore.background = val;
 		};
+	}
+
+	function onDeleteClick() {
+		if (selectedElementsStore.elements.length > 0) {
+			selectedElementsStore.clear();
+		} else {
+			elementsStore.clear();
+		}
 	}
 </script>
 
@@ -112,5 +123,11 @@
 			})}
 			style="background-color: {canvasStore.background}"
 		></button>
+
+		<div class="flex-1" />
+
+		<button onclick={onDeleteClick}>
+			<Trash />
+		</button>
 	{/if}
 </div>

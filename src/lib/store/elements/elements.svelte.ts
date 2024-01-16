@@ -161,6 +161,10 @@ class ElementStore {
 		const fontUrls = textEls.map((element) => element.fontUrl);
 		return [...new Set(fontUrls)];
 	}
+
+	clear() {
+		this.elements = [];
+	}
 }
 
 export const elementsStore = ElementStore.getInstance();

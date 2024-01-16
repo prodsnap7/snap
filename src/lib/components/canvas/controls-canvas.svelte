@@ -73,6 +73,14 @@
 		}
 	}
 
+	function onOuterCanvasMouseDown(event: MouseEvent) {
+		if (event.target === event.currentTarget) {
+			currentTarget = true;
+			dragPos = { x: event.clientX, y: event.clientY };
+			dragging = true;
+		}
+	}
+
 	function onmouseup(event: MouseEvent) {
 		if (dragging) {
 			store.selectedElements.setElements(store.highlightedElements.elements);
@@ -106,9 +114,7 @@
 <div
 	{onmouseup}
 	{onmousemove}
-	onmousedown={() => {
-		currentTarget = true;
-	}}
+	onmousedown={onOuterCanvasMouseDown}
 	bind:this={outerCanvasContainer}
 	role="button"
 	id="controls-canvas-container"

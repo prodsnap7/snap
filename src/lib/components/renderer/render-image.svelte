@@ -12,7 +12,7 @@
 		canvasStore.state === 'cropping' && activeElementStore.element === element
 	);
 
-	$inspect(element.clipPath.rect, isCropping);
+	// $inspect(element.clipPath.rect, isCropping);
 </script>
 
 {#if element.loading}
@@ -25,7 +25,7 @@
 			width: {element.width}px;
 			height: {element.height}px;
 			transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
-			clip-path: {element.clipPath.clip}
+			clip-path: {element.clipPath}
 		"
 	/>
 	<div
@@ -39,16 +39,21 @@
 		<Loader />
 	</div>
 {:else if !isCropping}
-	<img
-		id={`image-${element.id}`}
-		src={element.url}
-		alt={element.alt}
-		class="object-cover absolute left-0 top-0 origin-center"
+	<div
 		style="
-			width: {element.width}px;
-			height: {element.height}px;
 			transform: translate({element.x}px, {element.y}px) rotate({element.rotation}deg);
-			clip-path: {element.clipPath.clip}
-		"
-	/>
+			width: {element.width}px;
+			height: {element.height}px;"
+		class="absolute left-0 top-0 transform origin-center"
+	>
+		<img
+			id={`image-${element.id}`}
+			src={element.url}
+			alt={element.alt}
+			class="object-cover absolute left-0 top-0 origin-center"
+			style="
+	clip-path: {element.clipPath}
+"
+		/>
+	</div>
 {/if}

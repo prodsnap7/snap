@@ -2,7 +2,7 @@
 	import Canvas from '$lib/components/canvas/canvas.svelte';
 	import { goto } from '$app/navigation';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
-	import CropCanvas from '$lib/components/canvas/crop-canvas.svelte';
+	import CropCanvas from '$lib/components/canvas/crop-canvas';
 	import { Sidepanel } from '$lib/components/sidepanel';
 	import Toolbar from '$lib/components/toolbar/toolbar.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';

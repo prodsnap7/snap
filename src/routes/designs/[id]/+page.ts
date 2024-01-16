@@ -32,16 +32,17 @@ const loadData = async (id: string) => {
 	}
 };
 
-export const load: PageLoad = async ({ params }) => {
-	let isAuthenticated = false;
+export const load: PageLoad = async ({ params, parent }) => {
+	// await parent();
+	// let isAuthenticated = false;
 
-  await auth.checkAuth((isLoggedIn) => {
-    isAuthenticated = isLoggedIn;
-  });
+  // await auth.checkAuth((isLoggedIn) => {
+  //   isAuthenticated = isLoggedIn;
+  // });
 
-  if (!isAuthenticated) {
-    goto('/login');
-  }
+  // if (!isAuthenticated) {
+  //   goto('/login');
+  // }
 
 	const data = await loadData(params.id);
 

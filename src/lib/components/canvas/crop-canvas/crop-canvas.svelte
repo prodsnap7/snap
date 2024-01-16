@@ -172,7 +172,12 @@
 				/>
 				<div class="absolute inset-0 bg-black/50 pointer-events-none" />
 				<div class="-inset-1 absolute border-2 border-primary" />
-				<div {onmousedown} class="absolute -top-3 -left-3 cursor-nwse-resize resizing-tl">
+				<div
+					{onmousedown}
+					tabindex="0"
+					role="button"
+					class="absolute -top-3 -left-3 cursor-nwse-resize resizing-tl"
+				>
 					<svg
 						class="fill-gray-50 pointer-events-none stroke-gray-600"
 						width="24"
@@ -187,6 +192,8 @@
 				</div>
 				<div
 					{onmousedown}
+					tabindex="0"
+					role="button"
 					class="absolute rotate-90 -top-3 -right-3 cursor-nesw-resize resizing-tr"
 				>
 					<svg
@@ -203,6 +210,8 @@
 				</div>
 				<div
 					{onmousedown}
+					tabindex="0"
+					role="button"
 					class="absolute -rotate-90 -bottom-3 -left-3 cursor-nesw-resize resizing-bl"
 				>
 					<svg
@@ -219,6 +228,8 @@
 				</div>
 				<div
 					{onmousedown}
+					tabindex="0"
+					role="button"
 					class="absolute rotate-180 -bottom-3 -right-3 cursor-nwse-resize resizing-br"
 				>
 					<svg

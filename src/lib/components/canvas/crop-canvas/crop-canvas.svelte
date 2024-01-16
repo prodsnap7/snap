@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { canvasStore, activeElementStore } from '$lib/store';
 	import { Circle, Rectangle } from 'phosphor-svelte';
-	import MoveHandler from '../move-handler.svelte';
+	import MoveHandler from '$lib/components/move-handler.svelte';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
 	let image = activeElementStore.element;

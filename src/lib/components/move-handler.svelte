@@ -349,11 +349,10 @@
 			<ArrowsOutCardinal class="pointer-events-none" size={18} />
 		</div>
 	{/if}
+	{#if children}
+		{@render children()}
+	{/if}
 </div>
-
-{#if children}
-	{@render children()}
-{/if}
 
 <style lang="postcss">
 	.corner-control {

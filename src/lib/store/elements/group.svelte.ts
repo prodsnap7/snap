@@ -74,6 +74,17 @@ export class Group extends BaseObject {
 		});
 	}
 
+	get fontUrls(): string[] {
+		let fonts: string[] = [];
+		this.elements.forEach(el => {
+			if (el.type === 'text') {
+				fonts.push(el.fontUrl);
+			}
+		})
+
+		return fonts;
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;

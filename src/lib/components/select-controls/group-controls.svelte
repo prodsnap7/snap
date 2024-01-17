@@ -22,35 +22,37 @@
 	const { onMove, onRotate, onResize, element } = $props<Props>();
 </script>
 
-<MoveHandler
-	{onMove}
-	{onRotate}
-	{onResize}
-	bounds={element.bounds}
-	rotation={element.rotation}
-	exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
->
-	{#each element.elements as el}
-		{#if el instanceof Curve}
-			<div
-				class="absolute"
-				style="
+{#if element}
+	<MoveHandler
+		{onMove}
+		{onRotate}
+		{onResize}
+		bounds={element.bounds}
+		rotation={element.rotation}
+		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+	>
+		{#each element.elements as el}
+			{#if el instanceof Curve}
+				<div
+					class="absolute"
+					style="
         left: {-element.bounds.x}px;
         top: {-element.bounds.y}px;
       "
-			/>
-		{:else if el instanceof Group}
-			<div class="hidden" />
-		{:else}
-			<div
-				class="absolute left-0 top-0 hover:border hover:border-primary move"
-				style="
+				/>
+			{:else if el instanceof Group}
+				<div class="hidden" />
+			{:else}
+				<div
+					class="absolute left-0 top-0 hover:border hover:border-primary move"
+					style="
         width: {el.bounds.width}px;
         height: {el.bounds.height}px;
         transform: translate({el.x - element.bounds.x}px, {el.y -
-					element.bounds.y}px) rotate({el.rotation}deg); 
+						element.bounds.y}px) rotate({el.rotation}deg); 
       "
-			/>
-		{/if}
-	{/each}
-</MoveHandler>
+				/>
+			{/if}
+		{/each}
+	</MoveHandler>
+{/if}

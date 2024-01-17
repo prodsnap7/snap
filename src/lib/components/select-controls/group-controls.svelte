@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Curve, Group } from '$lib/store';
+	import { Curve, Group, type CanvasElement, activeElementStore } from '$lib/store';
+	import clsx from 'clsx';
 	import MoveHandler from '../move-handler.svelte';
 
 	type Props = {
@@ -19,6 +20,11 @@
 		}) => void;
 	};
 
+	function onElementPress(event: MouseEvent, el: CanvasElement) {
+		// event.stopPropagation();
+		activeElementStore.setElement(el);
+	}
+
 	const { onMove, onRotate, onResize, element } = $props<Props>();
 </script>
 
@@ -27,6 +33,7 @@
 		{onMove}
 		{onRotate}
 		{onResize}
+		borderClass="border-secondary border-2"
 		bounds={element.bounds}
 		rotation={element.rotation}
 		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
@@ -44,7 +51,12 @@
 				<div class="hidden" />
 			{:else}
 				<div
-					class="absolute left-0 top-0 hover:border hover:border-primary move"
+					onmouseup={(event) => onElementPress(event, el)}
+					tabindex="0"
+					role="button"
+					class={clsx('absolute left-0 top-0 hover:border hover:border-primary move', {
+						'border border-primary': el === activeElementStore.element
+					})}
 					style="
         width: {el.bounds.width}px;
         height: {el.bounds.height}px;

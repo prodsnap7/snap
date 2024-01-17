@@ -9,6 +9,7 @@
 		rotation: number;
 		transformOrigin?: string;
 		scale?: number;
+		borderClass?: string;
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onRotate: (rotation: number) => void;
@@ -35,6 +36,7 @@
 		transformOrigin = 'center center',
 		rotation,
 		exclude = [],
+		borderClass = '',
 		onMove,
 		onResize,
 		children,
@@ -280,7 +282,9 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border hover:border-solid border-primary cursor-move move', {
+	class={clsx('absolute border hover:border-solid cursor-move move', {
+		'border-primary': borderClass === '',
+		borderClass: borderClass !== '',
 		'border-dashed': status === 'idle'
 	})}
 	style="

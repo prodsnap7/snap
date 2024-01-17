@@ -65,6 +65,6 @@
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>
-		<RenderText hide={element.state === 'editing'} {scale} text={element} />
+		<RenderText {scale} text={element} />
 	</div>
 {/if}

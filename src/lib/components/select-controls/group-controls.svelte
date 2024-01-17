@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Curve, Group, type CanvasElement, activeElementStore } from '$lib/store';
+	import { Curve, Group, type CanvasElement, activeElementStore, TextBox } from '$lib/store';
 	import clsx from 'clsx';
 	import MoveHandler from '../move-handler.svelte';
+	import GroupTextControls from './group-text-controls.svelte';
 
 	type Props = {
 		element: Group;
@@ -49,6 +50,8 @@
 				/>
 			{:else if el instanceof Group}
 				<div class="hidden" />
+			{:else if el instanceof TextBox}
+				<GroupTextControls element={el} offset={{ x: element.bounds.x, y: element.bounds.y }} />
 			{:else}
 				<div
 					onmouseup={(event) => onElementPress(event, el)}

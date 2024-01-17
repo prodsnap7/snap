@@ -7,10 +7,9 @@
 	type Props = {
 		text: TextBox;
 		scale?: number;
-		hide?: boolean;
 	};
 
-	const { text, hide = false, scale = 1 } = $props<Props>();
+	const { text, scale = 1 } = $props<Props>();
 	let textRef = $state<HTMLDivElement>();
 
 	$effect(() => {
@@ -41,7 +40,7 @@
 	});
 </script>
 
-{#if hide}{:else if text.loading}
+{#if text.state === 'editing'}{:else if text.loading}
 	<div
 		style="height: {text.height}px; width: {text.width}px;"
 		class="absolute top-0 left-0 space-y-4"

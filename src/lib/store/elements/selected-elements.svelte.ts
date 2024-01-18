@@ -1,5 +1,5 @@
 import { getBounds } from '$lib/utils/bounds-utils';
-import { TextBox, type CanvasElement, canvasStore, elementsStore } from '..';
+import { TextBox, type CanvasElement, canvasStore, elementsStore, Group } from '..';
 import { AlignHandler } from '../align.svelte';
 
 class SelectedEleemnts {
@@ -220,27 +220,33 @@ class SelectedEleemnts {
 	}
 
 	verticallyCenterElements(): void {
-		this.alignHandler.verticallyCenterElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.verticallyCenterElements();
 	}
 
 	horizontallyCenterElements(): void {
-		this.alignHandler.horizontallyCenterElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.horizontallyCenterElements();
 	}
 
 	topAlignElements(): void {
-		this.alignHandler.topAlignElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.topAlignElements();
 	}
 
 	leftAlignElements(): void {
-		this.alignHandler.leftAlignElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.leftAlignElements();
 	}
 
 	bottomAlignElements(): void {
-		this.alignHandler.bottomAlignElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.bottomAlignElements();
 	}
 
 	rightAlignElements(): void {
-		this.alignHandler.rightAlignElements();
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		collection.rightAlignElements();
 	}
 
 	topAlignCanvas(): void {
@@ -269,27 +275,33 @@ class SelectedEleemnts {
 
 
 	get areElementsVerticallyCentered() {
-		return this.alignHandler.areElementsVerticallyCentered;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsVerticallyCentered;
 	}
 
 	get areElementsHorizontallyCentered() {
-		return this.alignHandler.areElementsHorizontallyCentered;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsHorizontallyCentered;
 	}
 
 	get areElementsTopAligned() {
-		return this.alignHandler.areElementsTopAligned;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsTopAligned;
 	}
 
 	get areElementsLeftAligned() {
-		return this.alignHandler.areElementsLeftAligned;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsLeftAligned;
 	}
 
 	get areElementsBottomAligned() {
-		return this.alignHandler.areElementsBottomAligned;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsBottomAligned;
 	}
 
 	get areElementsRightAligned() {
-		return this.alignHandler.areElementsRightAligned;
+		const collection = this.isGroup ? this.elements[0] as Group : this.alignHandler;
+		return collection.areElementsRightAligned;
 	}
 
 	get areElementsTopCanvas() {

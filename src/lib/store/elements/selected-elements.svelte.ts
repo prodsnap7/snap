@@ -14,54 +14,6 @@ class SelectedEleemnts {
 	isGroup = $derived(this.isSingle && this.elements[0].type === 'group');
 	isPathShape = $derived(this.isSingle && this.elements[0].type === 'path-shape');
 
-	get areElementsVerticallyCentered() {
-		return this.alignHandler.areElementsVerticallyCentered;
-	}
-
-	get areElementsHorizontallyCentered() {
-		return this.alignHandler.areElementsHorizontallyCentered;
-	}
-
-	get areElementsTopAligned() {
-		return this.alignHandler.areElementsTopAligned;
-	}
-
-	get areElementsLeftAligned() {
-		return this.alignHandler.areElementsLeftAligned;
-	}
-
-	get areElementsBottomAligned() {
-		return this.alignHandler.areElementsBottomAligned;
-	}
-
-	get areElementsRightAligned() {
-		return this.alignHandler.areElementsRightAligned;
-	}
-
-	get areElementsTopCanvas() {
-		return this.alignHandler.areElementsTopCanvas;
-	}
-
-	get areElementsLeftCanvas() {
-		return this.alignHandler.areElementsLeftCanvas;
-	}
-
-	get areElementsRightCanvas() {
-		return this.alignHandler.areElementsRightCanvas;
-	}
-
-	get areElementsBottomCanvas() {
-		return this.alignHandler.areElementsBottomCanvas;
-	}
-
-	get areElementsVerticallyCenteredCanvas() {
-		return this.alignHandler.areElementsVerticallyCenteredCanvas;
-	}
-
-	get areElementsHorizontallyCenteredCanvas() {
-		return this.alignHandler.areElementsHorizontallyCenteredCanvas;
-	}
-
 	bringToFront() {
 		if (this.elements.length === 1) {
 			elementsStore.bringToFront(this.elements[0]);
@@ -267,14 +219,6 @@ class SelectedEleemnts {
 		}
 	}
 
-	private findHorizontalMiddle(): number {
-		return this.bounds.x + this.bounds.width / 2;
-	}
-
-	private findVerticalMiddle(): number {
-		return this.bounds.y + this.bounds.height / 2;
-	}
-
 	verticallyCenterElements(): void {
 		this.alignHandler.verticallyCenterElements();
 	}
@@ -321,6 +265,55 @@ class SelectedEleemnts {
 
 	centerHorizontallyCanvas(): void {
 		this.alignHandler.centerHorizontallyCanvas();
+	}
+
+
+	get areElementsVerticallyCentered() {
+		return this.alignHandler.areElementsVerticallyCentered;
+	}
+
+	get areElementsHorizontallyCentered() {
+		return this.alignHandler.areElementsHorizontallyCentered;
+	}
+
+	get areElementsTopAligned() {
+		return this.alignHandler.areElementsTopAligned;
+	}
+
+	get areElementsLeftAligned() {
+		return this.alignHandler.areElementsLeftAligned;
+	}
+
+	get areElementsBottomAligned() {
+		return this.alignHandler.areElementsBottomAligned;
+	}
+
+	get areElementsRightAligned() {
+		return this.alignHandler.areElementsRightAligned;
+	}
+
+	get areElementsTopCanvas() {
+		return this.alignHandler.areElementsTopCanvas;
+	}
+
+	get areElementsLeftCanvas() {
+		return this.alignHandler.areElementsLeftCanvas;
+	}
+
+	get areElementsRightCanvas() {
+		return this.alignHandler.areElementsRightCanvas;
+	}
+
+	get areElementsBottomCanvas() {
+		return this.alignHandler.areElementsBottomCanvas;
+	}
+
+	get areElementsVerticallyCenteredCanvas() {
+		return this.alignHandler.areElementsVerticallyCenteredCanvas;
+	}
+
+	get areElementsHorizontallyCenteredCanvas() {
+		return this.alignHandler.areElementsHorizontallyCenteredCanvas;
 	}
 }
 

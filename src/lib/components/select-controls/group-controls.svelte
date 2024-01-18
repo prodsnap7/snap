@@ -42,11 +42,18 @@
 		{#each element.elements as el}
 			{#if el instanceof Curve}
 				<div
-					class="absolute"
+					tabindex="0"
+					role="button"
+					onmouseup={(event) => onElementPress(event, el)}
+					class="absolute cursor-pointer border border-transparent hover:border-primary"
 					style="
-        left: {-element.bounds.x}px;
-        top: {-element.bounds.y}px;
-      "
+						left: {el.x - element.bounds.x}px;
+						top: {el.y - element.bounds.y}px;
+						height: {element.bounds.height}px;
+						width: {element.bounds.width}px;
+						transform: translateY(-50%);
+						min-height: 10px;
+					"
 				/>
 			{:else if el instanceof Group}
 				<div class="hidden" />
@@ -57,9 +64,12 @@
 					onmouseup={(event) => onElementPress(event, el)}
 					tabindex="0"
 					role="button"
-					class={clsx('absolute left-0 top-0 hover:border hover:border-primary move', {
-						'border border-primary': el === activeElementStore.element
-					})}
+					class={clsx(
+						'absolute cursor-pointer left-0 top-0 hover:border hover:border-primary move',
+						{
+							'border border-primary': el === activeElementStore.element
+						}
+					)}
 					style="
         width: {el.bounds.width}px;
         height: {el.bounds.height}px;

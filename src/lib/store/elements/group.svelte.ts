@@ -124,7 +124,7 @@ export class Group extends BaseObject {
 		const elements = this.elements.map((e) => e.toObject());
 		return {
 			type: 'group',
-			elements: this.elements.map((e) => e.toObject())
+			elements
 		};
 	}
 

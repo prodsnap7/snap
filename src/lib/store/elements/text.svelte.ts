@@ -78,6 +78,7 @@ export class TextBox extends BaseObject {
 			fontFamily: this.fontFamily,
 			fontStyle: this.fontStyle,
 			fontWeight: this.fontWeight,
+			fontUrl: this.fontUrl,
 			align: this.align,
 			color: this.color,
 			decoration: this.decoration,

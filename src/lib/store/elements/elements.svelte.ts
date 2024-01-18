@@ -161,7 +161,9 @@ class ElementStore {
 		const groupedFontUrls = groupedEls.map((group) => group.fontUrls).flat();
 		const textEls = this.elements.filter((element) => element.type === 'text') as TextBox[];
 		const fontUrls = textEls.map((element) => element.fontUrl);
-		return [...new Set([...fontUrls, ...groupedFontUrls])];
+		const fontUrlList = [...new Set([...fontUrls, ...groupedFontUrls])];
+		console.log(fontUrlList);
+		return fontUrlList;
 	}
 
 	clear() {

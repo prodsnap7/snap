@@ -21,7 +21,7 @@
 		{ dash: '8,4', style: 'dashed' }
 	];
 
-	const TYPES = ['none', 'outline-arrow', 'outline-circle', 'fill-arrow', 'fill-circle'];
+	const TYPES = ['none', 'outline-arrow', 'outline-circle', 'fill-arrow', 'fill-circle', 'line'];
 
 	let { element } = $props<Props>();
 	let chosen = $state('');
@@ -154,12 +154,12 @@
 		</Button>
 	</Popover.Trigger>
 	<Popover.Content>
-		<label class="text-sm font-semibold" for="markers">Start</label>
-		<div class="space-x-1">
+		<label class="font-semibold block my-2 text-sm" for="markers">Start</label>
+		<div class="space-x-2">
 			{#each TYPES as type}
 				<Button
 					variant="ghost"
-					class={clsx('px-2 py-1.5 border', {
+					class={clsx('p-1 border', {
 						'border-primary': element.startMarker === type
 					})}
 					onclick={() => {
@@ -171,11 +171,13 @@
 			{/each}
 		</div>
 
-		<label class="font-semibold text-sm" for="markers">End</label>
-		<div class="space-x-1">
+		<div class="my-4" />
+
+		<label class="font-semibold block my-2 text-sm" for="markers">End</label>
+		<div class="space-x-2">
 			{#each TYPES as type}
 				<Button
-					class={clsx('px-2 py-1.5 border', {
+					class={clsx('p-1 border', {
 						'border-primary': element.endMarker === type
 					})}
 					variant="ghost"
@@ -188,10 +190,12 @@
 			{/each}
 		</div>
 
+		<div class="my-4" />
+
 		<div class="space-y-4 px-2">
 			<div class="flex items-center justify-between">
-				<label for="border width" class="text-xs font-semibold">Size</label>
-				<Input class="w-12 h-6 border rounded p-2 text-xs" bind:value={element.markerSize} />
+				<label for="border width" class="text-sm font-semibold">Size</label>
+				<Input class="w-12 h-6 border rounded p-2 text-sm" bind:value={element.markerSize} />
 			</div>
 
 			<Slider

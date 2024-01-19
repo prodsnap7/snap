@@ -9,9 +9,8 @@ export class Group extends BaseObject {
 	id = shortUUID.generate();
 	elements = $state<CanvasElement[]>([]);
 	opacity = $state(1);
-
-	private alignHandler = new AlignHandler(this);
 	private _rotation = $state(0);
+	private alignHandler = new AlignHandler(this);
 	private _bounds = $derived(getBounds(this.elements));
 
 	constructor(obj: Partial<Group>) {
@@ -116,7 +115,8 @@ export class Group extends BaseObject {
 	clone(): Group {
 		return new Group({
 			type: 'group',
-			elements: this.elements.map((e) => e.clone())
+			elements: this.elements.map((e) => e.clone()),
+			rotation: this._rotation,
 		});
 	}
 
@@ -124,6 +124,7 @@ export class Group extends BaseObject {
 		const elements = this.elements.map((e) => e.toObject());
 		return {
 			type: 'group',
+			rotation: this._rotation,
 			elements
 		};
 	}

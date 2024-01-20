@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { ArrowsCounterClockwise, ArrowsOutCardinal } from 'phosphor-svelte';
+	import { ArrowsOutCardinal } from 'phosphor-svelte';
 
 	type Props = {
 		bounds: { x: number; y: number; width: number; height: number };
@@ -300,15 +300,21 @@
 		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"
 	>
 		{#if status === 'rotating'}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -bottom-10 left-2/3 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{(rotation - 360).toFixed(0)}&deg;
 			</div>
 		{:else if status.startsWith('resizing-br')}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -right-20 top-1/2 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{width.toFixed(0)} x {height.toFixed(0)}
 			</div>
 		{:else if status === 'moving'}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -right-20 top-1/2 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{x.toFixed(0)} x {y.toFixed(0)}
 			</div>
 		{/if}

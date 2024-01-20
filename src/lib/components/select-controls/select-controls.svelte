@@ -4,6 +4,7 @@
 	import PointControls from '../point-controls.svelte';
 	import { snapToGrid } from '$lib/utils/snap-utils';
 	import TextControls from './text-controls.svelte';
+	import GroupControls from './group-controls.svelte';
 
 	const selected = $derived(store.selectedElements.elements);
 
@@ -107,20 +108,17 @@
 		{onMove}
 		{onResize}
 		onRotate={() => {}}
-	>
-		{#each points as point}
-			<PointControls {point} />
-		{/each}
-	</MoveHandler>
+	></MoveHandler>
+	{#each points as point}
+		<PointControls {point} />
+	{/each}
 {:else if store.selectedElements.isGroup}
-	<MoveHandler
-		{bounds}
-		rotation={store.selectedElements.rotation}
-		exclude={['resizing-tm', 'resizing-bm', 'resizing-lm', 'resizing-rm']}
+	<GroupControls
+		element={store.selectedElements.elements[0] as Group}
 		{onMove}
 		{onRotate}
 		{onResize}
-	></MoveHandler>
+	/>
 {:else if store.selectedElements.isImage}
 	<MoveHandler
 		{bounds}

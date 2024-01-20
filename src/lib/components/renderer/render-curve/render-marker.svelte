@@ -15,7 +15,7 @@
 <marker
 	{id}
 	viewBox="0 0 10 10"
-	refX="4"
+	refX="0"
 	refY="4"
 	markerUnits="userSpaceOnUse"
 	{markerWidth}
@@ -36,5 +36,16 @@
 		<path fill={color} stroke-linecap="round" stroke-linejoin="round" d="M 0 0 L 8 4 L 0 8 Z" />
 	{:else if type === 'fill-circle'}
 		<circle fill={color} cx={4} cy={4} r="3" />
+	{:else if type === 'line'}
+		<line
+			stroke={color}
+			stroke-width={2}
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			x1="0"
+			y1="0"
+			x2="0"
+			y2="8"
+		/>
 	{/if}
 </marker>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { ArrowsCounterClockwise, ArrowsOutCardinal } from 'phosphor-svelte';
+	import { ArrowsOutCardinal } from 'phosphor-svelte';
 
 	type Props = {
 		bounds: { x: number; y: number; width: number; height: number };
@@ -9,6 +9,7 @@
 		rotation: number;
 		transformOrigin?: string;
 		scale?: number;
+		borderClass?: string;
 		onMove: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onResize: (bounds: { x: number; y: number; width: number; height: number }) => void;
 		onRotate: (rotation: number) => void;
@@ -35,6 +36,7 @@
 		transformOrigin = 'center center',
 		rotation,
 		exclude = [],
+		borderClass = '',
 		onMove,
 		onResize,
 		children,
@@ -280,7 +282,9 @@
 	onmouseup={onMoveHandlerMouseUp}
 	tabindex="0"
 	role="button"
-	class={clsx('absolute border hover:border-solid border-primary cursor-move move', {
+	class={clsx('absolute border hover:border-solid cursor-move move', {
+		'border-primary': borderClass === '',
+		borderClass: borderClass !== '',
 		'border-dashed': status === 'idle'
 	})}
 	style="
@@ -296,15 +300,21 @@
 		class="absolute inset-0 flex items-center justify-center pointer-events-none text-center text-xs select-none"
 	>
 		{#if status === 'rotating'}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -bottom-10 left-2/3 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{(rotation - 360).toFixed(0)}&deg;
 			</div>
 		{:else if status.startsWith('resizing-br')}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -right-20 top-1/2 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{width.toFixed(0)} x {height.toFixed(0)}
 			</div>
 		{:else if status === 'moving'}
-			<div class="px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none">
+			<div
+				class="absolute -right-20 top-1/2 px-2 py-1.5 rounded text-slate-100 shadow bg-slate-800 pointer-events-none"
+			>
 				{x.toFixed(0)} x {y.toFixed(0)}
 			</div>
 		{/if}
@@ -349,11 +359,10 @@
 			<ArrowsOutCardinal class="pointer-events-none" size={18} />
 		</div>
 	{/if}
+	{#if children}
+		{@render children()}
+	{/if}
 </div>
-
-{#if children}
-	{@render children()}
-{/if}
 
 <style lang="postcss">
 	.corner-control {

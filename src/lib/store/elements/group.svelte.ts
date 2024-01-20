@@ -2,6 +2,7 @@ import shortUUID from 'short-uuid';
 import { BaseObject, type CanvasElement } from './common.svelte';
 import { Image, Shape, TextBox, Curve, PathShape } from '..';
 import { getBounds } from '$lib/utils/bounds-utils';
+import { AlignHandler } from '../align.svelte';
 
 export class Group extends BaseObject {
 	type = 'group' as const;
@@ -9,6 +10,7 @@ export class Group extends BaseObject {
 	elements = $state<CanvasElement[]>([]);
 	opacity = $state(1);
 	private _rotation = $state(0);
+	private alignHandler = new AlignHandler(this);
 	private _bounds = $derived(getBounds(this.elements));
 
 	constructor(obj: Partial<Group>) {
@@ -74,6 +76,17 @@ export class Group extends BaseObject {
 		});
 	}
 
+	get fontUrls(): string[] {
+		let fonts: string[] = [];
+		this.elements.forEach(el => {
+			if (el.type === 'text') {
+				fonts.push(el.fontUrl);
+			}
+		})
+
+		return fonts;
+	}
+
 	updateBounds({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
 		const newGroupWidth = this.bounds.width + width;
 		const newGroupHeight = this.bounds.height + height;
@@ -102,7 +115,8 @@ export class Group extends BaseObject {
 	clone(): Group {
 		return new Group({
 			type: 'group',
-			elements: this.elements.map((e) => e.clone())
+			elements: this.elements.map((e) => e.clone()),
+			rotation: this._rotation,
 		});
 	}
 
@@ -110,7 +124,8 @@ export class Group extends BaseObject {
 		const elements = this.elements.map((e) => e.toObject());
 		return {
 			type: 'group',
-			elements: this.elements.map((e) => e.toObject())
+			rotation: this._rotation,
+			elements
 		};
 	}
 
@@ -145,5 +160,101 @@ export class Group extends BaseObject {
 				}
 			})
 		});
+	}
+
+	get areElementsVerticallyCentered() {
+		return this.alignHandler.areElementsVerticallyCentered;
+	}
+
+	get areElementsHorizontallyCentered() {
+		return this.alignHandler.areElementsHorizontallyCentered;
+	}
+
+	get areElementsTopAligned() {
+		return this.alignHandler.areElementsTopAligned;
+	}
+
+	get areElementsLeftAligned() {
+		return this.alignHandler.areElementsLeftAligned;
+	}
+
+	get areElementsBottomAligned() {
+		return this.alignHandler.areElementsBottomAligned;
+	}
+
+	get areElementsRightAligned() {
+		return this.alignHandler.areElementsRightAligned;
+	}
+
+	get areElementsTopCanvas() {
+		return this.alignHandler.areElementsTopCanvas;
+	}
+
+	get areElementsLeftCanvas() {
+		return this.alignHandler.areElementsLeftCanvas;
+	}
+
+	get areElementsRightCanvas() {
+		return this.alignHandler.areElementsRightCanvas;
+	}
+
+	get areElementsBottomCanvas() {
+		return this.alignHandler.areElementsBottomCanvas;
+	}
+
+	get areElementsVerticallyCenteredCanvas() {
+		return this.alignHandler.areElementsVerticallyCenteredCanvas;
+	}
+
+	get areElementsHorizontallyCenteredCanvas() {
+		return this.alignHandler.areElementsHorizontallyCenteredCanvas;
+	}
+
+	verticallyCenterElements(): void {
+		this.alignHandler.verticallyCenterElements();
+	}
+
+	horizontallyCenterElements(): void {
+		this.alignHandler.horizontallyCenterElements();
+	}
+
+	topAlignElements(): void {
+		this.alignHandler.topAlignElements();
+	}
+
+	leftAlignElements(): void {
+		this.alignHandler.leftAlignElements();
+	}
+
+	bottomAlignElements(): void {
+		this.alignHandler.bottomAlignElements();
+	}
+
+	rightAlignElements(): void {
+		this.alignHandler.rightAlignElements();
+	}
+
+	topAlignCanvas(): void {
+		this.alignHandler.topAlignCanvas();
+	}
+
+	leftAlignCanvas(): void {
+		this.alignHandler.leftAlignCanvas();
+	}
+
+	bottomAlignCanvas(): void {
+		this.alignHandler.bottomAlignCanvas();
+	}
+
+	rightAlignCanvas(): void {
+		this.alignHandler.rightAlignCanvas();
+	}
+
+	centerVerticallyCanvas(): void {
+		this.alignHandler.centerVerticallyCanvas();
+	}
+
+	centerHorizontallyCanvas(): void {
+		this.alignHandler.centerHorizontallyCanvas();
 	}
 }

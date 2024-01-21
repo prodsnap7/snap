@@ -193,7 +193,19 @@
 						class="w-full group overflow-hidden hover:border-2 hover:border-primary cursor-pointer"
 					>
 						<Card.Content class="p-0 overflow-hidden">
-							<img class="object-cover" src="https://picsum.photos/250/150" alt={design.name} />
+							{#if design.thumbnail}
+								<img
+									class="object-cover rounded h-[150px]"
+									src={design.thumbnail}
+									alt={design.name}
+								/>
+							{:else}
+								<img
+									class="object-cover rounded"
+									src="https://picsum.photos/250/150"
+									alt={design.name}
+								/>
+							{/if}
 						</Card.Content>
 						<Card.Header class="p-2 group-hover:text-primary">
 							<Card.Title>{design.name}</Card.Title>

@@ -5,7 +5,6 @@
 	import { ModeWatcher } from 'mode-watcher';
 	import { auth } from '$lib/store/auth.svelte';
 
-	console.log('auth initialized', auth);
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {

@@ -184,7 +184,7 @@
 			<div class="mr-2 flex items-center gap-2">
 				<Button
 					onclick={() => {
-						store.saveToLocalStorage();
+						store.save(true);
 					}}
 					variant="outline"
 					size="sm"

@@ -17,6 +17,7 @@
 
 <div
 	id={group.id}
+	class="renderer"
 	style="
 			position: absolute;
 			left: {group.bounds.x}px;

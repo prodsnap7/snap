@@ -1,9 +1,6 @@
 import { canvasStore } from './canvas.svelte';
 import { Group } from './elements/group.svelte';
-import {
-	elementsStore,
-	highlightedElementsStore
-} from './elements/elements.svelte';
+import { elementsStore, highlightedElementsStore } from './elements/elements.svelte';
 import { activeElementStore } from './elements/active-element.svelte';
 import { selectedElementsStore } from './elements/selected-elements.svelte';
 import type { CanvasElement, TCanvas } from '.';
@@ -28,7 +25,9 @@ class Store {
 	canvas = canvasStore;
 	name = $state('New Design');
 	fonts = $state<Record<string, string[]>>({});
-	gridLines = $derived(getGridLines());
+	gridLines = $derived(
+		getGridLines(this.selectedElements.elements, this.unselectedElements, this.canvas)
+	);
 	saving = $state(false);
 	id = $state('');
 	timestamp = $state(Date.now());
@@ -48,7 +47,7 @@ class Store {
 		return Store.instance;
 	}
 
-	init(obj: StoreObj) {
+	init(obj: StoreObj = { canvas: {}, elements: '[]', name: 'New Design', id: ''  }) {
 		this.name = obj.name || 'New Design';
 		this.id = obj.id || '';
 		this.canvas.setFromObject(obj.canvas);
@@ -56,14 +55,16 @@ class Store {
 	}
 
 	initFromLocalStorage() {
-		const elements = localStorage.getItem(`elements-${this.id}`);
-		if (elements) {
-			this.elements.addFromJSON(elements);
-		}
+		if (isLocalStorageAvailable()) {
+			const elementsData = localStorage.getItem(`elements-${this.id}`);
+			if (elementsData && this.elements.addFromJSON) {
+				this.elements.addFromJSON(JSON.parse(elementsData));
+			}
 
-		const canvas = localStorage.getItem(`canvas-${this.id}`);
-		if (canvas) {
-			this.canvas.setFromJSON(canvas);
+			const canvasData = localStorage.getItem(`canvas-${this.id}`);
+			if (canvasData && this.canvas.setFromJSON) {
+				this.canvas.setFromJSON(JSON.parse(canvasData));
+			}
 		}
 	}
 
@@ -84,7 +85,7 @@ class Store {
 		}, 2000);
 	}
 
-	async save() {
+	async save(generateImage = false) {
 		this.saving = true;
 		const data = {
 			id: this.id,
@@ -93,12 +94,12 @@ class Store {
 				width: this.canvas.width,
 				height: this.canvas.height,
 				background: this.canvas.background,
-				elements: JSON.stringify(this.elements.elements.map((element) => element.toJson())),
+				elements: JSON.stringify(this.elements.elements.map((element) => element.toJson()))
 			}
 		};
 
 		try {
-			await updateDesign({ id: this.id, data });
+			await updateDesign({ id: this.id, data }, generateImage);
 		} catch (e) {
 			console.error(e);
 		}
@@ -145,8 +146,8 @@ class Store {
 
 export const store = Store.getInstance();
 
-function getGrid() {
-	const grid = store.unselectedElements.map((el) => {
+function getGrid(unselectedElements: CanvasElement[]) {
+	const grid = unselectedElements.map((el) => {
 		const { x, y, width, height } = el.bounds;
 		return {
 			left: x,
@@ -159,11 +160,21 @@ function getGrid() {
 	return grid;
 }
 
-export function getGridLines() {
-	const grid = getGrid();
-	const selectedElements = store.selectedElements.elements;
-	const canvas = store.canvas;
-	$inspect(selectedElements);
+function isLocalStorageAvailable() {
+	try {
+			return typeof localStorage !== 'undefined';
+	} catch (e) {
+			return false;
+	}
+}
+
+export function getGridLines(
+	selectedElements: CanvasElement[],
+	unselectedElements: CanvasElement[],
+	canvas: { width: number; height: number }
+) {
+	const grid = getGrid(unselectedElements);
+	// $inspect(selectedElements);
 	const lines = selectedElements.reduce(
 		(acc, el) => {
 			const { x, y, width, height } = el.bounds;

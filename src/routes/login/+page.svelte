@@ -39,17 +39,13 @@
 		};
 	});
 
-	$effect(() => {
-		if (auth.userLoggedIn) {
-			goto('/designs');
-		} else {
-			loading = false;
-		}
-	});
+	const { data } = $props();
+
+	console.log('data', data);
 
 	async function onclick() {
 		loading = true;
-		await auth.signIn(email, password);
+		// await auth.signIn(email, password);
 		loading = false;
 	}
 </script>

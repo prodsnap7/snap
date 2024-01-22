@@ -28,9 +28,11 @@
 				x = Math.random() * (canvas.clientWidth - el.clientWidth);
 				y = Math.random() * (canvas.clientHeight - el.clientHeight);
 			} else if (Math.random() < 0.7) {
-				scale = Math.random() * 4;
+				// scale = Math.random() * 4;
+				// scale between 0.5 and 2.5
+				scale = Math.random() * 2 + 0.5;
 			} else {
-				rotate = Math.random() * 360;
+				rotate = Math.random() > 0.5 ? 0 : 45;
 			}
 		}, 2000);
 
@@ -41,12 +43,15 @@
 
 	const { data } = $props();
 
-	console.log('data', data);
-
 	async function onclick() {
 		loading = true;
-		// await auth.signIn(email, password);
+		const { error } = await data.supabase.auth.signInWithPassword({ email, password });
 		loading = false;
+		if (!error) {
+			goto('/designs');
+		} else {
+			console.error(error);
+		}
 	}
 </script>
 

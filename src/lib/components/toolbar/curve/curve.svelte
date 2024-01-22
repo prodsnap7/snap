@@ -63,7 +63,7 @@
 
 <Separator class="h-6" orientation="vertical" />
 
-<Popover.Root portal="null">
+<Popover.Root portal={null}>
 	<Popover.Trigger>
 		<button
 			onclick={onBorderClick}
@@ -138,7 +138,7 @@
 
 <Separator class="h-6" orientation="vertical" />
 
-<Popover.Root portal="null">
+<Popover.Root portal={null}>
 	<Popover.Trigger>
 		<Button
 			onclick={() => {

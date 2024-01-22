@@ -238,7 +238,7 @@
 					</Popover.Content>
 				</Popover.Root>
 
-				<Popover.Root portal="null">
+				<Popover.Root portal={null}>
 					<Popover.Trigger>
 						<Avatar.Root>
 							<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />

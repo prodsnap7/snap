@@ -13,9 +13,12 @@
 	import { goto } from '$app/navigation';
 	import Loader from '$lib/components/ui/loader.svelte';
 	import * as Card from '$lib/components/ui/card';
+	import type { PageData } from '../$types';
 
 	let width = 2000;
 	let height = 2000;
+
+	export let data: PageData;
 
 	const createDesignMutation = createMutation({
 		mutationFn: createNewDesign,
@@ -35,6 +38,19 @@
 		queryKey: ['designs'],
 		queryFn: getDesignsByUser
 	});
+
+	$: console.log('Data: ', data);
+
+	const handleSignOut = async () => {
+		console.log('signing out', data);
+		const { error } = await data.supabase.auth.signOut();
+
+		if (!error) {
+			goto('/login');
+		} else {
+			console.error(error);
+		}
+	};
 </script>
 
 <div class="h-screen">
@@ -168,10 +184,18 @@
 			My Designs
 		</Button>
 
-		<Avatar.Root>
-			<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-			<Avatar.Fallback>CN</Avatar.Fallback>
-		</Avatar.Root>
+		<Popover.Root portal={null}>
+			<Popover.Trigger>
+				<Avatar.Root>
+					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+					<Avatar.Fallback>CN</Avatar.Fallback>
+				</Avatar.Root>
+			</Popover.Trigger>
+
+			<Popover.Content>
+				<button onclick={handleSignOut}>Sign Out</button>
+			</Popover.Content>
+		</Popover.Root>
 	</nav>
 
 	<section class="container">

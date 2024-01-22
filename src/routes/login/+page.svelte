@@ -13,7 +13,7 @@
 	let y = $state(0);
 	let scale = $state(1);
 	let rotate = $state(0);
-	let loading = $state(true);
+	let loading = $state(false);
 
 	let canvas: HTMLDivElement | null = $state(null);
 	let el: HTMLDivElement | null = $state(null);
@@ -62,21 +62,23 @@
 				<Card.Title>Sign In</Card.Title>
 				<Card.Description>Sign in to access your account</Card.Description>
 			</Card.Header>
-			<Card.Content class="space-y-6">
-				<div class="space-y-2">
-					<label for="email">Email</label>
-					<Input bind:value={email} type="email" />
-				</div>
+			<Card.Content>
+				<form class="space-y-6" method="POST">
+					<div class="space-y-2">
+						<label for="email">Email</label>
+						<Input name="email" bind:value={email} type="email" />
+					</div>
 
-				<div class="space-y-2">
-					<label for="password">Password</label>
-					<Input bind:value={password} type="password" />
-				</div>
+					<div class="space-y-2">
+						<label for="password">Password</label>
+						<Input name="password" bind:value={password} type="password" />
+					</div>
 
-				<Button {onclick} class="w-full" type="submit">
-					Sign In
-					<Spinner class={clsx('ml-2', { hidden: !loading })} />
-				</Button>
+					<Button class="w-full" type="submit">
+						Sign In
+						<Spinner class={clsx('ml-2', { hidden: !loading })} />
+					</Button>
+				</form>
 			</Card.Content>
 		</Card.Root>
 	</div>

@@ -15,34 +15,29 @@
 	import * as Card from '$lib/components/ui/card';
 	import type { PageData } from '../$types';
 
-	let width = 2000;
-	let height = 2000;
+	let width = $state(2000);
+	let height = $state(2000);
+	let loading = $state(false);
 
-	export let data: PageData;
-
-	const createDesignMutation = createMutation({
-		mutationFn: createNewDesign,
-		onSuccess: (id) => {
-			goto(`/designs/${id}`);
-		}
-	});
+	const { data } = $props();
 
 	const handleCreateDesign = async () => {
-		$createDesignMutation.mutate({
-			width: width,
-			height: height
-		});
+		loading = true;
+		try {
+			await createNewDesign({
+				width: width,
+				height: height
+			});
+
+			goto('/designs/${id');
+		} catch (error) {
+			console.log(error);
+		} finally {
+			loading = false;
+		}
 	};
 
-	const designsQuery = createQuery({
-		queryKey: ['designs'],
-		queryFn: getDesignsByUser
-	});
-
-	$: console.log('Data: ', data);
-
 	const handleSignOut = async () => {
-		console.log('signing out', data);
 		const { error } = await data.supabase.auth.signOut();
 
 		if (!error) {
@@ -92,7 +87,7 @@
 
 					<div class="p-1.5 h-8 border pointer-events-none text-center">px</div>
 					<Button onclick={handleCreateDesign} size="sm">
-						{#if $createDesignMutation.isPending}
+						{#if loading}
 							<Loader />
 						{:else}
 							<Check size={20} />
@@ -198,7 +193,7 @@
 		</Popover.Root>
 	</nav>
 
-	<section class="container">
+	<!-- <section class="container">
 		<h2 class="text-lg font-semibold mb-4">Recent Designs</h2>
 
 		{#if $designsQuery.isLoading}
@@ -241,5 +236,5 @@
 				{/each}
 			</div>
 		{/if}
-	</section>
+	</section> -->
 </div>

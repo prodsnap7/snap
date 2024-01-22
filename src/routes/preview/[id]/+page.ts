@@ -1,4 +1,5 @@
 // export const ssr = false;
+// export const csr = false;
 
 // import { goto } from '$app/navigation';
 import { getDesignById } from '$lib/api/designs';
@@ -29,26 +30,15 @@ const loadData = async (id: string) => {
 			name: name || 'Untitled'
 		};
 	} catch (e) {
-		// goto('/designs');
+		console.error('Error loading data:', e);
 		redirect(307, '/designs');
+		return; // Ensure no further execution after redirect
 	}
 };
 
 export const load: PageLoad = async ({ params, parent }) => {
-	// await parent();
-	// let isAuthenticated = false;
-
-  // await auth.checkAuth((isLoggedIn) => {
-  //   isAuthenticated = isLoggedIn;
-  // });
-
-  // if (!isAuthenticated) {
-  //   goto('/login');
-  // }
-
-	const data = await loadData(params.id);
-
+	const design = await loadData(params.id);
 	return {
-		design: data
+		design
 	};
 };

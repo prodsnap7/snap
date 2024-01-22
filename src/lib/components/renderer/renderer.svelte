@@ -29,7 +29,7 @@
 
 {#if element instanceof PathShape}
 	<div
-		class="absolute top-0 left-0 origin-center"
+		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>
@@ -37,7 +37,7 @@
 	</div>
 {:else if element instanceof Shape}
 	<div
-		class="absolute top-0 left-0 origin-center"
+		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>
@@ -45,7 +45,7 @@
 	</div>
 {:else if element instanceof SvgElement}
 	<div
-		class="absolute top-0 left-0 origin-center"
+		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>
@@ -54,14 +54,14 @@
 {:else if element instanceof Image}
 	<RenderImage {scale} {element} />
 {:else if element instanceof Curve}
-	<div class="absolute origin-center inset-0">
+	<div class="absolute origin-center inset-0 renderer">
 		<RenderCurve {scale} curve={element} />
 	</div>
 {:else if element instanceof Group}
 	<RenderGroup {scale} group={element} />
 {:else if element instanceof TextBox}
 	<div
-		class="absolute top-0 left-0 origin-center"
+		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
 			offset.y}px) rotate({element.rotation}deg);"
 	>

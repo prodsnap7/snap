@@ -2,9 +2,17 @@ import client from './client';
 import { supabase } from '$lib/utils/supabase';
 
 export const getDesignsByUser = async () => {
-	const res = await client.get('/designs');
+	// const res = await client.get('/designs');
 
-	return res.data.map(convertToPartialDesignType);
+	// return res.data.map(convertToPartialDesignType);
+
+	const { data, error } = await supabase.from('designs').select();
+
+	if (error) {
+		throw error;
+	} else {
+		return data;
+	}
 };
 
 export const createNewDesign = async ({ width, height }: { width: number; height: number }) => {
@@ -24,31 +32,37 @@ export const createNewDesign = async ({ width, height }: { width: number; height
 		}
 	};
 
-	const data = convertToPartialCreateDesignDTO(designData);
+	// const data = convertToPartialCreateDesignDTO(designData);
 
-	const res = await client.post('/designs', data);
+	const { data, error } = await supabase.from('designs').insert([designData]).select();
 
-	return res.data.id;
+	if (error) {
+		throw error;
+	} else {
+		return data[0];
+	}
 };
 
 export const updateDesign = async (
 	{ id, data }: { id: string; data: Partial<DesignType> },
 	generateImage = false
 ) => {
-	// const dto = convertToPartialCreateDesignDTO(data);
-	// const res = await client.put('/api/designs/' + id + '?generateThumbnail=' + generateImage, dto);
-
-	// return convertToPartialDesignType(res.data);
-	console.log("data: ", data);
-
-	const { error } = await supabase.from('designs').update(data).eq('id', id);
-	console.log("error: ", error);
+	const { data: design, error } = await supabase.from('designs').update(data).eq('id', id).select();
+	if (error) {
+		throw error;
+	} else {
+		return design[0];
+	}
 };
 
 export const getDesignById = async (id: string) => {
-	const res = await client.get('/designs/' + id);
+	const { data, error } = await supabase.from('designs').select().eq('id', id);
 
-	return convertToPartialDesignType(res.data);
+	if (error) {
+		throw error;
+	} else {
+		return data[0];
+	}
 };
 // Define the DesignType interface
 interface DesignType {

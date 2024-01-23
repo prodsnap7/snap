@@ -239,7 +239,7 @@ const PathType = {
  */
 export const getPathFromPoints = (points: IPoint[], pathType = PathType.LINEAR) => {
 	if (points.length < 2) {
-		throw new Error('getPathFromPoints requires at least two points to create a path.');
+		return ""
 	}
 
 	let pathData = `M${points[0].x} ${points[0].y}`;

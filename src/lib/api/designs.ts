@@ -40,7 +40,8 @@ export const updateDesign = async (
 	// return convertToPartialDesignType(res.data);
 	console.log("data: ", data);
 
-	const res = await supabase.from('designs').update(data).eq('id', id);
+	const { error } = await supabase.from('designs').update(data).eq('id', id);
+	console.log("error: ", error);
 };
 
 export const getDesignById = async (id: string) => {

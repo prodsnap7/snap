@@ -1,9 +1,6 @@
-// export const ssr = false;
-export const csr = false;
-
 import { getDesignById } from '$lib/api/designs';
 import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 const loadData = async (id: string) => {
 	try {
@@ -34,9 +31,10 @@ const loadData = async (id: string) => {
 	}
 };
 
-export const load: PageLoad = async ({ params, parent }) => {
-	const design = await loadData(params.id);
-	return {
-		design
-	};
-};
+export const load: PageServerLoad = async ({ params }) => {
+  const design = await loadData(params.id);
+
+  return {
+    design
+  }
+}

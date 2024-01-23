@@ -33,9 +33,9 @@
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
 
-	const { data } = $props();
-	console.log('data', data);
-	store.init(data.design!);
+	// const { data } = $props();
+	// console.log('data', data);
+	// store.init(data.design!);
 
 	async function signout() {
 		await auth.signOut();

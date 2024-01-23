@@ -6,20 +6,22 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	export let data;
+	// export let data;
 
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
+	// let { supabase, session } = data;
+	// $: ({ supabase, session } = data);
 
-	onMount(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
-			if (_session?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
+	// let { data } = $props();
 
-		return () => data.subscription.unsubscribe();
-	});
+	// $effect(() => {
+	// 	const res = data.supabase.auth.onAuthStateChange((event, _session) => {
+	// 		if (_session?.expires_at !== data.session?.expires_at) {
+	// 			invalidate('supabase:auth');
+	// 		}
+	// 	});
+
+	// 	return () => res.data.subscription.unsubscribe();
+	// });
 
 	const queryClient = new QueryClient({
 		defaultOptions: {

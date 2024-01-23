@@ -3,7 +3,8 @@ import type { PageLoad } from './$types';
 export const ssr = false;
 export const csr = true;
 
-export const load: PageLoad = async ({ parent, params }) => {
+export const load: PageLoad = async ({ parent, params, depends }) => {
+	depends('supabase:auth');
 	const { supabase } = await parent();
 	const { data, error } = await supabase.from('designs').select('*').eq('id', params.id);
 

@@ -16,6 +16,7 @@
 	import type { PageData } from '../$types';
 	import { toggleMode, mode } from 'mode-watcher';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import { supabase } from '$lib/utils/supabase';
 
 	let width = $state(2000);
 	let height = $state(2000);
@@ -40,7 +41,7 @@
 	};
 
 	const handleSignOut = async () => {
-		const { error } = await data.supabase.auth.signOut();
+		const { error } = await supabase.auth.signOut();
 
 		if (!error) {
 			goto('/login');

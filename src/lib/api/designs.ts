@@ -1,4 +1,5 @@
-import client, { supabase } from './client';
+import client from './client';
+import { supabase } from '$lib/utils/supabase';
 
 export const getDesignsByUser = async () => {
 	const res = await client.get('/designs');

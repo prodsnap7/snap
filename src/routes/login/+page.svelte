@@ -5,6 +5,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { auth } from '$lib/store/auth.svelte';
+	import { supabase } from '$lib/utils/supabase.js';
 	import clsx from 'clsx';
 	import { Spinner } from 'phosphor-svelte';
 	import { onMount } from 'svelte';
@@ -41,11 +42,9 @@
 		};
 	});
 
-	const { data } = $props();
-
 	async function onclick() {
 		loading = true;
-		const { error } = await data.supabase.auth.signInWithPassword({ email, password });
+		const { error } = await supabase.auth.signInWithPassword({ email, password });
 		loading = false;
 		if (!error) {
 			goto('/designs');
@@ -62,23 +61,21 @@
 				<Card.Title>Sign In</Card.Title>
 				<Card.Description>Sign in to access your account</Card.Description>
 			</Card.Header>
-			<Card.Content>
-				<form class="space-y-6" method="POST">
-					<div class="space-y-2">
-						<label for="email">Email</label>
-						<Input name="email" bind:value={email} type="email" />
-					</div>
+			<Card.Content class="space-y-6">
+				<div class="space-y-2">
+					<label for="email">Email</label>
+					<Input name="email" bind:value={email} type="email" />
+				</div>
 
-					<div class="space-y-2">
-						<label for="password">Password</label>
-						<Input name="password" bind:value={password} type="password" />
-					</div>
+				<div class="space-y-2">
+					<label for="password">Password</label>
+					<Input name="password" bind:value={password} type="password" />
+				</div>
 
-					<Button class="w-full" type="submit">
-						Sign In
-						<Spinner class={clsx('ml-2', { hidden: !loading })} />
-					</Button>
-				</form>
+				<Button {onclick} class="w-full" type="submit">
+					Sign In
+					<Spinner class={clsx('ml-2', { hidden: !loading })} />
+				</Button>
 			</Card.Content>
 		</Card.Root>
 	</div>

@@ -1,4 +1,4 @@
-import client from './client';
+import client, { supabase } from './client';
 
 export const getDesignsByUser = async () => {
 	const res = await client.get('/designs');
@@ -34,10 +34,13 @@ export const updateDesign = async (
 	{ id, data }: { id: string; data: Partial<DesignType> },
 	generateImage = false
 ) => {
-	const dto = convertToPartialCreateDesignDTO(data);
-	const res = await client.put('/designs/' + id + '?generateThumbnail=' + generateImage, dto);
+	// const dto = convertToPartialCreateDesignDTO(data);
+	// const res = await client.put('/api/designs/' + id + '?generateThumbnail=' + generateImage, dto);
 
-	return convertToPartialDesignType(res.data);
+	// return convertToPartialDesignType(res.data);
+	console.log("data: ", data);
+
+	const res = await supabase.from('designs').update(data).eq('id', id);
 };
 
 export const getDesignById = async (id: string) => {

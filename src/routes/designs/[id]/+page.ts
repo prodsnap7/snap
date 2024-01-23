@@ -1,52 +1,35 @@
+import type { PageLoad } from './$types';
+
 export const ssr = false;
 
-// import { goto } from '$app/navigation';
-// import { getDesignById } from '$lib/api/designs';
-// import { auth } from '$lib/store/auth.svelte';
-// import type { PageLoad } from './$types';
+export const load: PageLoad = async ({ parent, params }) => {
+	const { supabase} = await parent();
+	const { data, error } = await supabase.from('designs').select('*').eq('id', params.id);
 
-// const loadData = async (id: string) => {
-// 	try {
-// 		let { canvas, name } = await getDesignById(id);
-// 		let elements = '[]';
-// 		if (canvas) {
-// 			elements = canvas.elements || '[]';
-// 		} else {
-// 			canvas = {
-// 				width: 800,
-// 				height: 600,
-// 				background: '#ffffff',
-// 				elements: '[]',
-// 				fonts: []
-// 			};
-// 		}
+	if (error) {
+		return { error: new Error(error.message) };
+	} else {
+		let { canvas, name } = data[0];
+		let elements = [];
+		if (canvas) {
+			elements = canvas.elements || '[]';
+		} else {
+			canvas = {
+				width: 800,
+				height: 600,
+				background: '#ffffff',
+				elements: [],
+				fonts: []
+			};
+		}
 
-// 		return {
-// 			elements,
-// 			canvas,
-// 			id,
-// 			name: name || 'Untitled'
-// 		};
-// 	} catch (e) {
-// 		goto('/designs');
-// 	}
-// };
-
-// export const load: PageLoad = async ({ params }) => {
-// 	// await parent();
-// 	// let isAuthenticated = false;
-
-//   // await auth.checkAuth((isLoggedIn) => {
-//   //   isAuthenticated = isLoggedIn;
-//   // });
-
-//   // if (!isAuthenticated) {
-//   //   goto('/login');
-//   // }
-
-// 	const data = await loadData(params.id);
-
-// 	return {
-// 		design: data
-// 	};
-// };
+		return {
+			design: {
+				elements,
+				canvas,
+				id: params.id,
+				name: name || 'Untitled'
+			}
+		};
+	}
+};

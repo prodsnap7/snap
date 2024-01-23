@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { getUserToken } from '$lib/firebase';
+import { createClient } from '@supabase/supabase-js';
 
 // Create an Axios instance
-const client = axios.create({
-  baseURL: import.meta.env.VITE_BASE_API_URL,
-});
+const client = axios.create();
 
 // Add a request interceptor
 client.interceptors.request.use(async(config) => {
@@ -23,3 +22,8 @@ client.interceptors.request.use(async(config) => {
 });
 
 export default client;
+
+export const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL as string,
+  import.meta.env.VITE_SUPABASE_ANON_KEY as string
+)

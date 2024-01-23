@@ -4,7 +4,7 @@
 
 	import Logo from '$lib/components/logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Check, File, Folder, Spinner, X } from 'phosphor-svelte';
+	import { Check, File, Folder, Spinner, X, SunDim, MoonStars } from 'phosphor-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Popover from '$lib/components/ui/popover';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -14,6 +14,8 @@
 	import Loader from '$lib/components/ui/loader.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import type { PageData } from '../$types';
+	import { toggleMode, mode } from 'mode-watcher';
+	import Input from '$lib/components/ui/input/input.svelte';
 
 	let width = $state(2000);
 	let height = $state(2000);
@@ -53,7 +55,7 @@
 		<Logo />
 		<div class="flex-1"></div>
 
-		<Popover.Root portal={null}>
+		<!-- <Popover.Root portal={null}>
 			<Popover.Trigger>
 				<Button>
 					<File size={20} class="mr-2" />
@@ -172,7 +174,7 @@
 					</div>
 				</div>
 			</Popover.Content>
-		</Popover.Root>
+		</Popover.Root> -->
 
 		<Button variant="secondary">
 			<Folder size={20} class="mr-2" />
@@ -182,7 +184,7 @@
 		<Popover.Root portal={null}>
 			<Popover.Trigger>
 				<Avatar.Root>
-					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+					<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
 					<Avatar.Fallback>CN</Avatar.Fallback>
 				</Avatar.Root>
 			</Popover.Trigger>
@@ -191,7 +193,48 @@
 				<button onclick={handleSignOut}>Sign Out</button>
 			</Popover.Content>
 		</Popover.Root>
+
+		<button class="ml-2" onclick={toggleMode}>
+			{#if $mode === 'dark'}
+				<SunDim size={26} />
+				<span class="sr-only">Switch to light mode</span>
+			{:else}
+				<MoonStars size={26} />
+
+				<span class="sr-only">Switch to dark mode</span>
+			{/if}
+		</button>
 	</nav>
+
+	<section class="container">
+		<Card.Root class="w-full">
+			<Card.Header>
+				<Card.Title>Create New Design</Card.Title>
+				<Card.Description>Start a new design from scratch</Card.Description>
+			</Card.Header>
+
+			<Card.Content>
+				<form method="POST">
+					<div class="flex items-end space-x-4">
+						<div class="flex flex-col space-y-1.5">
+							<Label for="width">Width</Label>
+							<Input id="width" name="width" />
+						</div>
+
+						<div class="flex flex-col space-y-1.5">
+							<Label for="height">Height</Label>
+							<Input id="height" name="height" />
+						</div>
+
+						<div class="py-2 px-4 rounded-sm border border-accent pointer-events-none text-center">
+							px
+						</div>
+						<Button type="submit">Create</Button>
+					</div>
+				</form>
+			</Card.Content>
+		</Card.Root>
+	</section>
 
 	<!-- <section class="container">
 		<h2 class="text-lg font-semibold mb-4">Recent Designs</h2>

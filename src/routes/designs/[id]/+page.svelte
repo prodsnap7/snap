@@ -33,7 +33,8 @@
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
 
-	export let data: PageData;
+	const { data } = $props();
+	console.log('data', data);
 	store.init(data.design!);
 
 	async function signout() {

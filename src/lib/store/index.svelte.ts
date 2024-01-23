@@ -9,7 +9,7 @@ import { updateDesign } from '$lib/api/designs';
 type StoreObj = {
 	name?: string;
 	canvas: Partial<TCanvas>;
-	elements: string;
+	elements: [];
 	id?: string;
 };
 
@@ -47,11 +47,12 @@ class Store {
 		return Store.instance;
 	}
 
-	init(obj: StoreObj = { canvas: {}, elements: '[]', name: 'New Design', id: ''  }) {
+	init(obj: StoreObj = { canvas: {}, elements: [], name: 'New Design', id: ''  }) {
+		console.log('init', obj);
 		this.name = obj.name || 'New Design';
 		this.id = obj.id || '';
 		this.canvas.setFromObject(obj.canvas);
-		this.elements.addFromJSON(obj.elements);
+		this.elements.addFromObjectArray(obj.elements);
 	}
 
 	initFromLocalStorage() {

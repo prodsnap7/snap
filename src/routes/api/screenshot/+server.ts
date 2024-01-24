@@ -28,13 +28,14 @@ export const POST: RequestHandler = async (event) => {
   const { data, error } = await supabase.storage.from("designs").upload(name, file, {
     contentType: "image/png",
     cacheControl: "3600",
+    upsert: true
   });
 
   if (error) {
     return json({ error: error.message });
   }
 
-  const fileUrl = `${PUBLIC_APP_URL}/storage/v1/object/public/designs/${data.path}`;
+  const fileUrl = `${PUBLIC_SUPABASE_URL}/storage/v1/object/public/designs/${data.path}`;
   // update the design with the new image url
   console.log("Updating design with url: ", fileUrl);
   const { data: design, error: designError } = await supabase.from("designs").update({ thumbnail: fileUrl }).eq("id", id).single();

@@ -54,7 +54,8 @@ export const updateDesign = async (
 	}
 
 	if (generateImage) {
-		await axios.post('/api/screenshot', { id, filename: data.name || 'Untitled' })
+		const name = data.name || 'Untitled';
+		await axios.post('/api/screenshot', { id, filename: name.replace(/\s/g, '_')})
 	}
 
 	return design[0];

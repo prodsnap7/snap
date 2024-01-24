@@ -134,7 +134,7 @@
 							{#if design.thumbnail}
 								<img
 									class="object-cover rounded h-[150px]"
-									src={design.thumbnail}
+									src={encodeURI(design.thumbnail)}
 									alt={design.name}
 								/>
 							{:else}

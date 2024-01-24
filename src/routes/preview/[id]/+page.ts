@@ -1,11 +1,8 @@
 // export const ssr = false;
 // export const csr = false;
 
-// import { goto } from '$app/navigation';
 import { getDesignById } from '$lib/api/designs';
-// import { auth } from '$lib/store/auth.svelte';
 import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
 
 const loadData = async (id: string) => {
 	try {
@@ -36,7 +33,7 @@ const loadData = async (id: string) => {
 	}
 };
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load = async ({ params, parent }) => {
 	const design = await loadData(params.id);
 	return {
 		design

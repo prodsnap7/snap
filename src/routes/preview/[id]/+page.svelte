@@ -9,7 +9,7 @@
 	if (data.design) {
 		const elsJson = JSON.parse(data.design.elements!);
 		const els = elsJson.map((el: string) => JSON.parse(el));
-		console.log('Design: ', els);
+		console.log('design: ', data.design);
 	}
 </script>
 

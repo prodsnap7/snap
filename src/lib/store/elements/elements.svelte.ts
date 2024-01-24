@@ -116,6 +116,7 @@ class ElementStore {
 	}
 
 	addFromObjectArray(elements: CanvasObject[]) {
+		console.log(elements);
 		elements.forEach((element) => {
 			this.addFromObject(element);
 		});

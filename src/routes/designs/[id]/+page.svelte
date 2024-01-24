@@ -33,9 +33,9 @@
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
 
-	// const { data } = $props();
-	// console.log('data', data);
-	// store.init(data.design!);
+	const { data } = $props();
+	console.log('data', data);
+	store.init(data.design!);
 
 	async function signout() {
 		await auth.signOut();
@@ -271,7 +271,6 @@
 			<Sidepanel />
 		</div>
 
-		<!-- Main content section -->
 		<section class="flex flex-col w-full bg-primary/5 overflow-hidden">
 			<div class="h-14 w-full p-2 bg-background border-b shadow-xs">
 				<Toolbar />

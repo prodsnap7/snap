@@ -16,6 +16,11 @@ export const load = async ({ params }) => {
 	if (error) {
 		return { error: new Error(error.message) };
 	} else {
-		return { design }
+		return {
+			design: {
+				...design[0],
+				elements: design[0].canvas.elements
+			}
+		};
 	}
-}
+};

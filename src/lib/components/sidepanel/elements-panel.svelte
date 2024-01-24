@@ -79,8 +79,6 @@
 		queryKey: ['icons', 'eco-friendly'],
 		queryFn: () => searchIcons('eco-friendly')
 	});
-
-	$: console.log($iconsQuery.data);
 </script>
 
 <div class="mb-4 flex items-center justify-between">

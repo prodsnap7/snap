@@ -24,7 +24,6 @@
 	};
 
 	let { element, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();
-	console.log('renderer: ', offset.x, offset.y);
 </script>
 
 {#if element instanceof PathShape}

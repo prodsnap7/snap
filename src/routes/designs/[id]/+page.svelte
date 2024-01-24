@@ -34,7 +34,6 @@
 	import FontLoader from '$lib/components/font-loader.svelte';
 
 	const { data } = $props();
-	console.log('data', data);
 	store.init(data.design!);
 
 	async function signout() {

@@ -48,7 +48,6 @@ class Store {
 	}
 
 	init(obj: StoreObj = { canvas: {}, elements: '[]', name: 'New Design', id: ''  }) {
-		console.log('init', obj);
 		this.name = obj.name || 'New Design';
 		this.id = obj.id || '';
 		this.canvas.setFromObject(obj.canvas);

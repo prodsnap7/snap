@@ -49,6 +49,7 @@
 		"lodash.memoize": "^4.1.2",
 		"lucide-svelte": "^0.294.0",
 		"mode-watcher": "^0.1.2",
+		"puppeteer": "^21.9.0",
 		"short-uuid": "^4.2.2",
 		"svgson": "^5.3.1",
 		"tailwind-merge": "^2.1.0",

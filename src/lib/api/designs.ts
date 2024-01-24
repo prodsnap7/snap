@@ -1,5 +1,6 @@
 import client from './client';
 import { supabase } from '$lib/utils/supabase';
+import axios from 'axios';
 
 export const getDesignsByUser = async () => {
 	// const res = await client.get('/designs');
@@ -50,9 +51,13 @@ export const updateDesign = async (
 	const { data: design, error } = await supabase.from('designs').update(data).eq('id', id).select();
 	if (error) {
 		throw error;
-	} else {
-		return design[0];
 	}
+
+	if (generateImage) {
+		await axios.post('/api/screenshot', { id, filename: data.name || 'Untitled' })
+	}
+
+	return design[0];
 };
 
 export const getDesignById = async (id: string) => {

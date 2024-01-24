@@ -6,11 +6,6 @@
 
 	export let data: PageData;
 	store.init(data.design!);
-	if (data.design) {
-		const elsJson = JSON.parse(data.design.elements!);
-		const els = elsJson.map((el: string) => JSON.parse(el));
-		console.log('design: ', data.design);
-	}
 </script>
 
 <FontLoader fontUrls={store.elements.fonts} />

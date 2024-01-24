@@ -119,7 +119,7 @@
 	role="button"
 	id="controls-canvas-container"
 	tabindex="0"
-	class="cursor-pointer absolute left-0 top-0 p-10"
+	class="cursor-pointer absolute inset-0 p-10"
 >
 	<div
 		id="controls-canvas"

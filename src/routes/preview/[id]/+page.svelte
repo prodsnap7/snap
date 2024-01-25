@@ -8,7 +8,7 @@
 	store.init(data.design!);
 </script>
 
-<FontLoader fontUrls={store.elements.fonts} />
+<FontLoader fontUrls={store.canvas.fonts} />
 
 <div class="w-screen h-screen flex items-center justify-center">
 	<div

@@ -91,6 +91,7 @@ class Store {
 			id: this.id,
 			name: this.name,
 			canvas: {
+				fonts: JSON.stringify(this.elements.fonts),
 				width: this.canvas.width,
 				height: this.canvas.height,
 				background: this.canvas.background,

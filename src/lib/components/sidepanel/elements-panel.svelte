@@ -44,13 +44,11 @@
 	}
 
 	async function addIcon(icon: any) {
+		console.log(icon);
 		try {
-			const res = await fetch(icon.icon_url, {
-				method: 'GET'
-			});
-			const data = await res.text();
+			const res = await axios.get(`/api/icons/proxy?iconUrl=${icon.icon_url}`);
 
-			const svg = new SvgElement(data);
+			const svg = new SvgElement(res.data);
 			store.addElement(svg);
 		} catch (err) {
 			console.log(err);

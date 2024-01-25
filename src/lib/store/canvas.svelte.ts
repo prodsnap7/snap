@@ -9,6 +9,7 @@ export const canvasStore = new class implements TCanvas {
   width = $state(700);
   height = $state(500);
   background = $state("#ffffff");
+  fonts = $state<string[]>([]);
   scale = $state(1);
   state = $state<TCanvas["state"]>("normal");
   history = $state<string[]>([]);
@@ -33,6 +34,9 @@ export const canvasStore = new class implements TCanvas {
           break;
         case 'state':
           this.state = value as "normal" | "selected" | "cropping";
+          break;
+        case 'fonts':
+          this.fonts = JSON.parse(value as string);
           break;
         default:
           // Handle unknown keys, if necessary

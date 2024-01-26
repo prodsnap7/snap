@@ -1,23 +1,33 @@
 <script lang="ts">
-	import Canvas from '$lib/components/canvas/canvas.svelte';
-	import type { PageData } from './$types';
 	import FontLoader from '$lib/components/font-loader.svelte';
-	import { store } from '$lib/store';
+	import Renderer from '$lib/components/renderer/renderer.svelte';
 
-	export let data: PageData;
-	store.init(data.design!);
+	let { data } = $props();
 </script>
 
-<FontLoader fontUrls={store.canvas.fonts} />
+<FontLoader fontUrls={data.fonts} />
 
 <div class="w-screen h-screen flex items-center justify-center">
-	<div
-		style="
-		width: {store.canvas.width + 100}px;
-		height: {store.canvas.height + 100}px;
-	"
-		class="relative"
-	>
-		<Canvas />
+	<div class="relative" style="width: {data.canvas.width}px; height: {data.canvas.height}px;">
+		<div
+			role="button"
+			id="canvas-container"
+			tabindex="0"
+			class="cursor-pointer absolute left-0 top-0 p-10"
+		>
+			<div
+				id="canvas"
+				class="relative rounded-xs border shadow-xs overflow-hidden box-content"
+				style="
+    width: {data.canvas.width}px;
+    height: {data.canvas.height}px;
+    background-color: {data.canvas.background};
+    "
+			>
+				{#each data.elements as element}
+					<Renderer {element} />
+				{/each}
+			</div>
+		</div>
 	</div>
 </div>

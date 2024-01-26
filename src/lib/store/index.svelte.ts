@@ -11,10 +11,12 @@ type StoreObj = {
 	canvas: Partial<TCanvas>;
 	elements: string;
 	id?: string;
+	updated_at?: string;
 };
 
 class Store {
 	private static instance: Store;
+	updated_at = $state('');
 	elements = $state(elementsStore);
 	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
@@ -50,6 +52,7 @@ class Store {
 	init(obj: StoreObj = { canvas: {}, elements: '[]', name: 'New Design', id: ''  }) {
 		this.name = obj.name || 'New Design';
 		this.id = obj.id || '';
+		this.updated_at = obj.updated_at || '';
 		this.canvas.setFromObject(obj.canvas);
 		this.elements.addFromJSON(obj.elements);
 	}

@@ -2,6 +2,7 @@
 // export const csr = false;
 
 import { getDesignById } from '$lib/api/designs';
+import { elementsStore, type CanvasObject, getPathFromPoints, getfonts } from '$lib/store/index.js';
 import { redirect } from '@sveltejs/kit';
 
 const loadData = async (id: string) => {
@@ -35,7 +36,25 @@ const loadData = async (id: string) => {
 
 export const load = async ({ params }) => {
 	const design = await loadData(params.id);
+	const { canvas } = design!;
+	const els = JSON.parse(design!.elements).map((e: string) => JSON.parse(e));
+	const elements = els.map((element: CanvasObject) => {
+		if (element.type === 'curve') {
+			return {
+				...element,
+				path: getPathFromPoints(element.points!, element.pathType),
+			}
+		} 
+
+		return element;
+	})
 	return {
-		design
+		canvas: {
+			width: canvas.width,
+			height: canvas.height,
+			background: canvas.background,
+		},
+		elements,
+		fonts: getfonts(els),
 	};
 };

@@ -8,7 +8,7 @@ class ElementStore {
 	private static instance: ElementStore;
 	elements = $state<CanvasElement[]>([]);
 	colors = $derived(colors(this.elements));
-	fonts = $derived(this.getfonts());
+	fonts = $derived(getfonts(this.elements));
 	history = $state<string[]>([]);
 	historyIndex = $state<number>(0);
 
@@ -156,18 +156,18 @@ class ElementStore {
 		this.addElement(clone);
 	}
 
-	getfonts() {
-		const groupedEls = this.elements.filter((element) => element.type === 'group') as Group[];
-		const groupedFontUrls = groupedEls.map((group) => group.fontUrls).flat();
-		const textEls = this.elements.filter((element) => element.type === 'text') as TextBox[];
-		const fontUrls = textEls.map((element) => element.fontUrl);
-		const fontUrlList = [...new Set([...fontUrls, ...groupedFontUrls])];
-		return fontUrlList;
-	}
-
 	clear() {
 		this.elements = [];
 	}
+}
+
+export function getfonts(elements: CanvasElement[]) {
+	const groupedEls = elements.filter((element) => element.type === 'group') as Group[];
+	const groupedFontUrls = groupedEls.map((group) => group.fontUrls).flat();
+	const textEls = elements.filter((element) => element.type === 'text') as TextBox[];
+	const fontUrls = textEls.map((element) => element.fontUrl);
+	const fontUrlList = [...new Set([...fontUrls, ...groupedFontUrls])];
+	return fontUrlList;
 }
 
 export const elementsStore = ElementStore.getInstance();

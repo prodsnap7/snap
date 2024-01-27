@@ -19,17 +19,12 @@ export const getDesignsByUser = async () => {
 export const createNewDesign = async ({ width, height }: { width: number; height: number }) => {
 	const designData = {
 		name: 'Untitled',
-		canvasWidth: width,
-		canvasHeight: height,
-		fonts: [],
-		background: '#ffffff',
-		elements: '[]',
 		canvas: {
 			width,
 			height,
 			background: '#ffffff',
 			elements: '[]',
-			fonts: []
+			fonts: '[]'
 		}
 	};
 

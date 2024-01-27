@@ -90,6 +90,7 @@ class Store {
 
 	async save(generateImage = false) {
 		this.saving = true;
+		console.log('saving design', this.id);
 		const data = {
 			id: this.id,
 			name: this.name,
@@ -104,6 +105,7 @@ class Store {
 
 		try {
 			await updateDesign({ id: this.id, data }, generateImage);
+			console.log('saved design', this.id)
 		} catch (e) {
 			console.error(e);
 		}

@@ -1,25 +1,20 @@
 <script lang="ts">
-	import { Checkbox } from '$lib/components/ui/checkbox';
 	import Label from '$lib/components/ui/label/label.svelte';
-
 	import Logo from '$lib/components/logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Check, File, Folder, Spinner, X, SunDim, MoonStars } from 'phosphor-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Popover from '$lib/components/ui/popover';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { createMutation, createQuery } from '@tanstack/svelte-query';
 	import { createNewDesign, getDesignsByUser } from '$lib/api/designs';
 	import { goto } from '$app/navigation';
 	import Loader from '$lib/components/ui/loader.svelte';
 	import * as Card from '$lib/components/ui/card';
-	import type { PageData } from '../$types';
 	import { toggleMode, mode } from 'mode-watcher';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { supabase } from '$lib/utils/supabase';
 
-	let width = $state(2000);
-	let height = $state(2000);
+	let width = $state(900);
+	let height = $state(700);
 	let loading = $state(false);
 
 	const { data } = $props();
@@ -27,12 +22,12 @@
 	const handleCreateDesign = async () => {
 		loading = true;
 		try {
-			await createNewDesign({
+			const data = await createNewDesign({
 				width: width,
 				height: height
 			});
 
-			goto('/designs/${id');
+			goto(`/designs/${data.id}`);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -97,18 +92,18 @@
 				<div class="flex items-end space-x-4">
 					<div class="flex flex-col space-y-1.5">
 						<Label for="width">Width</Label>
-						<Input id="width" name="width" />
+						<Input id="width" name="width" bind:value={width} />
 					</div>
 
 					<div class="flex flex-col space-y-1.5">
 						<Label for="height">Height</Label>
-						<Input id="height" name="height" />
+						<Input id="height" name="height" bind:value={height} />
 					</div>
 
 					<div class="py-2 px-4 rounded-sm border border-accent pointer-events-none text-center">
 						px
 					</div>
-					<Button onclick={handleCreateDesign} type="submit">Create</Button>
+					<Button onclick={handleCreateDesign}>Create</Button>
 				</div>
 			</Card.Content>
 		</Card.Root>
@@ -122,9 +117,35 @@
 		{:else if data.designs.length === 0}
 			<div class="text-center text-sm text-muted-foreground">No designs found</div>
 		{:else}
-			<div class="grid grid-cols-6 gap-2">
+			<div class="flex flex-wrap items-center gap-4">
 				{#each data.designs as design}
-					<Card.Root
+					<div
+						tabindex="0"
+						role="button"
+						onmousedown={() => {
+							goto(`/designs/${design.id}`);
+						}}
+						class="space-y-2 cursor-pointer group hover:scale-105 hover:text-primary duration-500"
+					>
+						<div class="rounded border group-hover:border-primary overflow-hidden">
+							{#if design.thumbnail}
+								<img
+									class="h-[200px] object-cover -my-1"
+									src={encodeURI(design.thumbnail)}
+									alt={design.name}
+								/>
+							{:else}
+								<img class="object-cover" src="https://picsum.photos/250/200" alt={design.name} />
+							{/if}
+						</div>
+						<div class="space-y-1">
+							<h2 class="text-lg font-semibold">{design.name}</h2>
+							<p class="text-sm text-muted-foreground">
+								{design.canvas.width} x {design.canvas.height}
+							</p>
+						</div>
+					</div>
+					<!-- <Card.Root
 						onclick={() => {
 							goto(`/designs/${design.id}`);
 						}}
@@ -151,7 +172,7 @@
 								{design.canvas.width} x {design.canvas.height}
 							</Card.Description>
 						</Card.Header>
-					</Card.Root>
+					</Card.Root> -->
 				{/each}
 			</div>
 		{/if}

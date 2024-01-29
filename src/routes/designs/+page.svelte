@@ -127,7 +127,9 @@
 						}}
 						class="space-y-2 cursor-pointer group hover:scale-105 hover:text-primary duration-500"
 					>
-						<div class="rounded border group-hover:border-primary overflow-hidden">
+						<div
+							class="rounded border pointer-events-none group-hover:border-primary overflow-hidden"
+						>
 							{#if design.thumbnail}
 								<img
 									class="h-[200px] object-cover -my-1"

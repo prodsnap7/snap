@@ -54,6 +54,14 @@ class Store {
 		this.id = obj.id || '';
 		this.updated_at = obj.updated_at || '';
 		this.canvas.setFromObject(obj.canvas);
+
+		// clear all elements
+		this.elements.clear();
+		this.selectedElements.clear();
+		this.activeElement.clear();
+		this.highlightedElements.clear();
+
+		// init new elements
 		this.elements.addFromJSON(obj.elements);
 	}
 

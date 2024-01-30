@@ -68,7 +68,6 @@
 
 	$effect(() => {
 		if (viewer) {
-			console.log('setting zoom', store.zoom);
 			viewer.setZoom(store.zoom);
 		}
 	});

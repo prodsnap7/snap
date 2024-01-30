@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Canvas from '$lib/components/canvas/canvas.svelte';
 	import InfiniteViewer from 'infinite-viewer';
+	import Guides from '@scena/guides';
 	import { goto } from '$app/navigation';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
 	import CropCanvas from '$lib/components/canvas/crop-canvas';
@@ -34,6 +35,7 @@
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
 	import { onMount } from 'svelte';
+	import { doc } from 'firebase/firestore';
 
 	const { data } = $props();
 	store.init(data.design!);
@@ -44,6 +46,8 @@
 	}
 
 	let viewer: InfiniteViewer | undefined = $state();
+	let horizontalGuides: any = $state();
+	let verticalGuides: any = $state();
 
 	onMount(() => {
 		viewer = new InfiniteViewer(
@@ -57,12 +61,46 @@
 			}
 		);
 
-		viewer.on('scroll', (e) => {
-			store.zoom = e.zoomX;
+		horizontalGuides = new Guides(document.querySelector('.guides.horizontal') as HTMLElement, {
+			type: 'horizontal',
+			snapThreshold: 5,
+			snaps: [0, 300, 600],
+			displayDragPos: true,
+			dragPosFormat: (v) => `${v}px`
 		});
+
+		verticalGuides = new Guides(document.querySelector('.guides.vertical') as HTMLElement, {
+			type: 'vertical',
+			snapThreshold: 5,
+			snaps: [0, 300, 600],
+			displayDragPos: true,
+			dragPosFormat: (v) => `${v}px`
+		});
+
+		viewer
+			.on('scroll', (e) => {
+				store.zoom = e.zoomX;
+				const zoom = viewer!.zoom;
+				horizontalGuides!.scroll(e.scrollLeft, zoom);
+				horizontalGuides!.scrollGuides(e.scrollTop, zoom);
+
+				verticalGuides!.scroll(e.scrollTop, zoom);
+				verticalGuides!.scrollGuides(e.scrollLeft, zoom);
+			})
+			.on('pinch', (e) => {
+				const zoom = Math.max(0.1, e.zoom);
+
+				verticalGuides!.zoom = zoom;
+				horizontalGuides!.zoom = zoom;
+			});
 
 		requestAnimationFrame(() => {
 			viewer!.scrollCenter();
+		});
+
+		window.addEventListener('resize', () => {
+			horizontalGuides!.resize();
+			verticalGuides!.resize();
 		});
 	});
 
@@ -307,6 +345,8 @@
 			</div>
 
 			<div class="flex-1 overflow-auto relative">
+				<div class="guides horizontal"></div>
+				<div class="guides vertical"></div>
 				<div class="viewer">
 					<div class="viewport">
 						<Canvas />

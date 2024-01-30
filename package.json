@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@scena/guides": "^0.29.2",
 		"@simonwep/pickr": "^1.9.0",
 		"@supabase/auth-helpers-sveltekit": "^0.11.0",
 		"@supabase/ssr": "^0.0.10",

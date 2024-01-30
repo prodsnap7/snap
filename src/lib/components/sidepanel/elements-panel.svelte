@@ -44,15 +44,10 @@
 	}
 
 	async function addIcon(icon: any) {
-		console.log(icon);
-		try {
-			const res = await axios.get(`/api/icons/proxy?iconUrl=${icon.icon_url}`);
+		const res = await axios.get(icon.icon_url);
 
-			const svg = new SvgElement(res.data);
-			store.addElement(svg);
-		} catch (err) {
-			console.log(err);
-		}
+		const svg = new SvgElement(res.data);
+		store.addElement(svg);
 	}
 
 	const fourCurves = curves.slice(0, 5);

@@ -33,7 +33,7 @@ class Store {
 	saving = $state(false);
 	id = $state('');
 	timestamp = $state(Date.now());
-
+	zoom = $state(1);
 	canUndo = $derived(this.elements.canUndo || this.canvas.canUndo);
 	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
 

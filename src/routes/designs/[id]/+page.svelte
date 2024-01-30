@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Canvas from '$lib/components/canvas/canvas.svelte';
+	import InfiniteViewer from 'infinite-viewer';
 	import { goto } from '$app/navigation';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
 	import CropCanvas from '$lib/components/canvas/crop-canvas';
@@ -32,6 +33,7 @@
 	import type { PageData } from './$types';
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
+	import { onMount } from 'svelte';
 
 	const { data } = $props();
 	store.init(data.design!);
@@ -40,6 +42,36 @@
 		await auth.signOut();
 		goto('/login');
 	}
+
+	let viewer: InfiniteViewer | undefined = $state();
+
+	onMount(() => {
+		viewer = new InfiniteViewer(
+			document.querySelector('.viewer') as HTMLElement,
+			document.querySelector('.viewport') as HTMLElement,
+			{
+				margin: 0,
+				threshold: 0,
+				zoom: 1,
+				useAutoZoom: true
+			}
+		);
+
+		viewer.on('scroll', (e) => {
+			store.zoom = e.zoomX;
+		});
+
+		requestAnimationFrame(() => {
+			viewer!.scrollCenter();
+		});
+	});
+
+	$effect(() => {
+		if (viewer) {
+			console.log('setting zoom', store.zoom);
+			viewer.setZoom(store.zoom);
+		}
+	});
 </script>
 
 <FontLoader fontUrls={store.elements.fonts} />
@@ -151,7 +183,7 @@
 				<Popover.Root>
 					<Popover.Trigger>
 						<Button variant="ghost" class="text-sm">
-							{canvasStore.scale * 100}%
+							{(store.zoom * 100).toFixed(0)}%
 						</Button>
 					</Popover.Trigger>
 
@@ -161,7 +193,7 @@
 								<label for="border width" class="text-xs font-semibold">Zoom</label>
 								<Input
 									class="w-12 h-6 border rounded p-2 text-xs"
-									value={canvasStore.scale * 100}
+									value={(store.zoom * 100).toFixed(0)}
 								/>
 							</div>
 
@@ -171,9 +203,9 @@
 								step={0.01}
 								onValueChange={(val) => {
 									// Round the scale value to avoid floating point precision issues
-									canvasStore.scale = val[0];
+									store.zoom = val[0];
 								}}
-								value={[canvasStore.scale]}
+								value={[store.zoom]}
 							/>
 						</div>
 					</Popover.Content>
@@ -276,13 +308,24 @@
 			</div>
 
 			<div class="flex-1 overflow-auto relative">
-				<Canvas />
-				{#if canvasStore.state === 'cropping'}
-					<CropCanvas />
-				{:else}
-					<ControlsCanvas />
-				{/if}
+				<div class="viewer">
+					<div class="viewport">
+						<Canvas />
+						{#if canvasStore.state === 'cropping'}
+							<CropCanvas />
+						{:else}
+							<ControlsCanvas />
+						{/if}
+					</div>
+				</div>
 			</div>
 		</section>
 	</main>
 </div>
+
+<style>
+	:global(.viewer) {
+		width: 100%;
+		height: 100%;
+	}
+</style>

@@ -78,7 +78,7 @@ export class Curve extends BaseObject {
 
 	constructor(obj: Partial<Curve>, scale = 1) {
 		super(obj);
-		const { points, ...rest } = obj;
+		const { points, path: _, ...rest } = obj;
 		Object.assign(this, rest);
 
 		if (obj.points) {
@@ -206,6 +206,7 @@ export class Curve extends BaseObject {
 			type: this.type,
 			stroke: this.stroke,
 			strokeWidth: this.strokeWidth,
+			path: getPathFromPoints(this.points, this.pathType),
 			startMarker: this.startMarker,
 			endMarker: this.endMarker,
 			markerSize: this.markerSize,
@@ -239,7 +240,7 @@ const PathType = {
  */
 export const getPathFromPoints = (points: IPoint[], pathType = PathType.LINEAR) => {
 	if (points.length < 2) {
-		throw new Error('getPathFromPoints requires at least two points to create a path.');
+		return ""
 	}
 
 	let pathData = `M${points[0].x} ${points[0].y}`;

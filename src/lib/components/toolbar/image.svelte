@@ -30,7 +30,7 @@
 		selectedImage.loading = true;
 		removeBackgroundFromUrl(selectedImage.url)
 			.then((res) => {
-				selectedImage!.url = res.url;
+				selectedImage!.url = res!.url;
 			})
 			.catch((err) => {
 				console.log(err);

@@ -224,6 +224,7 @@ export class PathShape extends BaseObject {
 			y: this.y,
 			width: this.width,
 			height: this.height,
+			viewbox: this.viewBox,
 			type: this.type,
 			rotation: this.rotation,
 			opacity: this.opacity,
@@ -235,7 +236,7 @@ export class PathShape extends BaseObject {
 			strokeLinecap: this.strokeLinecap,
 			strokeLinejoin: this.strokeLinejoin,
 			strokeDasharray: this.strokeDasharray,
-			path: this._path
+			path: scalePathData(this._path, this.width, this.height, this.strokeWidth)
 		}	
 	}
 }

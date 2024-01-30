@@ -9,6 +9,7 @@ export const canvasStore = new class implements TCanvas {
   width = $state(700);
   height = $state(500);
   background = $state("#ffffff");
+  fonts = $state<string[]>([]);
   scale = $state(1);
   state = $state<TCanvas["state"]>("normal");
   history = $state<string[]>([]);
@@ -20,19 +21,22 @@ export const canvasStore = new class implements TCanvas {
     Object.entries(state).forEach(([key, value]) => {
       switch(key) {
         case 'width':
-          this.width = value as number;
+          this.width = +value;
           break;
         case 'height':
-          this.height = value as number;
+          this.height = +value
           break;
         case 'background':
           this.background = value as string;
           break;
         case 'scale':
-          this.scale = value as number;
+          this.scale = +value;
           break;
         case 'state':
           this.state = value as "normal" | "selected" | "cropping";
+          break;
+        case 'fonts':
+          this.fonts = JSON.parse(value as string);
           break;
         default:
           // Handle unknown keys, if necessary

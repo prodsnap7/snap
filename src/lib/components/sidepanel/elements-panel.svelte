@@ -45,8 +45,8 @@
 
 	async function addIcon(icon: any) {
 		const res = await axios.get(icon.icon_url);
-		const svg = new SvgElement(res.data);
 
+		const svg = new SvgElement(res.data);
 		store.addElement(svg);
 	}
 
@@ -72,8 +72,6 @@
 		queryKey: ['icons', 'eco-friendly'],
 		queryFn: () => searchIcons('eco-friendly')
 	});
-
-	$: console.log($iconsQuery.data);
 </script>
 
 <div class="mb-4 flex items-center justify-between">

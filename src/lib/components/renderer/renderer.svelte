@@ -1,14 +1,5 @@
 <script lang="ts">
-	import {
-		type CanvasElement,
-		Curve,
-		Shape,
-		Group,
-		PathShape,
-		TextBox,
-		Image,
-		SvgElement
-	} from '$lib/store';
+	import type { CanvasElement } from '$lib/store';
 	import RenderCurve from './render-curve';
 	import RenderGroup from './render-group/render-group.svelte';
 	import RenderImage from './render-image.svelte';
@@ -24,10 +15,9 @@
 	};
 
 	let { element, scale = 1, offset = { x: 0, y: 0 } } = $props<Props>();
-	console.log('renderer: ', offset.x, offset.y);
 </script>
 
-{#if element instanceof PathShape}
+{#if element.type === 'path-shape'}
 	<div
 		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
@@ -35,7 +25,7 @@
 	>
 		<RenderPathShape {scale} {element} />
 	</div>
-{:else if element instanceof Shape}
+{:else if element.type === 'shape'}
 	<div
 		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
@@ -43,7 +33,7 @@
 	>
 		<RenderShape {scale} shape={element} />
 	</div>
-{:else if element instanceof SvgElement}
+{:else if element.type === 'svg'}
 	<div
 		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -
@@ -51,15 +41,15 @@
 	>
 		<RenderSvg {element} />
 	</div>
-{:else if element instanceof Image}
+{:else if element.type === 'image'}
 	<RenderImage {scale} {element} />
-{:else if element instanceof Curve}
+{:else if element.type === 'curve'}
 	<div class="absolute origin-center inset-0 renderer">
 		<RenderCurve {scale} curve={element} />
 	</div>
-{:else if element instanceof Group}
+{:else if element.type === 'group'}
 	<RenderGroup {scale} group={element} />
-{:else if element instanceof TextBox}
+{:else if element.type === 'text'}
 	<div
 		class="absolute top-0 left-0 origin-center renderer"
 		style="transform: translate({element.x - offset.x}px, {element.y -

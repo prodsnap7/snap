@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Canvas from '$lib/components/canvas/canvas.svelte';
+	import InfiniteViewer from 'infinite-viewer';
+	import Guides from '@scena/guides';
 	import { goto } from '$app/navigation';
 	import ControlsCanvas from '$lib/components/canvas/controls-canvas.svelte';
 	import CropCanvas from '$lib/components/canvas/crop-canvas';
@@ -32,14 +34,81 @@
 	import type { PageData } from './$types';
 	import { auth } from '$lib/store/auth.svelte';
 	import FontLoader from '$lib/components/font-loader.svelte';
+	import { onMount } from 'svelte';
+	import { doc } from 'firebase/firestore';
 
-	export let data: PageData;
+	const { data } = $props();
 	store.init(data.design!);
 
 	async function signout() {
 		await auth.signOut();
 		goto('/login');
 	}
+
+	let viewer: InfiniteViewer | undefined = $state();
+	let horizontalGuides: any = $state();
+	let verticalGuides: any = $state();
+
+	onMount(() => {
+		viewer = new InfiniteViewer(
+			document.querySelector('.viewer') as HTMLElement,
+			document.querySelector('.viewport') as HTMLElement,
+			{
+				margin: 0,
+				threshold: 0,
+				zoom: 1,
+				useAutoZoom: true
+			}
+		);
+
+		horizontalGuides = new Guides(document.querySelector('.guides.horizontal') as HTMLElement, {
+			type: 'horizontal',
+			snapThreshold: 5,
+			snaps: [0, 300, 600],
+			displayDragPos: true,
+			dragPosFormat: (v) => `${v}px`
+		});
+
+		verticalGuides = new Guides(document.querySelector('.guides.vertical') as HTMLElement, {
+			type: 'vertical',
+			snapThreshold: 5,
+			snaps: [0, 300, 600],
+			displayDragPos: true,
+			dragPosFormat: (v) => `${v}px`
+		});
+
+		viewer
+			.on('scroll', (e) => {
+				store.zoom = e.zoomX;
+				const zoom = viewer!.zoom;
+				horizontalGuides!.scroll(e.scrollLeft, zoom);
+				horizontalGuides!.scrollGuides(e.scrollTop, zoom);
+
+				verticalGuides!.scroll(e.scrollTop, zoom);
+				verticalGuides!.scrollGuides(e.scrollLeft, zoom);
+			})
+			.on('pinch', (e) => {
+				const zoom = Math.max(0.1, e.zoom);
+
+				verticalGuides!.zoom = zoom;
+				horizontalGuides!.zoom = zoom;
+			});
+
+		requestAnimationFrame(() => {
+			viewer!.scrollCenter();
+		});
+
+		window.addEventListener('resize', () => {
+			horizontalGuides!.resize();
+			verticalGuides!.resize();
+		});
+	});
+
+	$effect(() => {
+		if (viewer) {
+			viewer.setZoom(store.zoom);
+		}
+	});
 </script>
 
 <FontLoader fontUrls={store.elements.fonts} />
@@ -151,7 +220,7 @@
 				<Popover.Root>
 					<Popover.Trigger>
 						<Button variant="ghost" class="text-sm">
-							{canvasStore.scale * 100}%
+							{(store.zoom * 100).toFixed(0)}%
 						</Button>
 					</Popover.Trigger>
 
@@ -161,7 +230,7 @@
 								<label for="border width" class="text-xs font-semibold">Zoom</label>
 								<Input
 									class="w-12 h-6 border rounded p-2 text-xs"
-									value={canvasStore.scale * 100}
+									value={(store.zoom * 100).toFixed(0)}
 								/>
 							</div>
 
@@ -171,9 +240,9 @@
 								step={0.01}
 								onValueChange={(val) => {
 									// Round the scale value to avoid floating point precision issues
-									canvasStore.scale = val[0];
+									store.zoom = val[0];
 								}}
-								value={[canvasStore.scale]}
+								value={[store.zoom]}
 							/>
 						</div>
 					</Popover.Content>
@@ -238,7 +307,7 @@
 					</Popover.Content>
 				</Popover.Root>
 
-				<Popover.Root portal="null">
+				<Popover.Root portal={null}>
 					<Popover.Trigger>
 						<Avatar.Root>
 							<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -270,20 +339,32 @@
 			<Sidepanel />
 		</div>
 
-		<!-- Main content section -->
 		<section class="flex flex-col w-full bg-primary/5 overflow-hidden">
 			<div class="h-14 w-full p-2 bg-background border-b shadow-xs">
 				<Toolbar />
 			</div>
 
 			<div class="flex-1 overflow-auto relative">
-				<Canvas />
-				{#if canvasStore.state === 'cropping'}
-					<CropCanvas />
-				{:else}
-					<ControlsCanvas />
-				{/if}
+				<div class="guides horizontal"></div>
+				<div class="guides vertical"></div>
+				<div class="viewer">
+					<div class="viewport">
+						<Canvas />
+						{#if canvasStore.state === 'cropping'}
+							<CropCanvas />
+						{:else}
+							<ControlsCanvas />
+						{/if}
+					</div>
+				</div>
 			</div>
 		</section>
 	</main>
 </div>
+
+<style>
+	:global(.viewer) {
+		width: 100%;
+		height: 100%;
+	}
+</style>

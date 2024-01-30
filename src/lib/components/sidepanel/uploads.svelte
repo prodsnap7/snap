@@ -3,7 +3,7 @@
 	import { Image, store } from '$lib/store';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const uploadsQuery = createQuery({
+	const uploadsQuery = createQuery<any>({
 		queryKey: ['uploads'],
 		queryFn: getAllUploads
 	});

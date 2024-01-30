@@ -5,6 +5,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { auth } from '$lib/store/auth.svelte';
+	import { supabase } from '$lib/utils/supabase.js';
 	import clsx from 'clsx';
 	import { Spinner } from 'phosphor-svelte';
 	import { onMount } from 'svelte';
@@ -13,7 +14,7 @@
 	let y = $state(0);
 	let scale = $state(1);
 	let rotate = $state(0);
-	let loading = $state(true);
+	let loading = $state(false);
 
 	let canvas: HTMLDivElement | null = $state(null);
 	let el: HTMLDivElement | null = $state(null);
@@ -28,9 +29,11 @@
 				x = Math.random() * (canvas.clientWidth - el.clientWidth);
 				y = Math.random() * (canvas.clientHeight - el.clientHeight);
 			} else if (Math.random() < 0.7) {
-				scale = Math.random() * 4;
+				// scale = Math.random() * 4;
+				// scale between 0.5 and 2.5
+				scale = Math.random() * 2 + 0.5;
 			} else {
-				rotate = Math.random() * 360;
+				rotate = Math.random() > 0.5 ? 0 : 45;
 			}
 		}, 2000);
 
@@ -39,18 +42,15 @@
 		};
 	});
 
-	$effect(() => {
-		if (auth.userLoggedIn) {
-			goto('/designs');
-		} else {
-			loading = false;
-		}
-	});
-
 	async function onclick() {
 		loading = true;
-		await auth.signIn(email, password);
+		const { error } = await supabase.auth.signInWithPassword({ email, password });
 		loading = false;
+		if (!error) {
+			goto('/designs');
+		} else {
+			console.error(error);
+		}
 	}
 </script>
 
@@ -64,12 +64,12 @@
 			<Card.Content class="space-y-6">
 				<div class="space-y-2">
 					<label for="email">Email</label>
-					<Input bind:value={email} type="email" />
+					<Input name="email" bind:value={email} type="email" />
 				</div>
 
 				<div class="space-y-2">
 					<label for="password">Password</label>
-					<Input bind:value={password} type="password" />
+					<Input name="password" bind:value={password} type="password" />
 				</div>
 
 				<Button {onclick} class="w-full" type="submit">

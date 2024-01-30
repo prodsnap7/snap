@@ -3,15 +3,10 @@
 	import Renderer from '../renderer/renderer.svelte';
 </script>
 
-<div
-	role="button"
-	id="canvas-container"
-	tabindex="0"
-	class="cursor-pointer absolute left-0 top-0 p-10"
->
+<div role="button" id="canvas-container" tabindex="0" class="viewport cursor-pointer p-10">
 	<div
 		id="canvas"
-		class="relative rounded-xs border shadow-xs overflow-hidden box-content"
+		class="relative rounded-xs border shadow overflow-hidden box-content"
 		style="
     width: {canvasStore.width}px;
     height: {canvasStore.height}px;

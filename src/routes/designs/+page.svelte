@@ -1,40 +1,49 @@
 <script lang="ts">
-	import { Checkbox } from '$lib/components/ui/checkbox';
 	import Label from '$lib/components/ui/label/label.svelte';
-
 	import Logo from '$lib/components/logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Check, File, Folder, Spinner, X } from 'phosphor-svelte';
+	import { Check, File, Folder, Spinner, X, SunDim, MoonStars } from 'phosphor-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Popover from '$lib/components/ui/popover';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { createMutation, createQuery } from '@tanstack/svelte-query';
 	import { createNewDesign, getDesignsByUser } from '$lib/api/designs';
 	import { goto } from '$app/navigation';
 	import Loader from '$lib/components/ui/loader.svelte';
 	import * as Card from '$lib/components/ui/card';
+	import { toggleMode, mode } from 'mode-watcher';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import { supabase } from '$lib/utils/supabase';
 
-	let width = 2000;
-	let height = 2000;
+	let width = $state(900);
+	let height = $state(700);
+	let loading = $state(false);
 
-	const createDesignMutation = createMutation({
-		mutationFn: createNewDesign,
-		onSuccess: (id) => {
-			goto(`/designs/${id}`);
-		}
-	});
+	const { data } = $props();
 
 	const handleCreateDesign = async () => {
-		$createDesignMutation.mutate({
-			width: width,
-			height: height
-		});
+		loading = true;
+		try {
+			const data = await createNewDesign({
+				width: width,
+				height: height
+			});
+
+			goto(`/designs/${data.id}`);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			loading = false;
+		}
 	};
 
-	const designsQuery = createQuery({
-		queryKey: ['designs'],
-		queryFn: getDesignsByUser
-	});
+	const handleSignOut = async () => {
+		const { error } = await supabase.auth.signOut();
+
+		if (!error) {
+			goto('/login');
+		} else {
+			console.error(error);
+		}
+	};
 </script>
 
 <div class="h-screen">
@@ -42,161 +51,113 @@
 		<Logo />
 		<div class="flex-1"></div>
 
-		<Popover.Root portal={null}>
-			<Popover.Trigger>
-				<Button>
-					<File size={20} class="mr-2" />
-					New Design
-				</Button>
-			</Popover.Trigger>
-
-			<Popover.Content>
-				<div class="mb-4 text-sm font-semibold">Custom Size</div>
-				<div class="flex text-xs items-center gap-2">
-					<div
-						class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:border-primary"
-					>
-						<span class="text-sm text-muted-foreground">W</span>
-						<input
-							type="number"
-							bind:value={width}
-							class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
-						/>
-					</div>
-					<div
-						class="w-20 h-8 flex rounded-sm border items-center p-1 gap-1 focus-within:border-primary"
-					>
-						<span class="text-sm text-muted-foreground">H</span>
-						<input
-							type="number"
-							bind:value={height}
-							class="w-full h-full ml-2 oultine-none text-xs focus:outline-none bg-background"
-						/>
-					</div>
-
-					<div class="p-1.5 h-8 border pointer-events-none text-center">px</div>
-					<Button onclick={handleCreateDesign} size="sm">
-						{#if $createDesignMutation.isPending}
-							<Loader />
-						{:else}
-							<Check size={20} />
-						{/if}
-					</Button>
-				</div>
-
-				<Separator class="my-4" />
-
-				<div class="mb-4 text-sm font-semibold">Presets</div>
-
-				<div class="space-y-4">
-					<div class="flex items-center space-x-2">
-						<Checkbox
-							id="2000x2000"
-							checked={width === 2000 && height === 2000}
-							onCheckedChange={(val) => {
-								if (!val) return;
-								width = 2000;
-								height = 2000;
-							}}
-						/>
-						<Label
-							for="terms"
-							class="text-sm inline-flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							2000 <X size={16} class="mx-1" /> 2000 px
-						</Label>
-					</div>
-
-					<div class="flex items-center space-x-2">
-						<Checkbox
-							id="1500x1500"
-							checked={width === 1500 && height === 1500}
-							onCheckedChange={(val) => {
-								if (!val) return;
-								width = 1500;
-								height = 1500;
-							}}
-						/>
-						<Label
-							for="terms"
-							class="text-sm inline-flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							1500 <X size={16} class="mx-1" /> 1500 px
-						</Label>
-					</div>
-					<div class="flex items-center space-x-2">
-						<Checkbox
-							id="2000x1500"
-							checked={width === 2000 && height === 1500}
-							onCheckedChange={(val) => {
-								if (!val) return;
-								width = 2000;
-								height = 1500;
-							}}
-						/>
-						<Label
-							for="terms"
-							class="text-sm flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							2000 <X size={16} class="mx-1" /> 1500 px
-						</Label>
-					</div>
-
-					<div class="flex items-center space-x-2">
-						<Checkbox
-							id="2000x1500"
-							checked={width === 900 && height === 700}
-							onCheckedChange={(val) => {
-								if (!val) return;
-								width = 900;
-								height = 700;
-							}}
-						/>
-						<Label
-							for="terms"
-							class="text-sm flex font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							900 <X size={16} class="mx-1" /> 700 px
-						</Label>
-					</div>
-				</div>
-			</Popover.Content>
-		</Popover.Root>
-
 		<Button variant="secondary">
 			<Folder size={20} class="mr-2" />
 			My Designs
 		</Button>
 
-		<Avatar.Root>
-			<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-			<Avatar.Fallback>CN</Avatar.Fallback>
-		</Avatar.Root>
+		<Popover.Root portal={null}>
+			<Popover.Trigger>
+				<Avatar.Root>
+					<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
+					<Avatar.Fallback>CN</Avatar.Fallback>
+				</Avatar.Root>
+			</Popover.Trigger>
+
+			<Popover.Content>
+				<button onclick={handleSignOut}>Sign Out</button>
+			</Popover.Content>
+		</Popover.Root>
+
+		<button class="ml-2" onclick={toggleMode}>
+			{#if $mode === 'dark'}
+				<SunDim size={26} />
+				<span class="sr-only">Switch to light mode</span>
+			{:else}
+				<MoonStars size={26} />
+
+				<span class="sr-only">Switch to dark mode</span>
+			{/if}
+		</button>
 	</nav>
 
 	<section class="container">
+		<Card.Root class="w-full">
+			<Card.Header>
+				<Card.Title>Create New Design</Card.Title>
+				<Card.Description>Start a new design from scratch</Card.Description>
+			</Card.Header>
+
+			<Card.Content>
+				<div class="flex items-end space-x-4">
+					<div class="flex flex-col space-y-1.5">
+						<Label for="width">Width</Label>
+						<Input id="width" name="width" bind:value={width} />
+					</div>
+
+					<div class="flex flex-col space-y-1.5">
+						<Label for="height">Height</Label>
+						<Input id="height" name="height" bind:value={height} />
+					</div>
+
+					<div class="py-2 px-4 rounded-sm border border-accent pointer-events-none text-center">
+						px
+					</div>
+					<Button onclick={handleCreateDesign}>Create</Button>
+				</div>
+			</Card.Content>
+		</Card.Root>
+	</section>
+
+	<section class="container my-8">
 		<h2 class="text-lg font-semibold mb-4">Recent Designs</h2>
 
-		{#if $designsQuery.isLoading}
+		{#if !data.designs}
 			<Loader />
-		{:else if $designsQuery.isError}
-			<div class="text-center text-sm text-muted-foreground">Failed to load designs</div>
-		{:else if $designsQuery.data.length === 0}
+		{:else if data.designs.length === 0}
 			<div class="text-center text-sm text-muted-foreground">No designs found</div>
 		{:else}
-			<div class="grid grid-cols-6 gap-2">
-				{#each $designsQuery.data as design}
-					<Card.Root
+			<div class="flex flex-wrap items-center gap-4">
+				{#each data.designs as design}
+					<div
+						tabindex="0"
+						role="button"
+						onmousedown={() => {
+							goto(`/designs/${design.id}`);
+						}}
+						class="space-y-2 cursor-pointer group hover:scale-105 hover:text-primary duration-500"
+					>
+						<div
+							class="rounded border pointer-events-none group-hover:border-primary overflow-hidden"
+						>
+							{#if design.thumbnail}
+								<img
+									class="h-[200px] object-cover -my-1"
+									src={encodeURI(design.thumbnail)}
+									alt={design.name}
+								/>
+							{:else}
+								<img class="object-cover" src="https://picsum.photos/250/200" alt={design.name} />
+							{/if}
+						</div>
+						<div class="space-y-1">
+							<h2 class="text-lg font-semibold">{design.name}</h2>
+							<p class="text-sm text-muted-foreground">
+								{design.canvas.width} x {design.canvas.height}
+							</p>
+						</div>
+					</div>
+					<!-- <Card.Root
 						onclick={() => {
 							goto(`/designs/${design.id}`);
 						}}
-						class="w-full group overflow-hidden hover:border-2 hover:border-primary cursor-pointer"
+						class="w-full group overflow-hidden border-2 border-transparent shadow hover:border-primary cursor-pointer"
 					>
 						<Card.Content class="p-0 overflow-hidden">
 							{#if design.thumbnail}
 								<img
 									class="object-cover rounded h-[150px]"
-									src={design.thumbnail}
+									src={encodeURI(design.thumbnail)}
 									alt={design.name}
 								/>
 							{:else}
@@ -213,7 +174,7 @@
 								{design.canvas.width} x {design.canvas.height}
 							</Card.Description>
 						</Card.Header>
-					</Card.Root>
+					</Card.Root> -->
 				{/each}
 			</div>
 		{/if}

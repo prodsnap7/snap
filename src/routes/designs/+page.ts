@@ -1,20 +1,23 @@
+import { supabase } from "$lib/utils/supabase"
+import { redirect } from "@sveltejs/kit";
 
-import { goto } from '$app/navigation';
-import { auth } from '$lib/store/auth.svelte';
+export const ssr = false
+
+export const load = async () => {
+  const { data } = await supabase.auth.getSession()
+
+  console.log("session data: ", data);
 
 
-export async function load() {
-  let isAuthenticated = false;
-
-  await auth.checkAuth((isLoggedIn) => {
-    isAuthenticated = isLoggedIn;
-  });
-
-  if (!isAuthenticated) {
-    goto('/login');
+  if (!data.session) {
+    throw redirect(303, "/login")
   }
 
-  return {};
-}
+  const { data: designs, error } = await supabase.from("designs").select("*")
 
-export const ssr = false;
+  if (error) {
+    return { error: new Error(error.message) }
+  } else {
+    return { designs }
+  }
+}

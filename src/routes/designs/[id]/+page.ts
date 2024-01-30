@@ -1,52 +1,26 @@
+import { supabase } from '$lib/utils/supabase';
+import { redirect } from '@sveltejs/kit';
+
 export const ssr = false;
+export const csr = true;
 
-import { goto } from '$app/navigation';
-import { getDesignById } from '$lib/api/designs';
-import { auth } from '$lib/store/auth.svelte';
-import type { PageLoad } from './$types';
+export const load = async ({ params }) => {
+	const { data } = await supabase.auth.getSession();
 
-const loadData = async (id: string) => {
-	try {
-		let { canvas, name } = await getDesignById(id);
-		let elements = '[]';
-		if (canvas) {
-			elements = canvas.elements || '[]';
-		} else {
-			canvas = {
-				width: 800,
-				height: 600,
-				background: '#ffffff',
-				elements: '[]',
-				fonts: []
-			};
-		}
-
-		return {
-			elements,
-			canvas,
-			id,
-			name: name || 'Untitled'
-		};
-	} catch (e) {
-		goto('/designs');
+	if (!data.session) {
+		throw redirect(303, '/login');
 	}
-};
 
-export const load: PageLoad = async ({ params, parent }) => {
-	// await parent();
-	// let isAuthenticated = false;
+	const { data: design, error } = await supabase.from('designs').select('*').eq('id', params.id);
 
-  // await auth.checkAuth((isLoggedIn) => {
-  //   isAuthenticated = isLoggedIn;
-  // });
-
-  // if (!isAuthenticated) {
-  //   goto('/login');
-  // }
-
-	const data = await loadData(params.id);
-
-	return {
-		design: data
-	};
+	if (error) {
+		return { error: new Error(error.message) };
+	} else {
+		return {
+			design: {
+				...design[0],
+				elements: design[0].canvas.elements
+			}
+		};
+	}
 };

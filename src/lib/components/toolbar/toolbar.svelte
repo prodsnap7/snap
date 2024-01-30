@@ -70,7 +70,7 @@
 		>
 
 		<Separator orientation="vertical" class="h-8" />
-		<Popover.Root portal="null">
+		<Popover.Root portal={null}>
 			<Popover.Trigger>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
 					><g fill="currentColor" fill-rule="evenodd"

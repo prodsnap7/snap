@@ -11,10 +11,12 @@ type StoreObj = {
 	canvas: Partial<TCanvas>;
 	elements: string;
 	id?: string;
+	updated_at?: string;
 };
 
 class Store {
 	private static instance: Store;
+	updated_at = $state('');
 	elements = $state(elementsStore);
 	activeElement = $derived(activeElementStore);
 	selectedElements = $derived(selectedElementsStore);
@@ -31,7 +33,7 @@ class Store {
 	saving = $state(false);
 	id = $state('');
 	timestamp = $state(Date.now());
-
+	zoom = $state(1);
 	canUndo = $derived(this.elements.canUndo || this.canvas.canUndo);
 	canRedo = $derived(this.elements.canRedo || this.canvas.canRedo);
 
@@ -50,7 +52,16 @@ class Store {
 	init(obj: StoreObj = { canvas: {}, elements: '[]', name: 'New Design', id: ''  }) {
 		this.name = obj.name || 'New Design';
 		this.id = obj.id || '';
+		this.updated_at = obj.updated_at || '';
 		this.canvas.setFromObject(obj.canvas);
+
+		// clear all elements
+		this.elements.clear();
+		this.selectedElements.clear();
+		this.activeElement.clear();
+		this.highlightedElements.clear();
+
+		// init new elements
 		this.elements.addFromJSON(obj.elements);
 	}
 
@@ -87,10 +98,12 @@ class Store {
 
 	async save(generateImage = false) {
 		this.saving = true;
+		console.log('saving design', this.id);
 		const data = {
 			id: this.id,
 			name: this.name,
 			canvas: {
+				fonts: JSON.stringify(this.elements.fonts),
 				width: this.canvas.width,
 				height: this.canvas.height,
 				background: this.canvas.background,
@@ -100,6 +113,7 @@ class Store {
 
 		try {
 			await updateDesign({ id: this.id, data }, generateImage);
+			console.log('saved design', this.id)
 		} catch (e) {
 			console.error(e);
 		}

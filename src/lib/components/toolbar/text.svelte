@@ -92,7 +92,7 @@
 	const fontSize = $derived(Math.ceil(element.fontSize) * element.scale);
 </script>
 
-<Popover.Root portal="null">
+<Popover.Root portal={null}>
 	<Popover.Trigger>
 		<Textbox size={28} />
 	</Popover.Trigger>
@@ -158,7 +158,7 @@
 
 <Separator orientation="vertical" class="h-6" />
 
-<Popover.Root portal="null">
+<Popover.Root portal={null}>
 	<Popover.Trigger>
 		<button class="h-8 w-8 rounded border">{Math.ceil(fontSize)}</button>
 	</Popover.Trigger>

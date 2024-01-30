@@ -74,7 +74,7 @@
 
 <Separator class="h-6" orientation="vertical" />
 
-<Popover.Root portal="null">
+<Popover.Root portal={null}>
 	<Popover.Trigger>
 		<button
 			onclick={onBorderClick}
